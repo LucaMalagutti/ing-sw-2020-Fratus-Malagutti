@@ -2,12 +2,12 @@ package it.polimi.ingsw.PSP4.model;
 
 public class Worker {
 
-    //attributi
+    //attributes
     private Position currPosition;
     private Position prevPosition;
-    private Player player;
+    private final Player player;
 
-    //getter e setter
+    //getter and setter
     public Position getCurrPosition() {
         return currPosition;
     }
@@ -24,12 +24,13 @@ public class Worker {
         this.prevPosition = prevPosition;
     }
 
-    public Player getPlayer() {
-        return player;
-    }
+    public Player getPlayer() { return player; }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public Worker(Player player){
+        this.player=player;
+        this.currPosition=null;
+        this.prevPosition=null;
+
     }
 
 }

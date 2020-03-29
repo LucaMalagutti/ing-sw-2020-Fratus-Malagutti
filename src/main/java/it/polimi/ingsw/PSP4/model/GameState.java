@@ -5,30 +5,14 @@ public class GameState {
     //singleton instance
     private static GameState instance;
 
-    private GameState(){
-    }
-
-    public static GameState getIstance(){
-        if(instance==null)
-            instance = new GameState();
-
-        return instance;
-    }
-
-    //attributi
-    private Position[][] board;
+    //attributes
+    private Position[][] board = new Position[5][5];
     private Player currPlayer;
     private int numPlayer;
     private Player[] players;
 
-    //getter e setter
-    public Position[][] getPosition() {
-        return board;
-    }
-
-    public void setPosition(Position[][] position) {
-        this.board = position;
-    }
+    //getter and setter
+    public Position[][] getBoard() { return board; }
 
     public Player getCurrPlayer() {
         return currPlayer;
@@ -53,5 +37,25 @@ public class GameState {
     public void setPlayers(Player[] players) {
         this.players = players;
     }
+
+    //methods
+    private GameState(){
+        this.currPlayer = null;
+        this.numPlayer = -1;
+        this.players = null;
+        for(int row=0; row<board.length; row++){
+            for(int col=0; col<board[row].length; col++){
+                board[row][col]= new Position(row,col,this);
+            }
+        }
+    }
+
+    public static GameState getIstance(){
+        if(instance==null)
+            instance = new GameState();
+
+        return instance;
+    }
+
 
 }

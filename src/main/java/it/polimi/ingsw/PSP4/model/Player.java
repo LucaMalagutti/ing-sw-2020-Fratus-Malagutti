@@ -1,44 +1,39 @@
 package it.polimi.ingsw.PSP4.model;
+import it.polimi.ingsw.PSP4.controller.GameMechanics;
+import java.util.ArrayList;
+
 
 public class Player {
 
-    //attributi
+    //attributes
     private String nickname;
-    private Worker[] workers;
+    private ArrayList<Worker> workers = new ArrayList<Worker>();
     private int turnNum;
     private GameMechanics mechanics;
 
-    //getter e setter
-    public String getNickname() {
-        return nickname;
-    }
+    //getter and setter
+    public String getNickname() { return nickname; }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public Worker[] getWorkers() {
+    public ArrayList<Worker> getWorkers() {
         return workers;
     }
 
-    public void setWorkers(Worker[] workers) {
-        this.workers = workers;
+    public int getTurnNum() { return turnNum; }
+
+    public void increaseTurnNum() { turnNum++; }
+
+    public GameMechanics getMechanics() { return mechanics; }
+
+    public void setMechanics(GameMechanics mechanics) { this.mechanics = mechanics; }
+
+    //methods
+    public Player (String nickname){
+        this.nickname=nickname;
+        workers.add(new Worker(this));
+        workers.add(new Worker(this));
+        this.turnNum=1;
+        this.mechanics=null;
     }
 
-    public int getTurnNum() {
-        return turnNum;
-    }
-
-    public void setTurnNum(int turnNum) {
-        this.turnNum = turnNum;
-    }
-
-    public GameMechanics getMechanics() {
-        return mechanics;
-    }
-
-    public void setMechanics(GameMechanics mechanics) {
-        this.mechanics = mechanics;
-    }
 
 }
