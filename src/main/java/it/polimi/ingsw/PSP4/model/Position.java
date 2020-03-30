@@ -2,15 +2,17 @@ package it.polimi.ingsw.PSP4.model;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the state of cell inside the game board
+ */
 public class Position {
-
     //attributes
     private int height;
     private final int row;
     private final int col;
     private Worker worker;
     private boolean dome;
-    private ArrayList<Position> neighbour;
+    private final ArrayList<Position> neighbour;
     private final GameState gameState;
 
     //getter and setter
@@ -18,7 +20,7 @@ public class Position {
         return height;
     }
 
-    public void increaseHeight() { height++; }
+    public void setHeight(int height) { this.height = height; }
 
     public int getRow() {
         return row;
@@ -42,6 +44,12 @@ public class Position {
 
     public GameState getGameState() { return gameState; }
 
+    /** @return a copy of neighbour.
+     */
+    public ArrayList<Position> getNeighbour() {
+        return new ArrayList<>(neighbour);
+    }
+
     //methods
     public Position (int row, int col, GameState gameState){
         this.height=0;
@@ -49,38 +57,37 @@ public class Position {
         this.col=col;
         this.worker=null;
         this.dome=false;
-        this.neighbour=null;
         this.gameState=gameState;
-    }
-
-    public ArrayList<Position> getNeighbour() {
-        if (neighbour==null){
-            Position[][] board = gameState.getBoard();
-            for(int r=Math.max(0,row-1); r<=Math.min(row+1,board.length-1); r++){
-                for(int c=Math.max(0,col-1); c<=Math.min(col+1,board.length-1); c++){
-                    if(!(c==col && r==row)){
-                        neighbour.add(board[r][c]);
-                    }
+        this.neighbour = new ArrayList<>();
+        Position[][] board = gameState.getBoard();
+        for(int r=Math.max(0,row-1); r<=Math.min(row+1,board.length-1); r++){
+            for(int c=Math.max(0,col-1); c<=Math.min(col+1,board.length-1); c++){
+                if(!(c==col && r==row)){
+                    neighbour.add(board[r][c]);
                 }
             }
-
         }
-
-        return neighbour;
     }
 
-    public ArrayList<Position> getLower (){
+    /** Filters neighbor arrayList by the cells of an height reachable by the player
+     * @return An ArrayList of the neighboring Positions respecting the above property
+     */
+    public ArrayList<Position> getReachableHeight(){
         return getNeighbour().stream().filter(position -> position.getHeight()<=height+1).collect(Collectors.toCollection(ArrayList::new));
     }
 
+    /** Filters neighbor arrayList by the cells not occupied by a dome of by another worker
+     * @return An ArrayList of the neighboring Positions respecting the above property
+     */
     public ArrayList<Position> getFree (){
         return getNeighbour().stream().filter(position -> !position.hasDome() && position.getWorker()==null).collect(Collectors.toCollection(ArrayList::new));
     }
 
+    /**
+     * Filters neighbor arrayList by the cells occupied by an enemy worker
+     * @return An ArrayList of the neighboring Positions respecting the above property
+     */
     public ArrayList<Position> getOccupied (){
         return getNeighbour().stream().filter(position -> position.getWorker() != null && position.getWorker().getPlayer() != worker.getPlayer() ).collect(Collectors.toCollection(ArrayList::new));
     }
-
-
-
 }

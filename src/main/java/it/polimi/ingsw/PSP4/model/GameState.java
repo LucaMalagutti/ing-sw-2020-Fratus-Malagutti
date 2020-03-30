@@ -1,7 +1,9 @@
 package it.polimi.ingsw.PSP4.model;
 
+/** Contains information about the game being played, its state and its board.
+ *  It is a singleton.
+ */
 public class GameState {
-
     //singleton instance
     private static GameState instance;
 
@@ -50,6 +52,9 @@ public class GameState {
         }
     }
 
+    /**
+     * @return single instance of GameState
+     */
     public static GameState getIstance(){
         if(instance==null)
             instance = new GameState();

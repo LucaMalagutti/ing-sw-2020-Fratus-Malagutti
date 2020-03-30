@@ -5,6 +5,8 @@ import it.polimi.ingsw.PSP4.model.Worker;
 
 import java.util.ArrayList;
 
+/** Defines basic god Card component structure
+ */
 abstract public class GodGameMechanics extends GameMechanics {
     private GameMechanics component;
 
@@ -15,13 +17,13 @@ abstract public class GodGameMechanics extends GameMechanics {
     public GameMechanics getComponent() { return component; }
 
     @Override
-    public ArrayList<Position> move(Worker worker, int callNum) {
-        return component.move(worker, callNum);
+    public ArrayList<Position> getMovePositions(Worker worker, int callNum) {
+        return component.getMovePositions(worker, callNum);
     }
 
     @Override
-    public ArrayList<Position> build(Worker worker, int callNum) {
-        return component.build(worker, callNum);
+    public ArrayList<Position> getBuildPositions(Worker worker, int callNum) {
+        return component.getBuildPositions(worker, callNum);
     }
 
     @Override

@@ -1,7 +1,9 @@
 package it.polimi.ingsw.PSP4.model;
 
+/**
+ *  Contains the state of one of the Player's worker
+ */
 public class Worker {
-
     //attributes
     private Position currPosition;
     private Position prevPosition;
@@ -30,7 +32,5 @@ public class Worker {
         this.player=player;
         this.currPosition=null;
         this.prevPosition=null;
-
     }
-
 }
