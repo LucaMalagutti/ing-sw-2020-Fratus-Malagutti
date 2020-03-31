@@ -40,7 +40,7 @@ public class Position {
 
     public boolean hasDome() { return dome; }
 
-    public void setDome() { this.dome = true; }
+    public void setDome(boolean hasDome) { this.dome = hasDome; }
 
     public GameState getGameState() { return gameState; }
 
