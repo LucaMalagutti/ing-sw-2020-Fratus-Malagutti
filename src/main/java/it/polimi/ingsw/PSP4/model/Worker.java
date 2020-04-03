@@ -4,16 +4,13 @@ package it.polimi.ingsw.PSP4.model;
  *  Contains the state of one of the Player's worker
  */
 public class Worker {
-    //attributes
-    private Position currPosition;
-    private Position prevPosition;
-    private final Player player;
+    private Position currPosition;      //reference to the current position of the player
+    private Position prevPosition;      //reference to the previous position of the player
 
     //getter and setter
     public Position getCurrPosition() {
         return currPosition;
     }
-
     public void setCurrPosition(Position currPosition) {
         this.currPosition = currPosition;
     }
@@ -21,15 +18,14 @@ public class Worker {
     public Position getPrevPosition() {
         return prevPosition;
     }
-
     public void setPrevPosition(Position prevPosition) {
         this.prevPosition = prevPosition;
     }
 
-    public Player getPlayer() { return player; }
-
-    public Worker(Player player){
-        this.player=player;
+    /**
+     * Constructor of the class Worker
+     */
+    public Worker(){
         this.currPosition=null;
         this.prevPosition=null;
     }

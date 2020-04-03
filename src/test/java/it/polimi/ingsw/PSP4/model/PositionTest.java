@@ -9,7 +9,7 @@ public class PositionTest {
     GameState gameState;
     @Before
     public void setUp() throws Exception {
-        gameState = GameState.getIstance();
+        gameState = GameState.getInstance();
         gameState.setPlayers(new Player[]{new Player("1"), new Player("2")});
         gameState.setNumPlayer(2);
         gameState.setCurrPlayer(gameState.getPlayers()[0]);

@@ -1,45 +1,46 @@
 package it.polimi.ingsw.PSP4.controller;
 
+import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
-import it.polimi.ingsw.PSP4.model.Worker;
 
-import java.util.ArrayList;
-
-/** Defines the mechanics of the God card Hephaestus
+/**
+ * Defines the mechanics of the God card Hephaestus
  */
 public class HephaestusGameMechanics extends GodGameMechanics {
-    private Position lastPositionBuilt;
+    private Position lastPositionBuilt;     //reference to the last position in which the player has built
 
+    //getters and setters
     public Position getLastPositionBuilt() {
         return lastPositionBuilt;
     }
-
     public void setLastPositionBuilt(Position lastPositionBuilt) {
         this.lastPositionBuilt = lastPositionBuilt;
     }
 
+    /**
+     * Constructor of the class HephaestusGameMechanics
+     * @param component reference to the game mechanics to decorate
+     */
     public HephaestusGameMechanics(GameMechanics component) {
-        super(component);
+        super(component, "Hephaestus", PathType.DEFAULT);
     }
 
-    /** Allows the player to build a second time in the position where he had previously build (not a dome)
+    /**
+     * Ask the player if want to build a second time in the same position (not a dome)
+     * @param position position in which has to build
+     * @return false if height is 3 (no dome) or the player doesn't want to build a second block
      */
-    @Override
-    public ArrayList<Position> getBuildPositions(Worker worker, int callNum) {
-        if (callNum > 2) {
-            return new ArrayList<>();
-        }
-        ArrayList<Position> componentValid = super.getBuildPositions(worker, callNum);
+    public boolean doubleBuild(Position position) {
+        if(position.getHeight() >= 3)
+            return false;
+        //To be implemented
+        return true;
+    }
 
-        if (callNum == 2) {
-            if (this.getLastPositionBuilt().getHeight() >= 3) {
-                return new ArrayList<>();
-            }
-            else {
-                componentValid = new ArrayList<>();
-                componentValid.add(this.getLastPositionBuilt());
-            }
-        }
-        return componentValid;
+    @Override
+    public void build(Player player, Position futurePosition) {
+        getComponent().build(player, futurePosition);
+        if(doubleBuild(futurePosition))
+            futurePosition.increaseHeight();
     }
 }

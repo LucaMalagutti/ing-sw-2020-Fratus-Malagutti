@@ -1,17 +1,18 @@
 package it.polimi.ingsw.PSP4.model;
 
-/** Contains information about the game being played, its state and its board.
- *  It is a singleton.
+import java.util.ArrayList;
+
+/**
+ * Contains information about the game being played, its state and its board.
+ * It is a singleton.
  */
 public class GameState {
-    //singleton instance
-    private static GameState instance;
+    private static GameState instance;                  //singleton instance
 
-    //attributes
-    private Position[][] board = new Position[5][5];
-    private Player currPlayer;
-    private int numPlayer;
-    private Player[] players;
+    private Position[][] board = new Position[5][5];    //5x5 grid, represents game platform
+    private ArrayList<Player> players;                  //list of players
+    private Player currPlayer;                          //reference to current player
+    private int numPlayer;                              //number of players (2 or 3)
 
     //getter and setter
     public Position[][] getBoard() { return board; }
@@ -19,7 +20,6 @@ public class GameState {
     public Player getCurrPlayer() {
         return currPlayer;
     }
-
     public void setCurrPlayer(Player currPlayer) {
         this.currPlayer = currPlayer;
     }
@@ -27,20 +27,21 @@ public class GameState {
     public int getNumPlayer() {
         return numPlayer;
     }
-
     public void setNumPlayer(int numPlayer) {
         this.numPlayer = numPlayer;
     }
 
-    public Player[] getPlayers() {
+    public ArrayList<Player> getPlayers() {
         return players;
     }
-
-    public void setPlayers(Player[] players) {
+    public void setPlayers(ArrayList<Player> players) {
         this.players = players;
     }
 
-    //methods
+    /**
+     * Constructor of the class GameState
+     * Builds the board creating Position objects
+     */
     private GameState(){
         this.currPlayer = null;
         this.numPlayer = -1;
@@ -55,12 +56,9 @@ public class GameState {
     /**
      * @return single instance of GameState
      */
-    public static GameState getIstance(){
+    public static GameState getInstance(){
         if(instance==null)
             instance = new GameState();
-
         return instance;
     }
-
-
 }
