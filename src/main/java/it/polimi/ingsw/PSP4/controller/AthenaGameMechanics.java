@@ -31,7 +31,7 @@ public class AthenaGameMechanics extends GodGameMechanics {
     private void wrapEnemies(Player player) {
         for(Player enemy : getPlayers()){
             GameMechanics mechanics = enemy.getMechanics();
-            if(enemy != player && mechanics.getName() != "Athena_Enemy")
+            if(enemy != player && !mechanics.getName().equals("Athena_Enemy"))
                 enemy.setMechanics(new AthenaEnemyGameMechanics(mechanics));
         }
     }
@@ -43,7 +43,7 @@ public class AthenaGameMechanics extends GodGameMechanics {
     private void unwrapEnemies(Player player) {
         for(Player enemy : getPlayers()){
             GameMechanics mechanics = enemy.getMechanics();
-            if(enemy != player && mechanics.getName() == "Athena_Enemy")
+            if (enemy != player && mechanics.getName().equals("Athena_Enemy"))
                 enemy.setMechanics(mechanics.getComponent());
         }
     }

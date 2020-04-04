@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class GameState {
     private static GameState instance;                  //singleton instance
 
-    private Position[][] board = new Position[5][5];    //5x5 grid, represents game platform
+    private final Position[][] board = new Position[5][5];    //5x5 grid, represents game platform
     private ArrayList<Player> players;                  //list of players
     private Player currPlayer;                          //reference to current player
     private int numPlayer;                              //number of players (2 or 3)
@@ -48,7 +48,12 @@ public class GameState {
         this.players = null;
         for(int row=0; row<board.length; row++){
             for(int col=0; col<board[row].length; col++){
-                board[row][col]= new Position(row,col,this);
+                board[row][col] = new Position(row,col,this);
+            }
+        }
+        for(int row=0; row<board.length; row++){
+            for(int col=0; col<board[row].length; col++){
+                board[row][col].setUpNeighbors(row, col, this);
             }
         }
     }

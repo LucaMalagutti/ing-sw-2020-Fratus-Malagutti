@@ -12,7 +12,7 @@ public class EarlyBuildState extends State {
     private boolean change;     //true if the player wants to change worker
 
     //getters and setters
-    private boolean isChange() { return change; }
+    private boolean isWorkerChanged() { return change; }
     private void changeWorker() { this.change = true; }
 
     /**
@@ -36,7 +36,7 @@ public class EarlyBuildState extends State {
         Position position = selectOption(options);
         if(position != null)            //Player wants to build
             player.getMechanics().build(player, position);
-        else if(isChange())             //Player wants to change worker
+        else if(isWorkerChanged())             //Player wants to change worker
             return new EarlyBuildState();
         return new StandardMoveState(); //Player wants to skip this state
     }

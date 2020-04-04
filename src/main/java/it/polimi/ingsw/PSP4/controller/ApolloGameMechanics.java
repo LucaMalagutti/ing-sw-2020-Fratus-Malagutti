@@ -22,9 +22,6 @@ public class ApolloGameMechanics extends GodGameMechanics {
      */
     @Override
     public ArrayList<Position> getMovePositions(Player player, int callNum) {
-        if(callNum > 1) {
-            return new ArrayList<>();   //Empty ArrayList
-        }
         ArrayList<Position> componentValid = super.getComponent().getMovePositions(player, callNum);
 
         Position currPosition = player.getCurrWorker().getCurrPosition();
@@ -44,24 +41,26 @@ public class ApolloGameMechanics extends GodGameMechanics {
         if(futurePosition == null){
             //exception
         }
-        if(futurePosition.hasDome()){
+        else if(futurePosition.hasDome()){
             //exception
         }
-        player.lockWorker();
+        else {
+            player.lockWorker();
 
-        Worker currWorker = player.getCurrWorker();
-        Worker enemyWorker = futurePosition.getWorker();
-        Position currentPosition = currWorker.getCurrPosition();
+            Worker currWorker = player.getCurrWorker();
+            Worker enemyWorker = futurePosition.getWorker();
+            Position currentPosition = currWorker.getCurrPosition();
 
-        futurePosition.setWorker(currWorker);
-        currentPosition.setWorker(enemyWorker);
+            futurePosition.setWorker(currWorker);
+            currentPosition.setWorker(enemyWorker);
 
-        currWorker.setPrevPosition(currentPosition);
-        currWorker.setCurrPosition(futurePosition);
+            currWorker.setPrevPosition(currentPosition);
+            currWorker.setCurrPosition(futurePosition);
 
-        if(enemyWorker != null){
-            enemyWorker.setPrevPosition(futurePosition);
-            enemyWorker.setCurrPosition(currentPosition);
+            if (enemyWorker != null) {
+                enemyWorker.setPrevPosition(futurePosition);
+                enemyWorker.setCurrPosition(currentPosition);
+            }
         }
     }
 }

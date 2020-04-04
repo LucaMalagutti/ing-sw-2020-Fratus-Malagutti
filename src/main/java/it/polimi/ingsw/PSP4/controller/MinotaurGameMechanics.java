@@ -24,9 +24,6 @@ public class MinotaurGameMechanics extends GodGameMechanics {
      */
     @Override
     public ArrayList<Position> getMovePositions(Player player, int callNum) {
-        if (callNum > 1) {
-            return new ArrayList<>();
-        }
         ArrayList<Position> componentValid = super.getMovePositions(player, callNum);
         Position currPosition = player.getCurrWorker().getCurrPosition();
         ArrayList<Position> lower = currPosition.getReachableHeight();
@@ -43,64 +40,78 @@ public class MinotaurGameMechanics extends GodGameMechanics {
      * Returns a boolean indicating if the space directly behind the enemy worker, in line with the player's worker, is free
      */
     private boolean freeSpaceBehindEnemy(Position yourPosition, Position enemyPosition) {
-        Position behindPosition = getBehindEnemyPosition(yourPosition, enemyPosition);
-        if (behindPosition.getRow() == -1 && behindPosition.getCol() == -1) {
+        int[] behindPosition = getBehindEnemyPositionCoordinates(yourPosition, enemyPosition);
+        if (behindPosition[0] == -1 && behindPosition[1] == -1) {
             return false;
         }
         ArrayList<Position> enemyNeighborFree = enemyPosition.getFree();
         for (Position enemyNeighbor: enemyNeighborFree) {
-            if (enemyNeighbor.getRow() == behindPosition.getRow() && enemyNeighbor.getCol() == behindPosition.getCol()) {
+            if (enemyNeighbor.getRow() == behindPosition[0] && enemyNeighbor.getCol() == behindPosition[1]) {
                 return true;
             }
         }
         return false;
     }
 
-
-    //WARNING: Should return the actual reference to the board position
     /**
-     * @return Position indicating the coordinates of the cell behind the enemy worker. The position has coordinates (-1, -1) if occupied
+     * Gets coordinates of the position behind the enemy worker. The position has coordinates (-1, -1) if it falls outside of the board
+     * @return int array having row and column of behind position as the only two elements
      */
-    private Position getBehindEnemyPosition(Position yourPosition, Position enemyPosition) {
+    private int[] getBehindEnemyPositionCoordinates(Position yourPosition, Position enemyPosition) {
         int behindRow = enemyPosition.getRow() + (enemyPosition.getRow() - yourPosition.getRow());
         int behindCol = enemyPosition.getCol() + (enemyPosition.getCol() - yourPosition.getCol());
         if (behindRow < 5 && behindRow >= 0 && behindCol < 5 && behindCol >= 0) {
-            return new Position(behindRow, behindCol, null);
+            return new int[] {behindRow, behindCol};
         }
         else {
-            return new Position(-1, -1, null);
+            return new int[] {-1, -1};
         }
     }
 
     /**
-     * If futurePosition is not free punches the worker to the position behind
+     * If futurePosition is not free pushes the enemy worker to the position behind him
      */
     @Override
     public void move(Player player, Position futurePosition) {
         if(futurePosition == null){
             //exception
         }
-        if(futurePosition.hasDome()){
+        else if(futurePosition.hasDome()){
             //exception
         }
-        player.lockWorker();
+        else {
+            if (futurePosition.getWorker() == null) {
+                super.move(player, futurePosition);
+            }
+            else {
+                player.lockWorker();
 
-        Worker currWorker = player.getCurrWorker();
-        Worker enemyWorker = futurePosition.getWorker();
-        Position currentPosition = currWorker.getCurrPosition();
-        Position behindPosition = getBehindEnemyPosition(currentPosition, futurePosition);
+                Worker currWorker = player.getCurrWorker();
+                Worker enemyWorker = futurePosition.getWorker();
+                Position currentPosition = currWorker.getCurrPosition();
+                Position behindPosition = new Position(-1, -1, null);
+                int[] behindCoordinates = getBehindEnemyPositionCoordinates(currentPosition, futurePosition);
+                for (Position x : futurePosition.getFree()) {
+                    if (x.getRow() == behindCoordinates[0] && x.getCol() == behindCoordinates[1]) {
+                        behindPosition = x;
+                    }
+                }
+                //This should never happen because behindPosition should always be reassigned in the loop above, since it was
+                //previously filtered by getMovePosition as behind and free. Putting (future) exception throw just in case.
+                if (behindPosition.getCol() == -1 && behindPosition.getRow() == -1) {
+                    //exception
+                }
+                futurePosition.setWorker(currWorker);
+                currentPosition.setWorker(null);
 
-        futurePosition.setWorker(currWorker);
-        currentPosition.setWorker(null);
+                currWorker.setPrevPosition(currentPosition);
+                currWorker.setCurrPosition(futurePosition);
 
-        currWorker.setPrevPosition(currentPosition);
-        currWorker.setCurrPosition(futurePosition);
-
-        if(enemyWorker != null){
-            behindPosition.setWorker(enemyWorker);
-
-            enemyWorker.setPrevPosition(futurePosition);
-            enemyWorker.setCurrPosition(behindPosition);
+                behindPosition.setWorker(enemyWorker);
+                //TODO should we add something to indicate that the worker was FORCED to move to this position to avoid checkWinCondition bugs?
+                enemyWorker.setPrevPosition(futurePosition);
+                enemyWorker.setCurrPosition(behindPosition);
+            }
         }
     }
 }

@@ -22,9 +22,6 @@ public class ArtemisGameMechanics extends GodGameMechanics {
      */
     @Override
     public ArrayList<Position> getMovePositions(Player player, int callNum) {
-        if(callNum > 2)
-            return new ArrayList<>(); //Empty Array List
-
         ArrayList<Position> componentValid = super.getComponent().getMovePositions(player, callNum);
 
         if(callNum == 2)

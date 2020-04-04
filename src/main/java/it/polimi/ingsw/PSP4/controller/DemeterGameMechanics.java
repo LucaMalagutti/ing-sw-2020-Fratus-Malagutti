@@ -29,18 +29,29 @@ public class DemeterGameMechanics extends GodGameMechanics{
     }
 
     /**
-     * Adds possibility to build a second time, except when you have just built
+     * Adds possibility to build a second time, except where you have just built
      */
     @Override
     public ArrayList<Position> getBuildPositions(Player player, int callNum) {
-        if (callNum > 2) {
-            return new ArrayList<>();
-        }
         ArrayList<Position> componentValid = super.getComponent().getBuildPositions(player, callNum);
 
+        //resets lastPositionBuilt to null at the beginning of StandardBuiltState
+        if (callNum == 1) {
+            setLastPositionBuilt(null);
+        }
         if (callNum == 2) {
             componentValid.remove(this.getLastPositionBuilt());
         }
         return componentValid;
+    }
+
+    @Override
+    public void build(Player player, Position futurePosition) {
+        super.build(player, futurePosition);
+
+        //lastPositionBuilt is null at the beginning StandardBuildState
+        if (getLastPositionBuilt() == null) {
+            setLastPositionBuilt(futurePosition);
+        }
     }
 }

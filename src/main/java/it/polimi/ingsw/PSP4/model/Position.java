@@ -12,7 +12,7 @@ public class Position {
     private final int col;                          //x coordinate of the position in the platform
     private Worker worker;                          //worker currently in the position, null if free
     private boolean dome;                           //if true the position has a dome
-    private final ArrayList<Position> neighbour;    //list of surrounding positions on the board
+    private ArrayList<Position> neighbour;          //list of surrounding positions on the board
 
     //getter and setter
     public int getHeight() {
@@ -62,6 +62,27 @@ public class Position {
     }
 
     /**
+     * Creates neighbor ArrayList for a Position in the gameState.board
+     * @param row row of the Position
+     * @param col column of the Position
+     * @param gameState singleton
+     */
+    public void setUpNeighbors(int row, int col, GameState gameState) {
+        if (neighbour==null){
+            neighbour = new ArrayList<Position>();
+            Position[][] board = gameState.getBoard();
+            for(int r=Math.max(0,row-1); r<=Math.min(row+1,board.length-1); r++){
+                for(int c=Math.max(0,col-1); c<=Math.min(col+1,board.length-1); c++){
+                    if(!(c==col && r==row)){
+                        neighbour.add(board[r][c]);
+                    }
+                }
+            }
+
+        }
+    }
+
+    /**
      * Constructor of the class Position
      * Generates neighbour list based on row and col
      * @param row y coordinate of the position in the platform
@@ -74,15 +95,7 @@ public class Position {
         this.col=col;
         this.worker=null;
         this.dome=false;
-        this.neighbour = new ArrayList<> ();
-        Position[][] board = gameState.getBoard();
-        for(int r=Math.max(0,row-1); r<=Math.min(row+1,board.length-1); r++){
-            for(int c=Math.max(0,col-1); c<=Math.min(col+1,board.length-1); c++){
-                if(!(c==col && r==row)){
-                    neighbour.add(board[r][c]);
-                }
-            }
-        }
+        this.neighbour = null;
     }
 
     /**

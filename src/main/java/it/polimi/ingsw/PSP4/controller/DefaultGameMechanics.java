@@ -53,22 +53,24 @@ public class DefaultGameMechanics extends GameMechanics {
         if(futurePosition == null){
             //exception
         }
-        if(futurePosition.getWorker() != null){
+        else if(futurePosition.getWorker() != null){
             //exception
         }
-        if(futurePosition.hasDome()){
+        else if(futurePosition.hasDome()){
             //exception
         }
-        player.lockWorker();
+        else {
+            player.lockWorker();
 
-        Worker currWorker = player.getCurrWorker();
-        Position currentPosition = currWorker.getCurrPosition();
+            Worker currWorker = player.getCurrWorker();
+            Position currentPosition = currWorker.getCurrPosition();
 
-        futurePosition.setWorker(currWorker);
-        currentPosition.setWorker(null);
+            futurePosition.setWorker(currWorker);
+            currentPosition.setWorker(null);
 
-        currWorker.setPrevPosition(currentPosition);
-        currWorker.setCurrPosition(futurePosition);
+            currWorker.setPrevPosition(currentPosition);
+            currWorker.setCurrPosition(futurePosition);
+        }
     }
 
     @Override
@@ -76,13 +78,15 @@ public class DefaultGameMechanics extends GameMechanics {
         if(futurePosition == null){
             //exception
         }
-        if(futurePosition.getWorker() != null){
+        else if(futurePosition.getWorker() != null){
             //exception
         }
-        if(futurePosition.hasDome()){
+        else if(futurePosition.hasDome()){
             //exception
         }
-        player.lockWorker();
-        futurePosition.increaseHeight();
+        else {
+            player.lockWorker();
+            futurePosition.increaseHeight();
+        }
     }
 }

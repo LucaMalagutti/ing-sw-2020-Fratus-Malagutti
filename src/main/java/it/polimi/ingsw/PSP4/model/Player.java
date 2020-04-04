@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Player {
     private final String username;                              //Player's username
-    private ArrayList<Worker> workers = new ArrayList<>();      //list of player's workers
+    private final ArrayList<Worker> workers = new ArrayList<>();      //list of player's workers
     private Worker currWorker;                                  //reference to current worker
     private boolean workerLocked;                               //if true current worker can't be changed
     private int turnNum;                                        //number of player's turn

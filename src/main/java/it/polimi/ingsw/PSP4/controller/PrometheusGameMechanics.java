@@ -10,21 +10,12 @@ import java.util.stream.Collectors;
  * Defines the mechanics of the God card Prometheus
  */
 public class PrometheusGameMechanics extends GodGameMechanics {
-    private Boolean canMoveUp;          //true if the worker can move up
-
-    //getters and setters
-    public Boolean getCanMoveUp() { return canMoveUp; }
-    public void setCanMoveUp(Boolean canMoveUp) {
-        this.canMoveUp = canMoveUp;
-    }
-
     /**
      * Constructor of the class PrometheusGameMechanics
      * @param component reference to the game mechanics to decorate
      */
     public PrometheusGameMechanics(GameMechanics component) {
         super(component, "Prometheus", PathType.EARLY_BUILD);
-        canMoveUp = true;
     }
 
     /**
@@ -32,10 +23,8 @@ public class PrometheusGameMechanics extends GodGameMechanics {
      */
     @Override
     public ArrayList<Position> getMovePositions(Player player, int callNum) {
-        if (callNum > 1) {
-            return new ArrayList<>();
-        }
-        if (!getCanMoveUp()) {
+        //Prometheus can move up IFF he hasn't built before, i.e. if his worker is not locked
+        if (player.isWorkerLocked()) {
             ArrayList<Position> componentValid = super.getComponent().getMovePositions(player, callNum);
             return componentValid.stream().filter(position -> position.getHeight() <= player.getCurrWorker().getCurrPosition().getHeight()).collect(Collectors.toCollection(ArrayList::new));
         }

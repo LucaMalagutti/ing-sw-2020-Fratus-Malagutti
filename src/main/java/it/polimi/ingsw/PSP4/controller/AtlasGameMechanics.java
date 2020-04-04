@@ -3,8 +3,6 @@ package it.polimi.ingsw.PSP4.controller;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 
-import java.util.ArrayList;
-
 /**
  * Defines the mechanics of the God card Atlas
  */
@@ -34,17 +32,19 @@ public class AtlasGameMechanics extends GodGameMechanics {
         if(futurePosition == null){
             //exception
         }
-        if(futurePosition.getWorker() != null){
+        else if(futurePosition.getWorker() != null){
             //exception
         }
-        if(futurePosition.hasDome()){
+        else if(futurePosition.hasDome()){
             //exception
         }
-        player.lockWorker();
+        else {
+            player.lockWorker();
 
-        if(forceDome(futurePosition))
-            futurePosition.setDome(true);
-        else
-            futurePosition.increaseHeight();
+            if (forceDome(futurePosition))
+                futurePosition.setDome(true);
+            else
+                futurePosition.increaseHeight();
+        }
     }
 }
