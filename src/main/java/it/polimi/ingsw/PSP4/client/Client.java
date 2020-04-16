@@ -1,99 +1,99 @@
 package it.polimi.ingsw.PSP4.client;
 
-import it.polimi.ingsw.PSP4.server.Server;
-
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+public class Client {
+    private final String ipAddress;
+    private final int port;
 
-public class Client implements Runnable, ServerObserver
-{
-    /* auxiliary variable used for implementing the consumer-producer pattern*/
-    private String response = null;
+    private boolean active = true;
 
+    private String clientUI;
 
-    public static void main( String[] args )
-    {
-        /* Instantiate a new Client which will also receive events from
-         * the server by implementing the ServerObserver interface */
-        Client client = new Client();
-        client.run();
+    public Client(String ipAddress, int port) {
+        this.ipAddress = ipAddress;
+        this.port = port;
     }
 
+    public synchronized boolean isActive() {return active;}
 
-    @Override
-    public void run()
-    {
-        /*
-         * WARNING: this method executes IN THE CONTEXT OF THE MAIN THREAD
-         */
+    public synchronized void setActive(boolean active) {this.active = active;}
 
-        Scanner scanner = new Scanner(System.in);
+    private void setClientUI(String clientUI) {this.clientUI = clientUI;}
 
-        System.out.println("IP address of server?");
-        String ip = scanner.nextLine();
+    /**
+     * Asks the user (repeatedly) to choose which kind of UI he wants to use during the game
+     * @param stdIn buffer from command line to input the UI chosen
+     * @return String representing the kind of UI
+     */
+    private String chooseClientUI(final Scanner stdIn) {
+        String inputLine;
+        do {
+            System.out.println("Choose your graphical interface:\n(Type \"GUI\" or \"CLI\")");
+            inputLine = stdIn.nextLine().toUpperCase();
+        } while (!inputLine.equals("CLI") && !inputLine.equals("GUI"));
+        System.out.println("You have chosen \""+inputLine+"\" as your UI for the game.");
+        return inputLine;
+    }
 
-        /* open a connection to the server */
-        Socket server;
-        try {
-            server = new Socket(ip, Server.SOCKET_PORT);
-        } catch (IOException e) {
-            System.out.println("server unreachable");
-            return;
-        }
-        System.out.println("Connected");
-
-        /* Create the adapter that will allow communication with the server
-         * in background, and start running its thread */
-        ServerAdapter serverAdapter = new ServerAdapter(server);
-        serverAdapter.addObserver(this);
-        Thread serverAdapterThread = new Thread(serverAdapter);
-        serverAdapterThread.start();
-
-        String str = scanner.nextLine();
-        while (!"".equals(str)) {
-
-            synchronized (this) {
-                /* reset the variable that contains the next string to be consumed
-                 * from the server */
-                response = null;
-
-                serverAdapter.requestConversion(str);
-
-                /* While we wait for the server to respond, we can do whatever we want.
-                 * In this case we print a count-up of the number of seconds since we
-                 * requested the conversion to the server. */
-                int seconds = 0;
-                while (response == null) {
-                    System.out.println("been waiting for " + seconds + " seconds");
-                    try {
-                        wait(1000);
-                    } catch (InterruptedException e) { }
-                    seconds++;
+    public Thread asyncReadFromSocket(final ObjectInputStream socketIn) {
+        Thread t = new Thread((Runnable) () -> {
+            try {
+                while(isActive()) {
+                    Object inputObject = socketIn.readObject();
+                    if(inputObject instanceof String) {
+                        System.out.println((String) inputObject);
+                    }
                 }
-
-                /* we have the response, print it */
-                System.out.println(response);
+            } catch (Exception e) {
+                setActive(false);
             }
-
-            str = scanner.nextLine();
-        }
-
-        serverAdapter.stop();
+        });
+        t.start();
+        return t;
     }
 
+    public Thread asyncWriteToSocket(final Scanner stdIn, final PrintWriter socketOut) {
+        Thread t = new Thread((Runnable) () -> {
+            try {
+                while (isActive()) {
+                    String inputLine = stdIn.nextLine();
+                    socketOut.println(inputLine);
+                    socketOut.flush();
+                }
+            } catch (Exception e) {
+                setActive(false);
+            }
+        });
+        t.start();
+        return t;
+    }
 
-    @Override
-    public synchronized void didReceiveConvertedString(String oldStr, String newStr)
-    {
-        /*
-         * WARNING: this method executes IN THE CONTEXT OF `serverAdapterThread`
-         * because it is called from inside the `run` method of ServerAdapter!
-         */
+    public void run() throws IOException {
+        Socket socket = new Socket(ipAddress, port);
+        System.out.println("Connection established");
 
-        /* Save the string and notify the main thread */
-        response = newStr;
-        notifyAll();
+        ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
+        PrintWriter socketOut = new PrintWriter(socket.getOutputStream());
+        Scanner stdIn = new Scanner(System.in);
+        setClientUI(chooseClientUI(stdIn));
+        try {
+            Thread t0 = asyncReadFromSocket(socketIn);
+            Thread t1 = asyncWriteToSocket(stdIn, socketOut);
+            t0.join();
+            t1.join();
+        } catch (InterruptedException |NoSuchElementException e) {
+            System.out.println("Connection closed from client side");
+        } finally {
+            stdIn.close();
+            socketIn.close();
+            socketOut.close();
+            socket.close();
+        }
     }
 }

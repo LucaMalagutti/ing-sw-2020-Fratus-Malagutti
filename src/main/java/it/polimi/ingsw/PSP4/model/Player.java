@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP4.model;
 
-import it.polimi.ingsw.PSP4.controller.*;
+import it.polimi.ingsw.PSP4.controller.turnStates.*;
+import it.polimi.ingsw.PSP4.controller.cardsMechanics.GameMechanics;
+import it.polimi.ingsw.PSP4.controller.turnStates.PathType;
 
 import java.util.ArrayList;
 
