@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.observer.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Contains information about the game being played, its state and its board.
@@ -11,13 +12,13 @@ import java.util.ArrayList;
  */
 public class GameState implements Observable<Message> {
     private ArrayList<GodType> allowedGods;
-    private static GameState instance;                  //singleton instance
+    private static GameState instance;                          //singleton instance
     private final ArrayList<Observer<Message>> observers = new ArrayList<>();
 
-    private final Position[][] board = new Position[5][5];    //5x5 grid, represents game platform
-    private ArrayList<Player> players;                  //list of players
-    private Player currPlayer;                          //reference to current player
-    private int numPlayer;                              //number of players (2 or 3)
+    private final Position[][] board = new Position[5][5];      //5x5 grid, represents game platform
+    private ArrayList<Player> players;                          //list of players
+    private Player currPlayer;                                  //reference to current player
+    private int numPlayer;                                      //number of players (2 or 3)
 
     //getter and setter
     public Position[][] getBoard() { return board; }
@@ -32,7 +33,9 @@ public class GameState implements Observable<Message> {
     public int getNumPlayer() {
         return numPlayer;
     }
-    public void setNumPlayer(int numPlayer) { this.numPlayer = numPlayer; }
+    public void setNumPlayer(int numPlayer) {
+        this.numPlayer = numPlayer;
+    }
 
     public ArrayList<Player> getPlayers() {
         return players;
@@ -47,7 +50,6 @@ public class GameState implements Observable<Message> {
      */
     private GameState(){
         this.currPlayer = null;
-        this.numPlayer = numPlayer;
         this.players = null;
         for(int row=0; row<board.length; row++){
             for(int col=0; col<board[row].length; col++){
@@ -59,6 +61,17 @@ public class GameState implements Observable<Message> {
                 board[row][col].setUpNeighbors(row, col, this);
             }
         }
+    }
+
+    /**
+     * @return ArrayList of Position of the board (1D)
+     */
+    public ArrayList<Position> getStraightBoard() {
+        ArrayList<Position> straightBoard = new ArrayList<>();
+        for(Position[] line : board){
+            straightBoard.addAll(Arrays.asList(line));
+        }
+        return straightBoard;
     }
 
     public void startGame() {

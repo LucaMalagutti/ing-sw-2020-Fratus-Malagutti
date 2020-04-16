@@ -10,19 +10,19 @@ import java.util.ArrayList;
  * Contains information about the state of one player
  */
 public class Player {
-    private final String username;                              //Player's username
-    private final ArrayList<Worker> workers = new ArrayList<>();      //list of player's workers
-    private Worker currWorker;                                  //reference to current worker
-    private boolean workerLocked;                               //if true current worker can't be changed
-    private int turnNum;                                        //number of player's turn
-    private State state;                                        //state of player's turn
-    private GameMechanics mechanics;                            //card of the player
+    private final String username;                                  //Player's username
+    private final ArrayList<Worker> workers = new ArrayList<>();    //list of player's workers
+    private Worker currWorker;                                      //reference to current worker
+    private boolean workerLocked;                                   //if true current worker can't be changed
+    private int turnNum;                                            //number of player's turn
+    private State state;                                            //state of player's turn
+    private GameMechanics mechanics;                                //card of the player
 
     //getter and setter
     public String getUsername() { return username; }
 
     public ArrayList<Worker> getWorkers() {
-        return workers;
+        return new ArrayList<>(workers);
     }
 
     public Worker getCurrWorker() { return currWorker; }
