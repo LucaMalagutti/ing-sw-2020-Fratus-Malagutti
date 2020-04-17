@@ -33,6 +33,9 @@ public class Server {
     }
 
     public synchronized void lobby(SocketClientConnection c, String name) {
+        if (playingConnections.size() > 0) {
+            c.closeConnection("A game has already started. Try again later!");
+        }
         waitingConnections.put(name, c);
         if (waitingConnections.size() == 1) {
             setNumPlayers(c.initializeGameNumPlayer());

@@ -43,6 +43,8 @@ public class GameState implements Observable<Message> {
     public void setPlayers(ArrayList<Player> players) {
         this.players = players;
     }
+    public void addPlayer(Player player) { this.players.add(player); }
+    public void removePlayer(Player player) { this.players.remove(player); }
 
     /**
      * Constructor of the class GameState
@@ -66,12 +68,12 @@ public class GameState implements Observable<Message> {
     /**
      * @return ArrayList of Position of the board (1D)
      */
-    public ArrayList<Position> getStraightBoard() {
-        ArrayList<Position> straightBoard = new ArrayList<>();
+    public ArrayList<Position> getFlatBoard() {
+        ArrayList<Position> flatBoard = new ArrayList<>();
         for(Position[] line : board){
-            straightBoard.addAll(Arrays.asList(line));
+            flatBoard.addAll(Arrays.asList(line));
         }
-        return straightBoard;
+        return flatBoard;
     }
 
     public void startGame() {
@@ -80,7 +82,7 @@ public class GameState implements Observable<Message> {
 
     public void chooseAllowedGods() {
         //TODO implement this after defining Message stucture
-        notifyObservers(new Message(""));
+        //notifyObservers(new Message(""));
     }
 
     /**

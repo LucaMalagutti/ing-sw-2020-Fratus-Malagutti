@@ -36,6 +36,11 @@ public class SocketClientConnection implements Observable<String>, Runnable {
         }
     }
 
+    public void closeConnection(String message) {
+        send(message);
+        closeConnection();
+    }
+
     public void closeConnection() {
         send("Connection closed");
         try {
@@ -54,12 +59,7 @@ public class SocketClientConnection implements Observable<String>, Runnable {
     }
 
     public void asyncSend(Object message) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                send(message);
-            }
-        }).start();
+        new Thread(() -> send(message)).start();
     }
 
     /**

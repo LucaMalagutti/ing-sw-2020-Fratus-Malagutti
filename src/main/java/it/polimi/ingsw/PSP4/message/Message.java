@@ -1,12 +1,22 @@
 package it.polimi.ingsw.PSP4.message;
 
-public class Message {
-    //Classe creata come placeholder per i generics di Observable e Observer
-    String payload;
+import java.io.Serializable;
 
-    public String getPayload() {return this.payload;}
+public abstract class Message implements Serializable {
+    private static final long serialVersionUID = -2598699184641521335L;
 
-    public Message(String payload) {
-        this.payload = payload;
+    private final String player;
+    private final String message;
+    private final MessageType type;
+
+    //getter and setter
+    public String getPlayer() { return this.player; }
+    public String getMessage() { return this.message; }
+    public MessageType getType() { return this.type; }
+
+    public Message(String player, String message, MessageType type) {
+        this.player = player;
+        this.message = message;
+        this.type = type;
     }
 }

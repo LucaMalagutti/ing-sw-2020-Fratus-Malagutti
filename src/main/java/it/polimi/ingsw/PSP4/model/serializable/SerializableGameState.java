@@ -21,7 +21,7 @@ public final class SerializableGameState implements Serializable {
      * @param gameState GameState to serialize
      */
     public SerializableGameState(GameState gameState) {
-        gameState.getStraightBoard().forEach(position -> this.board.add(new SerializablePosition(position)));
+        gameState.getFlatBoard().forEach(position -> this.board.add(new SerializablePosition(position)));
         gameState.getPlayers().forEach(player -> this.players.add(new SerializablePlayer(player)));
         this.currPlayerIndex = gameState.getPlayers().indexOf(gameState.getCurrPlayer());
         this.numPlayer = gameState.getNumPlayer();
