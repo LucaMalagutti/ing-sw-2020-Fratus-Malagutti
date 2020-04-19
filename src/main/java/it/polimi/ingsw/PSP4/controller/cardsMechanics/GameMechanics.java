@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
-import it.polimi.ingsw.PSP4.controller.turnStates.PathType;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 
@@ -10,24 +9,12 @@ import java.util.ArrayList;
  * Base class for the God card Decorator
  */
 abstract public class GameMechanics {
-    private final String name;          //name of the god or "Default"
-    private final PathType path;        //path to follow during a turn, fixed for every God
-
     //getters and setters
-    public String getName() { return name; }
-
-    public PathType getPath() { return path; }
+    abstract public GodType getType();
+    public String getName() { return getType().getName(); }
+    public PathType getPath() { return getType().getPathType(); }
 
     abstract public GameMechanics getComponent();
-
-    /**
-     * Constructor of the class GameMechanics
-     * @param path type of path of the actual God
-     */
-    protected GameMechanics(String name, PathType path) {
-        this.name = name;
-        this.path = path;
-    }
 
     /**
      * Modifies available movement positions based on the card effect

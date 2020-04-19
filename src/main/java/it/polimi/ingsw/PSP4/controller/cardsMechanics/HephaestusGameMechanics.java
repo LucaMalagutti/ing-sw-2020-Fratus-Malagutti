@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
-import it.polimi.ingsw.PSP4.controller.turnStates.PathType;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 
@@ -8,22 +7,18 @@ import it.polimi.ingsw.PSP4.model.Position;
  * Defines the mechanics of the God card Hephaestus
  */
 public class HephaestusGameMechanics extends GodGameMechanics {
-    private Position lastPositionBuilt;     //reference to the last position in which the player has built
+    private static final GodType type = GodType.HEPHAESTUS;         //type which represents the God
 
     //getters and setters
-    public Position getLastPositionBuilt() {
-        return lastPositionBuilt;
-    }
-    public void setLastPositionBuilt(Position lastPositionBuilt) {
-        this.lastPositionBuilt = lastPositionBuilt;
-    }
+    @Override
+    public GodType getType() { return type; }
 
     /**
      * Constructor of the class HephaestusGameMechanics
      * @param component reference to the game mechanics to decorate
      */
     public HephaestusGameMechanics(GameMechanics component) {
-        super(component, "Hephaestus", PathType.DEFAULT);
+        super(component);
     }
 
     /**

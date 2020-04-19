@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
-import it.polimi.ingsw.PSP4.controller.turnStates.PathType;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 import it.polimi.ingsw.PSP4.model.Worker;
@@ -12,11 +11,17 @@ import java.util.stream.Collectors;
  * Defines the mechanics of the God card Apollo
  */
 public class ApolloGameMechanics extends GodGameMechanics {
+    private static final GodType type = GodType.APOLLO;           //type which represents the God
+
+    //getter and setter
+    @Override
+    public GodType getType() { return type; }
+
     /**
      * Constructor of the class ApolloGameMechanics
      * @param component reference to the game mechanics to decorate
      */
-    public ApolloGameMechanics(GameMechanics component){ super(component, "Apollo", PathType.DEFAULT); }
+    public ApolloGameMechanics(GameMechanics component){ super(component); }
 
     /**
      * Allows the player to move in neighboring cells occupied by another player's worker

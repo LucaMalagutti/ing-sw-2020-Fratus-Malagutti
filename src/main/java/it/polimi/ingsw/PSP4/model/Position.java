@@ -65,12 +65,11 @@ public class Position {
      * Creates neighbor ArrayList for a Position in the gameState.board
      * @param row row of the Position
      * @param col column of the Position
-     * @param gameState singleton
      */
-    public void setUpNeighbors(int row, int col, GameState gameState) {
+    public void setUpNeighbors(int row, int col) {
         if (neighbour==null){
-            neighbour = new ArrayList<Position>();
-            Position[][] board = gameState.getBoard();
+            neighbour = new ArrayList<>();
+            Position[][] board = GameState.getInstance().getBoard();
             for(int r=Math.max(0,row-1); r<=Math.min(row+1,board.length-1); r++){
                 for(int c=Math.max(0,col-1); c<=Math.min(col+1,board.length-1); c++){
                     if(!(c==col && r==row)){
@@ -87,9 +86,8 @@ public class Position {
      * Generates neighbour list based on row and col
      * @param row y coordinate of the position in the platform
      * @param col x coordinate of the position in the platform
-     * @param gameState reference to gameState, used to extract the board
      */
-    public Position (int row, int col, GameState gameState){
+    public Position (int row, int col){
         this.height=0;
         this.row=row;
         this.col=col;
@@ -120,6 +118,6 @@ public class Position {
      * @return An ArrayList of the neighboring Positions respecting the above property
      */
     public ArrayList<Position> getOccupied(Player player) {
-        return getNeighbour().stream().filter(position -> position.getWorker() != null && player.getWorkers().indexOf(position.getWorker()) == -1).collect(Collectors.toCollection(ArrayList::new));
+        return getNeighbour().stream().filter(position -> position.getWorker() != null && !player.getWorkers().contains(position.getWorker())).collect(Collectors.toCollection(ArrayList::new));
     }
 }

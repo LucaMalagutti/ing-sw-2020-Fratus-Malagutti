@@ -10,13 +10,21 @@ import java.util.stream.Collectors;
  * Defines the mechanics of the God card Athena, when it affects an enemy
  */
 public class AthenaEnemyGameMechanics extends GodGameMechanics {
+    //getter and setter
+    @Override
+    public GodType getType() { return getComponent().getType(); }
+
+    @Override
+    public String getName() { return "Athena_Enemy"; }
+
+    @Override
+    public PathType getPath() { return getComponent().getPath(); }
+
     /**
      * Constructor of the class AthenaEnemyGameMechanics
      * @param component reference to the game mechanics to decorate
      */
-    protected AthenaEnemyGameMechanics(GameMechanics component) {
-        super(component, "Athena_Enemy", component.getPath());
-    }
+    protected AthenaEnemyGameMechanics(GameMechanics component) { super(component); }
 
     /**
      * Removes the possibility of moving up

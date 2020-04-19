@@ -11,8 +11,9 @@ import java.util.ArrayList;
 public class SecondMoveState extends State {
     /**
      * Constructor of the class SecondMoveState
+     * @param player reference to current player
      */
-    public SecondMoveState() { super(StateType.MOVE); }
+    public SecondMoveState(Player player) { super(player, StateType.MOVE); }
 
     @Override
     public Position selectOption(ArrayList<Position> options) {
@@ -21,15 +22,18 @@ public class SecondMoveState extends State {
     }
 
     @Override
-    public State performAction(Player player) {
+    public State performAction() {
+        Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getMovePositions(player, 2);
-        Position position = selectOption(options);
-        if(position != null) {  //Player wants to move
-            player.getMechanics().move(player, position);
-            if(player.getMechanics().checkWinCondition(player)){
-                //handle game over : win
+        if(options.size() != 0) {
+            Position position = selectOption(options);
+            if (position != null) {  //Player wants to move
+                player.getMechanics().move(player, position);
+                if (player.getMechanics().checkWinCondition(player)) {
+                    //handle game over : win
+                }
             }
         }
-        return new StandardBuildState();
+        return new StandardBuildState(player);
     }
 }

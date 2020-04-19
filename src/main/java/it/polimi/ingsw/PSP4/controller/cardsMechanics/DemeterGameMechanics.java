@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
-import it.polimi.ingsw.PSP4.controller.turnStates.PathType;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 
@@ -10,9 +9,13 @@ import java.util.ArrayList;
  * Defines the mechanics of the God card Demeter
  */
 public class DemeterGameMechanics extends GodGameMechanics {
-    private Position lastPositionBuilt;     //reference to the last position in which the player has built
+    private static final GodType type = GodType.DEMETER;            //type which represents the God
+    private Position lastPositionBuilt;                             //reference to the last position in which the player has built
 
     //getters and setters
+    @Override
+    public GodType getType() { return type; }
+
     public Position getLastPositionBuilt() {
         return lastPositionBuilt;
     }
@@ -25,7 +28,7 @@ public class DemeterGameMechanics extends GodGameMechanics {
      * @param component reference to the game mechanics to decorate
      */
     public DemeterGameMechanics(GameMechanics component) {
-        super(component, "Demeter", PathType.DOUBLE_BUILD);
+        super(component);
         lastPositionBuilt = null;
     }
 

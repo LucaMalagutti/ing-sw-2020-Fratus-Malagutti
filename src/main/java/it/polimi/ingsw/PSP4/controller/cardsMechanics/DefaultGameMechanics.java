@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
-import it.polimi.ingsw.PSP4.controller.turnStates.PathType;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 import it.polimi.ingsw.PSP4.model.Worker;
@@ -13,14 +12,14 @@ import java.util.stream.Collectors;
  * Defines the behaviours that a user would have if he wasn't assigned any card.
  */
 public class DefaultGameMechanics extends GameMechanics {
+    private static final GodType type = GodType.DEFAULT;            //type which represents the God
+
     //getters and setters
     @Override
-    public GameMechanics getComponent() { return null; }
+    public GodType getType() { return type; }
 
-    /**
-     * Constructor of the class DefaultGameMechanics
-     */
-    public DefaultGameMechanics() { super("Default", PathType.DEFAULT); }
+    @Override
+    public GameMechanics getComponent() { return null; }
 
     /**
      * Returns ArrayList containing neighboring, reachable and free positions from the selected worker

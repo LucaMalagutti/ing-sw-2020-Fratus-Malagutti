@@ -1,9 +1,12 @@
 package it.polimi.ingsw.PSP4.model;
 
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
+import it.polimi.ingsw.PSP4.controller.turnStates.State;
+import it.polimi.ingsw.PSP4.controller.turnStates.StateType;
 import it.polimi.ingsw.PSP4.message.ChooseAllowedGodsMessage;
 import it.polimi.ingsw.PSP4.message.Message;
-import it.polimi.ingsw.PSP4.observer.*;
+import it.polimi.ingsw.PSP4.observer.Observable;
+import it.polimi.ingsw.PSP4.observer.Observer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +37,8 @@ public class GameState implements Observable<Message> {
     public void setCurrPlayer(Player currPlayer) {
         this.currPlayer = currPlayer;
     }
+    public Player getNextPlayer() { return players.get((players.indexOf(currPlayer) + 1) % numPlayer); }
+    private void skipPlayer() { setCurrPlayer(getNextPlayer()); }
 
     public int getNumPlayer() {
         return numPlayer;
@@ -59,12 +64,12 @@ public class GameState implements Observable<Message> {
         this.players = new ArrayList<>();
         for(int row=0; row<board.length; row++){
             for(int col=0; col<board[row].length; col++){
-                board[row][col] = new Position(row,col,this);
+                board[row][col] = new Position(row, col);
             }
         }
         for(int row=0; row<board.length; row++){
             for(int col=0; col<board[row].length; col++){
-                board[row][col].setUpNeighbors(row, col, this);
+                board[row][col].setUpNeighbors(row, col);
             }
         }
     }
@@ -132,5 +137,38 @@ public class GameState implements Observable<Message> {
         synchronized (observers) {
             observers.remove(o);
         }
+    }
+
+    /**
+     * Asks currPlayer to select a worker, then sets it as current
+     */
+    private void selectWorker() {
+        //TODO: implement this to choose a worker
+        //Worker worker = ???
+        //getCurrPlayer().setCurrWorker(worker);
+    }
+
+    /**
+     * If no player is playing, moves currPlayer pointer forward and prepares the new player for the turn
+     */
+    public synchronized void newTurn() {
+        for(Player player : getPlayers())
+            if(player.getState().getType() != StateType.WAIT)
+                return;
+        skipPlayer();
+        getCurrPlayer().newTurn();
+    }
+
+    /**
+     * Runs the turn until the currPlayer's state is WAIT
+     */
+    public synchronized void runTurn() {
+        while(getCurrPlayer().getState().getType() != StateType.WAIT) {
+            if(!getCurrPlayer().isWorkerLocked())
+                selectWorker();
+            State nextState = getCurrPlayer().getState().performAction();
+            getCurrPlayer().setState(nextState);
+        }
+        getCurrPlayer().endTurn();
     }
 }

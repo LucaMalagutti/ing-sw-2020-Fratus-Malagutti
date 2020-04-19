@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP4.controller.turnStates;
 
+import it.polimi.ingsw.PSP4.controller.cardsMechanics.PathType;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 
@@ -17,9 +18,10 @@ public class StandardMoveState extends State {
 
     /**
      * Constructor of the class StandardMoveState
+     * @param player reference to current player
      */
-    public StandardMoveState() {
-        super(StateType.MOVE);
+    public StandardMoveState(Player player) {
+        super(player, StateType.MOVE);
         this.change = false;
     }
 
@@ -31,17 +33,21 @@ public class StandardMoveState extends State {
     }
 
     @Override
-    public State performAction(Player player) {
+    public State performAction() {
+        Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getMovePositions(player, 1);
+        if(options.size() == 0) {
+            //handle game over : loss
+        }
         Position position = selectOption(options);
-        if(position == null && isWorkerChanged())              //Player wants to change worker
-            return new StandardMoveState();
-        player.getMechanics().move(player, position);   //Player wants to build
+        if(position == null && isWorkerChanged())           //Player wants to change worker
+            return new StandardMoveState(player);
+        player.getMechanics().move(player, position);       //Player wants to build
         if(player.getMechanics().checkWinCondition(player)) {
             //handle game over : win
         }
         if(player.getMechanics().getPath() == PathType.DOUBLE_MOVE)
-            return new SecondMoveState();
-        return new StandardBuildState();
+            return new SecondMoveState(player);
+        return new StandardBuildState(player);
     }
 }

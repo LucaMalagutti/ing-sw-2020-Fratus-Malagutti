@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
-import it.polimi.ingsw.PSP4.controller.turnStates.PathType;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 
@@ -10,12 +9,18 @@ import java.util.ArrayList;
  * Defines the mechanics of the God card Artemis
  */
 public class ArtemisGameMechanics extends GodGameMechanics {
+    private static final GodType type = GodType.ARTEMIS;            //type which represents the God
+
+    //getter and setter
+    @Override
+    public GodType getType() { return type; }
+
     /**
      * Constructor of the class ArtemisGameMechanics
      * @param component reference to the game mechanics to decorate
      */
     public ArtemisGameMechanics(GameMechanics component) {
-        super(component, "Artemis", PathType.DOUBLE_MOVE);
+        super(component);
     }
 
     /**

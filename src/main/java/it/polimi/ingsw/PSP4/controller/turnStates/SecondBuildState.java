@@ -11,8 +11,9 @@ import java.util.ArrayList;
 public class SecondBuildState extends State {
     /**
      * Constructor of the class SecondBuildState
+     * @param player reference to current player
      */
-    public SecondBuildState() { super(StateType.BUILD); }
+    public SecondBuildState(Player player) { super(player, StateType.BUILD); }
 
     @Override
     public Position selectOption(ArrayList<Position> options) {
@@ -21,11 +22,14 @@ public class SecondBuildState extends State {
     }
 
     @Override
-    public State performAction(Player player) {
+    public State performAction() {
+        Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getBuildPositions(player, 2);
-        Position position = selectOption(options);
-        if(position != null)    //Player wants to build
-            player.getMechanics().build(player, position);
-        return new WaitState(); //End of turn
+        if(options.size() != 0) {
+            Position position = selectOption(options);
+            if (position != null)       //Player wants to build
+                player.getMechanics().build(player, position);
+        }
+        return new WaitState(player);         //End of turn
     }
 }

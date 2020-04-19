@@ -18,9 +18,9 @@ public final class SerializableGameState implements Serializable {
 
     /**
      * Constructor of the class SerializableGameState
-     * @param gameState GameState to serialize
      */
-    public SerializableGameState(GameState gameState) {
+    public SerializableGameState() {
+        GameState gameState = GameState.getInstance();
         gameState.getFlatBoard().forEach(position -> this.board.add(new SerializablePosition(position)));
         gameState.getPlayers().forEach(player -> this.players.add(new SerializablePlayer(player)));
         this.currPlayerIndex = gameState.getPlayers().indexOf(gameState.getCurrPlayer());

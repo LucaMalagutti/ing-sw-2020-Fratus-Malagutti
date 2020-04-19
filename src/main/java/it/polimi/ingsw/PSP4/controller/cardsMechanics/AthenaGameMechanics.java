@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
-import it.polimi.ingsw.PSP4.controller.turnStates.PathType;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 import it.polimi.ingsw.PSP4.model.Worker;
@@ -11,9 +10,14 @@ import java.util.ArrayList;
  * Defines the mechanics of the God card Athena
  */
 public class AthenaGameMechanics extends GodGameMechanics {
+    private static final GodType type = GodType.ATHENA;             //type which represents the God
+
     private final ArrayList<Player> players;
 
     //getters and setters
+    @Override
+    public GodType getType() { return type; }
+
     private ArrayList<Player> getPlayers() { return players; }
 
     /**
@@ -21,7 +25,7 @@ public class AthenaGameMechanics extends GodGameMechanics {
      * @param component reference to the game mechanics to decorate
      */
     public AthenaGameMechanics(GameMechanics component, ArrayList<Player> players) {
-        super(component, "Athena", PathType.DEFAULT);
+        super(component);
         this.players = players;
     }
 

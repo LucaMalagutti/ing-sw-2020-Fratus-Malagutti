@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP4.model.serializable;
 
+import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
 import it.polimi.ingsw.PSP4.model.Player;
 
 import java.io.Serializable;
@@ -15,7 +16,7 @@ public final class SerializablePlayer implements Serializable {
     private final ArrayList<String> workers = new ArrayList<>();    //list of player's worker ids
     private final int turnNum;                                      //number of player's turn
     private final String state;                                     //String that represents the state of the player
-    private final String card;                                      //name of the player's card
+    private final GodType card;                                     //type of the player's card
 
     /**
      * Constructor of the class SerializablePlayer
@@ -26,7 +27,7 @@ public final class SerializablePlayer implements Serializable {
         player.getWorkers().forEach(worker -> this.workers.add(worker.getId()));
         this.turnNum = player.getTurnNum();
         this.state = player.getState().getType().getString();
-        this.card = player.getMechanics().getName();
+        this.card = player.getMechanics().getType();
     }
 
     //getter and setter
@@ -38,5 +39,5 @@ public final class SerializablePlayer implements Serializable {
 
     public String getState() { return state; }
 
-    public String getCard() { return card; }
+    public GodType getCard() { return card; }
 }

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
-import it.polimi.ingsw.PSP4.controller.turnStates.PathType;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 
@@ -11,12 +10,18 @@ import java.util.stream.Collectors;
  * Defines the mechanics of the God card Prometheus
  */
 public class PrometheusGameMechanics extends GodGameMechanics {
+    private static final GodType type = GodType.PROMETHEUS;         //type which represents the God
+
+    //getter and setter
+    @Override
+    public GodType getType() { return type; }
+
     /**
      * Constructor of the class PrometheusGameMechanics
      * @param component reference to the game mechanics to decorate
      */
     public PrometheusGameMechanics(GameMechanics component) {
-        super(component, "Prometheus", PathType.EARLY_BUILD);
+        super(component);
     }
 
     /**

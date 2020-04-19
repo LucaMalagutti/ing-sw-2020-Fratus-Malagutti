@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP4.model.Player;
 import java.util.ArrayList;
 
 public enum GodType {
+    DEFAULT ("Default"),
     APOLLO ("Apollo"),
     ARTEMIS ("Artemis"),
     ATHENA ("Athena"),
@@ -25,8 +26,10 @@ public enum GodType {
         this.name = name;
     }
 
-    public GameMechanics getGameMechanics(GodType god, ArrayList<Player> players) {
-        switch (god) {
+    public GameMechanics getGameMechanics(ArrayList<Player> players) {
+        switch (this) {
+            case DEFAULT:
+                return new DefaultGameMechanics();
             case APOLLO:
                 return new ApolloGameMechanics(new DefaultGameMechanics());
             case ARTEMIS:
@@ -48,6 +51,28 @@ public enum GodType {
             default:
                 System.out.println("Not a valid god");
                 return new DefaultGameMechanics();
+        }
+    }
+
+    public PathType getPathType() {
+        switch (this) {
+            case DEFAULT:
+            case APOLLO:
+            case ATHENA:
+            case ATLAS:
+            case HEPHAESTUS:
+            case MINOTAUR:
+            case PAN:
+                return PathType.DEFAULT;
+            case ARTEMIS:
+                return PathType.DOUBLE_MOVE;
+            case DEMETER:
+                return PathType.DOUBLE_BUILD;
+            case PROMETHEUS:
+                return PathType.EARLY_BUILD;
+            default:
+                System.out.println("Not a valid god");
+                return PathType.DEFAULT;
         }
     }
 }

@@ -1,8 +1,8 @@
 package it.polimi.ingsw.PSP4.model;
 
-import it.polimi.ingsw.PSP4.controller.turnStates.*;
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.GameMechanics;
-import it.polimi.ingsw.PSP4.controller.turnStates.PathType;
+import it.polimi.ingsw.PSP4.controller.cardsMechanics.PathType;
+import it.polimi.ingsw.PSP4.controller.turnStates.*;
 
 import java.util.ArrayList;
 
@@ -53,39 +53,33 @@ public class Player {
         this.currWorker = null;
         this.workerLocked = false;
         this.turnNum = 1;
-        this.state = new WaitState();
+        this.state = new WaitState(this);
         this.mechanics = null;
     }
 
     /**
-     * Asks the player to select a worker, then sets it as current
-     */
-    public void selectWorker() {
-        //To be implemented
-    }
-
-    /**
-     * Prepares the player for a new turn
+     * If the player is not playing, prepares it for a new turn
      */
     public void newTurn() {
-        increaseTurnNum();
-        unlockWorker();
-        setCurrWorker(null);
-        if (getMechanics().getPath() == PathType.EARLY_BUILD)
-            setState(new EarlyBuildState());
-        else
-            setState(new StandardMoveState());
+        if(getState().getType() == StateType.WAIT) {
+            increaseTurnNum();
+            unlockWorker();
+            setCurrWorker(null);
+            if (getMechanics().getPath() == PathType.EARLY_BUILD)
+                setState(new EarlyBuildState(this));
+            else
+                setState(new StandardMoveState(this));
+        }
     }
 
     /**
-     * Runs the turn until the player's state is WAIT
+     * If the player is not playing, locks currWorker as null (for safety)
      */
-    public void runTurn() {
-        while(getState().getType() != StateType.WAIT) {
-            if(!isWorkerLocked())
-                selectWorker();
-            State nextState = getState().performAction(this);
-            setState(nextState);
+    public void endTurn() {
+        if(getState().getType() == StateType.WAIT) {
+            unlockWorker();
+            setCurrWorker(null);
+            lockWorker();
         }
     }
 }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP4.controller.turnStates;
+package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
 /**
  * Enum which identifies the path to follow during a turn for each card

@@ -14,11 +14,11 @@ public class WaitState extends State {
     /**
      * Constructor of the class WaitState
      */
-    public WaitState() { super(StateType.WAIT); }
+    public WaitState(Player player) { super(player, StateType.WAIT); }
 
     @Override
     public Position selectOption(ArrayList<Position> options) { return null; }
 
     @Override
-    public State performAction(Player player) { return this; }
+    public State performAction() { return this; }
 }

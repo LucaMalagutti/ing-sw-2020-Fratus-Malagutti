@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
-import it.polimi.ingsw.PSP4.controller.turnStates.PathType;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 import it.polimi.ingsw.PSP4.model.Worker;
@@ -12,12 +11,18 @@ import java.util.stream.Collectors;
  * Defines the mechanics of the God card Minotaur
  */
 public class MinotaurGameMechanics extends GodGameMechanics {
+    private static final GodType type = GodType.MINOTAUR;           //type which represents the God
+
+    //getter and setter
+    @Override
+    public GodType getType() { return type; }
+
     /**
      * Constructor of the class MinotaurGameMechanics
      * @param component reference to the game mechanics to decorate
      */
     public MinotaurGameMechanics(GameMechanics component) {
-        super(component, "Minotaur", PathType.DEFAULT);
+        super(component);
     }
 
     /**
@@ -90,7 +95,7 @@ public class MinotaurGameMechanics extends GodGameMechanics {
                 Worker currWorker = player.getCurrWorker();
                 Worker enemyWorker = futurePosition.getWorker();
                 Position currentPosition = currWorker.getCurrPosition();
-                Position behindPosition = new Position(-1, -1, null);
+                Position behindPosition = new Position(-1, -1);
                 int[] behindCoordinates = getBehindEnemyPositionCoordinates(currentPosition, futurePosition);
                 for (Position x : futurePosition.getFree()) {
                     if (x.getRow() == behindCoordinates[0] && x.getCol() == behindCoordinates[1]) {
