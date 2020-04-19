@@ -1,6 +1,6 @@
-package it.polimi.ingsw.PSP4.model;
+package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
-import it.polimi.ingsw.PSP4.controller.cardsMechanics.*;
+import it.polimi.ingsw.PSP4.model.Player;
 
 import java.util.ArrayList;
 

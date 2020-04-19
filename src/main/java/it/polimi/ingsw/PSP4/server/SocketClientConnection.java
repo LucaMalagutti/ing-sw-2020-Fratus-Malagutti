@@ -1,9 +1,11 @@
 package it.polimi.ingsw.PSP4.server;
 
+import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.observer.Observable;
 import it.polimi.ingsw.PSP4.observer.Observer;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -55,7 +57,7 @@ public class SocketClientConnection implements Observable<String>, Runnable {
         closeConnection();
         System.out.println("Unregistering client from server");
         server.unregisterConnection(this);
-        System.out.println("Connection Unregistered from server");
+        System.out.println("Connection unregistered from server");
     }
 
     public void asyncSend(Object message) {
@@ -67,13 +69,16 @@ public class SocketClientConnection implements Observable<String>, Runnable {
      * @return number of players for this game
      */
     public int initializeGameNumPlayer() {
-        send("Choose the number of players for this game: (2) or (3)");
+        send("Choose the number of players for this game: (2) or (3). Default: 2");
         try {
             Scanner in = new Scanner(socket.getInputStream());
             String numPlayers = in.nextLine();
-            while (!numPlayers.equals("2") && !numPlayers.equals("3")) {
+            while (!numPlayers.equals("2") && !numPlayers.equals("3") && !numPlayers.equals("")) {
                 send("Not a valid number of players. Type 2 or 3");
                 numPlayers = in.nextLine();
+            }
+            if (numPlayers.equals("")) {
+                numPlayers = "2";
             }
             return Integer.parseInt(numPlayers);
         } catch (IOException e) {
@@ -82,19 +87,46 @@ public class SocketClientConnection implements Observable<String>, Runnable {
         }
     }
 
+    /**
+     * Overloading method
+     * @param alreadyTaken selected username that was already taken by another player
+     * @return whitespace-stripped username
+     */
+    public String selectClientUsername(String alreadyTaken) {
+        send(alreadyTaken+" was already taken by another player. Select another one");
+        return selectClientUsername();
+    }
+
+    /**
+     * Asks the player to select a username. Performs length checks and removes whitespace
+     * @return whitespace-stripped username
+     */
+    public String selectClientUsername() {
+        send("Select your username:");
+        try {
+            Scanner in = new Scanner(socket.getInputStream());
+            String name = in.nextLine().replaceAll("\\s","");
+            while (name.equals("") || name.length() > 15) {
+                send("Username's length has to be between 1 and 15 characters. Try again: ");
+                name = in.nextLine().replaceAll("\\s", "");
+            }
+            return name;
+        } catch (IOException e) {
+            return e.getMessage();
+        }
+    }
+
     @Override
     public void run() {
         Scanner in;
-        String name;
         try {
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
-            send("Welcome\nType your name");
-            String read = in.nextLine();
-            name = read;
+            String name = server.selectUsername(this);
+            send("Entering server lobby as "+name);
             server.lobby(this, name);
             while (isActive()) {
-                read = in.nextLine();
+                String read = in.nextLine();
                 notifyObservers(read);
             }
         } catch (IOException e) {

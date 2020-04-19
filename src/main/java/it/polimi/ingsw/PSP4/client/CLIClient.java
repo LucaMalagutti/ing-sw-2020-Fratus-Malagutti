@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP4.client;
 
+import it.polimi.ingsw.PSP4.message.*;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
@@ -7,47 +9,36 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class Client {
+/**
+ * Base class for a Client using a CLI UI.
+ */
+public class CLIClient {
     private final String ipAddress;
     private final int port;
 
     private boolean active = true;
 
-    private String clientUI;
-
-    public Client(String ipAddress, int port) {
+    public CLIClient(String ipAddress, int port) {
         this.ipAddress = ipAddress;
         this.port = port;
     }
 
     public synchronized boolean isActive() {return active;}
-
     public synchronized void setActive(boolean active) {this.active = active;}
-
-    private void setClientUI(String clientUI) {this.clientUI = clientUI;}
-
-    /**
-     * Asks the user (repeatedly) to choose which kind of UI he wants to use during the game
-     * @param stdIn buffer from command line to input the UI chosen
-     * @return String representing the kind of UI
-     */
-    private String chooseClientUI(final Scanner stdIn) {
-        String inputLine;
-        do {
-            System.out.println("Choose your graphical interface:\n(Type \"GUI\" or \"CLI\")");
-            inputLine = stdIn.nextLine().toUpperCase();
-        } while (!inputLine.equals("CLI") && !inputLine.equals("GUI"));
-        System.out.println("You have chosen \""+inputLine+"\" as your UI for the game.");
-        return inputLine;
-    }
 
     public Thread asyncReadFromSocket(final ObjectInputStream socketIn) {
         Thread t = new Thread((Runnable) () -> {
             try {
                 while(isActive()) {
                     Object inputObject = socketIn.readObject();
-                    if(inputObject instanceof String) {
-                        System.out.println((String) inputObject);
+                    if (inputObject instanceof String) {
+                        System.out.println(inputObject);
+                    }
+                    else if (inputObject instanceof Message) {
+                        if (((Message) inputObject).getType() == MessageType.CHOOSE_ALLOWED_GODS) {
+                            ChooseAllowedGodsMessage message = (ChooseAllowedGodsMessage) inputObject;
+                            System.out.println(message.toString());
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -81,7 +72,6 @@ public class Client {
         ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
         PrintWriter socketOut = new PrintWriter(socket.getOutputStream());
         Scanner stdIn = new Scanner(System.in);
-        setClientUI(chooseClientUI(stdIn));
         try {
             Thread t0 = asyncReadFromSocket(socketIn);
             Thread t1 = asyncWriteToSocket(stdIn, socketOut);

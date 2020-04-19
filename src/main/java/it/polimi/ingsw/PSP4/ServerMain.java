@@ -4,6 +4,9 @@ import it.polimi.ingsw.PSP4.server.Server;
 
 import java.io.IOException;
 
+/**
+ * Initializes Server
+ */
 public class ServerMain {
     public static void main( String[] args ) {
         Server server;
@@ -11,7 +14,7 @@ public class ServerMain {
             server = new Server();
             server.run();
         } catch(IOException e) {
-            e.getMessage();
+            e.printStackTrace();
         }
     }
 }

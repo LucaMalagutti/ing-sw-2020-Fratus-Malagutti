@@ -12,9 +12,7 @@ public abstract class View implements Observable<Message>, Observer<Message> {
 
     protected Player getPlayer() {return this.player;}
 
-    protected abstract void showMessage(Object message);
-
-    void handleMove() {};
-
-    public void reportError(String message) {showMessage(message);}
+    void handleMove(Message message) {
+        notifyObservers(message);
+    };
 }
