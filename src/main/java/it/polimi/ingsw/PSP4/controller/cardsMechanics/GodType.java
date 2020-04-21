@@ -3,6 +3,9 @@ package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 import it.polimi.ingsw.PSP4.model.Player;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public enum GodType {
     DEFAULT ("Default"),
@@ -74,5 +77,11 @@ public enum GodType {
                 System.out.println("Not a valid god");
                 return PathType.DEFAULT;
         }
+    }
+
+    public static List<String> getImplementedGodsList() {
+        List<String> godNames = Stream.of(GodType.values()).map(GodType::toString).collect(Collectors.toList());
+        godNames.remove("DEFAULT");
+        return godNames;
     }
 }

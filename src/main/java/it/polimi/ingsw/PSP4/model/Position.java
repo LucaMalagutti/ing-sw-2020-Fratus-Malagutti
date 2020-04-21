@@ -63,13 +63,14 @@ public class Position {
 
     /**
      * Creates neighbor ArrayList for a Position in the gameState.board
+     * Should only be called in the GameState constructor
      * @param row row of the Position
      * @param col column of the Position
      */
-    public void setUpNeighbors(int row, int col) {
+    protected void setUpNeighbors(int row, int col, GameState gameState) {
         if (neighbour==null){
             neighbour = new ArrayList<>();
-            Position[][] board = GameState.getInstance().getBoard();
+            Position[][] board = gameState.getBoard();
             for(int r=Math.max(0,row-1); r<=Math.min(row+1,board.length-1); r++){
                 for(int c=Math.max(0,col-1); c<=Math.min(col+1,board.length-1); c++){
                     if(!(c==col && r==row)){

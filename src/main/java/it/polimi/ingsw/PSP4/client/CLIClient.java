@@ -35,10 +35,8 @@ public class CLIClient {
                         System.out.println(inputObject);
                     }
                     else if (inputObject instanceof Message) {
-                        if (((Message) inputObject).getType() == MessageType.CHOOSE_ALLOWED_GODS) {
-                            ChooseAllowedGodsMessage message = (ChooseAllowedGodsMessage) inputObject;
-                            System.out.println(message.toString());
-                        }
+                        Message message = (Message) inputObject;
+                        System.out.println(message.toString());
                     }
                 }
             } catch (Exception e) {

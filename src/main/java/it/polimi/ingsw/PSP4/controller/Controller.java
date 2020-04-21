@@ -1,9 +1,8 @@
 package it.polimi.ingsw.PSP4.controller;
 
+import it.polimi.ingsw.PSP4.controller.cardsMechanics.GameMechanics;
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
-import it.polimi.ingsw.PSP4.message.ChooseAllowedGodsMessage;
-import it.polimi.ingsw.PSP4.message.Message;
-import it.polimi.ingsw.PSP4.message.MessageType;
+import it.polimi.ingsw.PSP4.message.*;
 import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.observer.Observer;
 
@@ -20,10 +19,6 @@ public class Controller implements Observer<Message> {
      */
     @Override
     public void update(Message message) {
-        if (message.getType() == MessageType.CHOOSE_ALLOWED_GODS) {
-            ChooseAllowedGodsMessage m = (ChooseAllowedGodsMessage) message;
-            List<GodType> gods = m.getSelectableGods().stream().map(GodType::valueOf).collect(Collectors.toList());
-            GameState.getInstance().setAllowedGods(gods);
-        }
+
     }
 }

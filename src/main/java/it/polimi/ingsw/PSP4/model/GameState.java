@@ -3,7 +3,9 @@ package it.polimi.ingsw.PSP4.model;
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
 import it.polimi.ingsw.PSP4.controller.turnStates.State;
 import it.polimi.ingsw.PSP4.controller.turnStates.StateType;
+import it.polimi.ingsw.PSP4.message.AssignGodMessage;
 import it.polimi.ingsw.PSP4.message.ChooseAllowedGodsMessage;
+import it.polimi.ingsw.PSP4.message.ChooseStartingPlayerMessage;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.observer.Observable;
 import it.polimi.ingsw.PSP4.observer.Observer;
@@ -31,29 +33,21 @@ public class GameState implements Observable<Message> {
     //getter and setter
     public Position[][] getBoard() { return board; }
 
-    public Player getCurrPlayer() {
-        return currPlayer;
-    }
-    public void setCurrPlayer(Player currPlayer) {
-        this.currPlayer = currPlayer;
-    }
+    public Player getCurrPlayer() { return currPlayer; }
+    public void setCurrPlayer(Player currPlayer) { this.currPlayer = currPlayer; }
     public Player getNextPlayer() { return players.get((players.indexOf(currPlayer) + 1) % numPlayer); }
     private void skipPlayer() { setCurrPlayer(getNextPlayer()); }
 
-    public int getNumPlayer() {
-        return numPlayer;
-    }
-    public void setNumPlayer(int numPlayer) {
-        this.numPlayer = numPlayer;
-    }
+    public int getNumPlayer() { return numPlayer; }
+    public void setNumPlayer(int numPlayer) { this.numPlayer = numPlayer; }
 
-    public ArrayList<Player> getPlayers() {return players;}
+    public ArrayList<Player> getPlayers() {return new ArrayList<>(players);}
     public void setPlayers(ArrayList<Player> players) {this.players = players;}
     public void addPlayer(Player player) { this.players.add(player);}
     public void removePlayer(Player player) { this.players.remove(player);}
 
-    public List<GodType> getAllowedGods() { return allowedGods;}
-    public void setAllowedGods(List<GodType> allowedGods) { this.allowedGods = allowedGods; }
+    public List<GodType> getAllowedGods() { return new ArrayList<>(allowedGods);}
+    public synchronized void setAllowedGods(List<GodType> allowedGods) { this.allowedGods = allowedGods; }
 
     /**
      * Constructor of the class GameState
@@ -69,35 +63,9 @@ public class GameState implements Observable<Message> {
         }
         for(int row=0; row<board.length; row++){
             for(int col=0; col<board[row].length; col++){
-                board[row][col].setUpNeighbors(row, col);
+                board[row][col].setUpNeighbors(row, col, this);
             }
         }
-    }
-
-    /**
-     * @return ArrayList of Position of the board (1D)
-     */
-    public ArrayList<Position> getFlatBoard() {
-        ArrayList<Position> flatBoard = new ArrayList<>();
-        for(Position[] line : board){
-            flatBoard.addAll(Arrays.asList(line));
-        }
-        return flatBoard;
-    }
-
-    //TODO move this to Controller?
-    public void startGame() {
-        System.out.println("The game has started with "+getNumPlayer()+" players.");
-        chooseAllowedGods();
-    }
-
-    /**
-     * Starts sending a ChooseAllowedGodMessage to the first player
-     */
-    public void chooseAllowedGods() {
-        String message = "Select "+this.getNumPlayer()+" gods from this list:";
-        List<String> implementedGodList = Stream.of(GodType.values()).map(Enum::name).collect(Collectors.toList());
-        notifyObservers(new ChooseAllowedGodsMessage(currPlayer.getUsername(), message, implementedGodList));
     }
 
     /**
@@ -116,27 +84,56 @@ public class GameState implements Observable<Message> {
         return instance;
     }
 
-    @Override
-    public void notifyObservers(Message message) {
-        synchronized (observers) {
-            for (Observer<Message> obs: observers) {
-                obs.update(message);
-            }
+    /**
+     * @return ArrayList of Position of the board (1D)
+     */
+    public ArrayList<Position> getFlatBoard() {
+        ArrayList<Position> flatBoard = new ArrayList<>();
+        for(Position[] line : board){
+            flatBoard.addAll(Arrays.asList(line));
         }
+        return flatBoard;
     }
 
-    @Override
-    public void addObserver(Observer<Message> o) {
-        synchronized (observers) {
-            observers.add(o);
+    public Player getPlayerFromUsername (String username) {
+        for (Player player:getPlayers()) {
+            if (player.getUsername().equals(username))
+                return player;
         }
+        return null;
     }
 
-    @Override
-    public void removeObserver(Observer<Message> o) {
-        synchronized (observers) {
-            observers.remove(o);
-        }
+    //TODO move this to Controller?
+    public void startGame() {
+        System.out.println("The game has started with "+getNumPlayer()+" players.");
+        chooseAllowedGods();
+    }
+
+    /**
+     * Starts sending a ChooseAllowedGodMessage to the first player
+     */
+    public void chooseAllowedGods() {
+        String message = "Select "+this.getNumPlayer()+" gods from this list:";
+        List<String> implementedGodList = GodType.getImplementedGodsList();
+        notifyObservers(new ChooseAllowedGodsMessage(currPlayer.getUsername(), message, implementedGodList));
+    }
+
+    public void assignGod() {
+        this.skipPlayer();
+        String message = "Select your god from the following list:";
+        notifyObservers(new AssignGodMessage(currPlayer.getUsername(), message,
+            getAllowedGods().stream().map(Enum::toString).collect(Collectors.toList()),
+            ""));
+    }
+
+    public void chooseStartingPlayer() {
+        List<String> playerList = this.getPlayers().stream().map(Player::getUsername).collect(Collectors.toList());
+        notifyObservers(new ChooseStartingPlayerMessage(this.getCurrPlayer().getUsername(), playerList));
+    }
+
+    public void placeWorkers() {
+        //TODO implement this
+        System.out.println(this.getCurrPlayer().getUsername());
     }
 
     /**
@@ -170,5 +167,28 @@ public class GameState implements Observable<Message> {
             getCurrPlayer().setState(nextState);
         }
         getCurrPlayer().endTurn();
+    }
+
+    @Override
+    public void notifyObservers(Message message) {
+        synchronized (observers) {
+            for (Observer<Message> obs: observers) {
+                obs.update(message);
+            }
+        }
+    }
+
+    @Override
+    public void addObserver(Observer<Message> o) {
+        synchronized (observers) {
+            observers.add(o);
+        }
+    }
+
+    @Override
+    public void removeObserver(Observer<Message> o) {
+        synchronized (observers) {
+            observers.remove(o);
+        }
     }
 }

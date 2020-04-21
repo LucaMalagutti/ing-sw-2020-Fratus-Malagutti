@@ -16,14 +16,15 @@ public class Server {
     private final static int port = 31713;
     private final ServerSocket socket;
     private final ExecutorService executor = Executors.newFixedThreadPool(64);
+
     private final Map<SocketClientConnection, String> waitingConnections = new LinkedHashMap<>();
     private final Map<SocketClientConnection, Player> playingConnections = new LinkedHashMap<>();
 
-    private int numPlayers;                                                 //number of playing clients
-    private SocketClientConnection numPlayersSetter;                        //first client to connect to the lobby
-    private final ArrayList<String> usernamesTaken = new ArrayList<>();
+    private int numPlayers = -1;                                                 //number of playing clients
+    private SocketClientConnection firstClientConnected;                        //first client to connect to the lobby
+    private final List<String> usernamesTaken = Collections.synchronizedList(new ArrayList<>());
 
-    private void setNumPlayers(int numPlayers) { this.numPlayers = numPlayers; }
+    private synchronized void setNumPlayers(int numPlayers) { this.numPlayers = numPlayers; }
 
     public Server() throws IOException {
         this.socket = new ServerSocket(port);
@@ -38,9 +39,9 @@ public class Server {
         playingConnections.remove(c);
         waitingConnections.remove(c);
         //Handles first client disconnection when the game is still in lobby phase
-        if (c == numPlayersSetter && waitingConnections.size() > 0) {
-            numPlayers = 0;
-            numPlayersSetter = null;
+        if (c == firstClientConnected) {
+            numPlayers = -1;
+            firstClientConnected = null;
             for (SocketClientConnection connection: waitingConnections.keySet()) {
                 connection.closeConnection("The lobby creator has left.");
             }
@@ -54,14 +55,26 @@ public class Server {
      * @return unique username selected. Will be used as a parameter for later lobby() call
      */
     public String selectUsername(SocketClientConnection c) {
-        synchronized (usernamesTaken) {
-            String selectedUsername = c.selectClientUsername();
-            while (usernamesTaken.contains(selectedUsername) || selectedUsername.equals("")) {
-                selectedUsername = c.selectClientUsername(selectedUsername);
-            }
-            usernamesTaken.add(selectedUsername);
-            return selectedUsername;
+        if (firstClientConnected != null && numPlayers == -1) {
+            c.asyncSend("Wait for the first player to set up the lobby");
+//            c.discardScanner();
         }
+        synchronized (this) {
+            try {
+                while(firstClientConnected != null && numPlayers == -1) {
+                    wait();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+//        c.stopDiscarding();
+        String selectedUsername = c.selectClientUsername();
+        while (usernamesTaken.contains(selectedUsername) || selectedUsername.equals("")) {
+            selectedUsername = c.selectClientUsername(selectedUsername);
+        }
+        usernamesTaken.add(selectedUsername);
+        return selectedUsername;
     }
 
     /**
@@ -76,8 +89,18 @@ public class Server {
         }
         waitingConnections.put(c, name);
         if (waitingConnections.size() == 1) {
-            numPlayersSetter = c;
-            setNumPlayers(c.initializeGameNumPlayer());
+            firstClientConnected = c;
+            try {
+                setNumPlayers(c.initializeGameNumPlayer(name));
+                c.asyncSend("\nWaiting for the other players to join your lobby");
+            } catch (Exception e) {
+                unregisterConnection(c);
+            } finally {
+                notifyAll();
+            }
+        }
+        else {
+            c.asyncSend("Entering lobby as "+name);
         }
         //When the number of waiting players is reached, initializes GameState and its dependencies and starts the game
         if (waitingConnections.size() == numPlayers) {
@@ -93,6 +116,7 @@ public class Server {
                 GameState.getInstance().addObserver(playerView);
                 playerView.addObserver(controller);
                 playingConnections.put(connection, player);
+                connection.asyncSend("\nSTARTING A NEW SANTORINI GAME\n");
             }
             GameState.getInstance().setNumPlayer(numPlayers);
             GameState.getInstance().startGame();

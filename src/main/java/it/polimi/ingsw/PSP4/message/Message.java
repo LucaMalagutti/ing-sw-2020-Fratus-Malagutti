@@ -10,17 +10,17 @@ public abstract class Message implements Serializable {
 
     private final String player;        //player receiving the message (use all to broadcast)
     private final String message;       //message string to be displayed
-    private final MessageType type;     //used for casting after serialization
+    private static MessageType staticType;
 
     //getter and setter
+    public static MessageType getStaticType() { return staticType; }
     public String getPlayer() { return this.player; }
     public String getMessage() { return this.message; }
-    public MessageType getType() { return this.type; }
+    public MessageType getType() { return staticType; }
 
-    public Message(String player, String message, MessageType type) {
+    public Message(String player, String message) {
         this.player = player;
         this.message = message;
-        this.type = type;
     }
 
     /**
