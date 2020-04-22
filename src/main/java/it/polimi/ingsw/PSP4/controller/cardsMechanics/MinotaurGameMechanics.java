@@ -80,10 +80,10 @@ public class MinotaurGameMechanics extends GodGameMechanics {
     @Override
     public void move(Player player, Position futurePosition) {
         if(futurePosition == null){
-            //exception
+            //TODO: handle exception
         }
         else if(futurePosition.hasDome()){
-            //exception
+            //TODO: handle exception
         }
         else {
             if (futurePosition.getWorker() == null) {
@@ -105,7 +105,7 @@ public class MinotaurGameMechanics extends GodGameMechanics {
                 //This should never happen because behindPosition should always be reassigned in the loop above, since it was
                 //previously filtered by getMovePosition as behind and free. Putting (future) exception throw just in case.
                 if (behindPosition.getCol() == -1 && behindPosition.getRow() == -1) {
-                    //exception
+                    //TODO: handle exception
                 }
                 futurePosition.setWorker(currWorker);
                 currentPosition.setWorker(null);

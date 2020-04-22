@@ -3,18 +3,18 @@ package it.polimi.ingsw.PSP4.model;
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
 import it.polimi.ingsw.PSP4.controller.turnStates.State;
 import it.polimi.ingsw.PSP4.controller.turnStates.StateType;
-import it.polimi.ingsw.PSP4.message.AssignGodMessage;
-import it.polimi.ingsw.PSP4.message.ChooseAllowedGodsMessage;
-import it.polimi.ingsw.PSP4.message.ChooseStartingPlayerMessage;
 import it.polimi.ingsw.PSP4.message.Message;
+import it.polimi.ingsw.PSP4.message.requests.AssignGodRequest;
+import it.polimi.ingsw.PSP4.message.requests.ChooseAllowedGodsRequest;
+import it.polimi.ingsw.PSP4.message.requests.ChooseStartingPlayerRequest;
 import it.polimi.ingsw.PSP4.observer.Observable;
 import it.polimi.ingsw.PSP4.observer.Observer;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Contains information about the game being played, its state and its board.
@@ -32,6 +32,7 @@ public class GameState implements Observable<Message> {
 
     //getter and setter
     public Position[][] getBoard() { return board; }
+    public Position getPosition(int row, int col) { return board[row][col]; }
 
     public Player getCurrPlayer() { return currPlayer; }
     public void setCurrPlayer(Player currPlayer) { this.currPlayer = currPlayer; }
@@ -105,7 +106,7 @@ public class GameState implements Observable<Message> {
 
     //TODO move this to Controller?
     public void startGame() {
-        System.out.println("The game has started with "+getNumPlayer()+" players.");
+        System.out.println(MessageFormat.format(Message.GAME_STARTED, getNumPlayer()));
         chooseAllowedGods();
     }
 
@@ -113,22 +114,20 @@ public class GameState implements Observable<Message> {
      * Starts sending a ChooseAllowedGodMessage to the first player
      */
     public void chooseAllowedGods() {
-        String message = "Select "+this.getNumPlayer()+" gods from this list:";
+        String message = MessageFormat.format(Message.CHOOSE_ALLOWED_GODS, getNumPlayer());
         List<String> implementedGodList = GodType.getImplementedGodsList();
-        notifyObservers(new ChooseAllowedGodsMessage(currPlayer.getUsername(), message, implementedGodList));
+        notifyObservers(new ChooseAllowedGodsRequest(currPlayer.getUsername(), message, implementedGodList));
     }
 
     public void assignGod() {
         this.skipPlayer();
-        String message = "Select your god from the following list:";
-        notifyObservers(new AssignGodMessage(currPlayer.getUsername(), message,
-            getAllowedGods().stream().map(Enum::toString).collect(Collectors.toList()),
-            ""));
+        notifyObservers(new AssignGodRequest(currPlayer.getUsername(),
+            getAllowedGods().stream().map(Enum::toString).collect(Collectors.toList())));
     }
 
     public void chooseStartingPlayer() {
         List<String> playerList = this.getPlayers().stream().map(Player::getUsername).collect(Collectors.toList());
-        notifyObservers(new ChooseStartingPlayerMessage(this.getCurrPlayer().getUsername(), playerList));
+        notifyObservers(new ChooseStartingPlayerRequest(this.getCurrPlayer().getUsername(), playerList));
     }
 
     public void placeWorkers() {

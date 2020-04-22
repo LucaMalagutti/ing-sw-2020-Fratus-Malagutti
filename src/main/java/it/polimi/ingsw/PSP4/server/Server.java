@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP4.server;
 
 import it.polimi.ingsw.PSP4.controller.Controller;
+import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.view.RemoteView;
@@ -9,6 +10,7 @@ import it.polimi.ingsw.PSP4.view.View;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -20,8 +22,8 @@ public class Server {
     private final Map<SocketClientConnection, String> waitingConnections = new LinkedHashMap<>();
     private final Map<SocketClientConnection, Player> playingConnections = new LinkedHashMap<>();
 
-    private int numPlayers = -1;                                                 //number of playing clients
-    private SocketClientConnection firstClientConnected;                        //first client to connect to the lobby
+    private int numPlayers = -1;                                        //number of playing clients
+    private SocketClientConnection firstClientConnected;                //first client to connect to the lobby
     private final List<String> usernamesTaken = Collections.synchronizedList(new ArrayList<>());
 
     private synchronized void setNumPlayers(int numPlayers) { this.numPlayers = numPlayers; }
@@ -43,7 +45,7 @@ public class Server {
             numPlayers = -1;
             firstClientConnected = null;
             for (SocketClientConnection connection: waitingConnections.keySet()) {
-                connection.closeConnection("The lobby creator has left.");
+                connection.closeConnection(Message.LOBBY_CREATOR_LEFT);
             }
             waitingConnections.clear();
         }
@@ -56,7 +58,7 @@ public class Server {
      */
     public String selectUsername(SocketClientConnection c) {
         if (firstClientConnected != null && numPlayers == -1) {
-            c.asyncSend("Wait for the first player to set up the lobby");
+            c.asyncSend(Message.WAIT_LOBBY_SETUP);
 //            c.discardScanner();
         }
         synchronized (this) {
@@ -85,14 +87,14 @@ public class Server {
     public synchronized void lobby(SocketClientConnection c, String name) {
         //drops connections started with an ongoing game
         if (playingConnections.size() > 0) {
-            c.closeConnection("A game has already started. Try again later!");
+            c.closeConnection(Message.GAME_ALREADY_STARTED);
         }
         waitingConnections.put(c, name);
         if (waitingConnections.size() == 1) {
             firstClientConnected = c;
             try {
                 setNumPlayers(c.initializeGameNumPlayer(name));
-                c.asyncSend("\nWaiting for the other players to join your lobby");
+                c.asyncSend(Message.WAIT_PLAYERS);
             } catch (Exception e) {
                 unregisterConnection(c);
             } finally {
@@ -100,7 +102,7 @@ public class Server {
             }
         }
         else {
-            c.asyncSend("Entering lobby as "+name);
+            c.asyncSend(MessageFormat.format(Message.ENTERING_LOBBY, name));
         }
         //When the number of waiting players is reached, initializes GameState and its dependencies and starts the game
         if (waitingConnections.size() == numPlayers) {
@@ -116,7 +118,7 @@ public class Server {
                 GameState.getInstance().addObserver(playerView);
                 playerView.addObserver(controller);
                 playingConnections.put(connection, player);
-                connection.asyncSend("\nSTARTING A NEW SANTORINI GAME\n");
+                connection.asyncSend(Message.GAME_STARTING);
             }
             GameState.getInstance().setNumPlayer(numPlayers);
             GameState.getInstance().startGame();

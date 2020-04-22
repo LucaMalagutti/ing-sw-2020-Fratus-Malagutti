@@ -51,13 +51,13 @@ public class DefaultGameMechanics extends GameMechanics {
     @Override
     public void move(Player player, Position futurePosition) {
         if(futurePosition == null){
-            //exception
+            //TODO: handle exception
         }
         else if(futurePosition.getWorker() != null){
-            //exception
+            //TODO: handle exception
         }
         else if(futurePosition.hasDome()){
-            //exception
+            //TODO: handle exception
         }
         else {
             player.lockWorker();
@@ -76,13 +76,13 @@ public class DefaultGameMechanics extends GameMechanics {
     @Override
     public void build(Player player, Position futurePosition) {
         if(futurePosition == null){
-            //exception
+            //TODO: handle exception
         }
         else if(futurePosition.getWorker() != null){
-            //exception
+            //TODO: handle exception
         }
         else if(futurePosition.hasDome()){
-            //exception
+            //TODO: handle exception
         }
         else {
             player.lockWorker();

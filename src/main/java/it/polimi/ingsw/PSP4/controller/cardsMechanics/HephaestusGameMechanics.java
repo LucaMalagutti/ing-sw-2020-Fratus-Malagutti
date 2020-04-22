@@ -29,7 +29,7 @@ public class HephaestusGameMechanics extends GodGameMechanics {
     public boolean doubleBuild(Position position) {
         if(position.getHeight() >= 3)
             return false;
-        //To be implemented
+        //TODO: implement, send message?
         return true;
     }
 

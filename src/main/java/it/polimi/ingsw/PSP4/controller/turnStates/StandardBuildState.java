@@ -10,29 +10,44 @@ import java.util.ArrayList;
  * Defines the actions to perform when building for the first time after moving
  */
 public class StandardBuildState extends State {
+    //Cannot be skipped, cannot change worker
+    private static final StateType staticType = StateType.BUILD;
+
     /**
      * Constructor of the class StandardBuildState
      * @param player reference to current player
      */
-    public StandardBuildState(Player player) { super(player, StateType.BUILD); }
+    public StandardBuildState(Player player) { super(player, staticType); }
 
     @Override
-    public Position selectOption(ArrayList<Position> options) {
-        //To be implemented
-        return null; //Cannot be null
+    public synchronized void changeWorker() {
+        //TODO: signal not possible
     }
 
     @Override
-    public State performAction() {
+    public synchronized void skipState() {
+        //TODO: signal not possible
+    }
+
+    @Override
+    public synchronized State performAction() {
         Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getBuildPositions(player, 1);
         if(options.size() == 0) {
-            //handle game over : loss
+            //TODO: handle game over, loss
         }
-        Position position = selectOption(options);
-        player.getMechanics().build(player, position);
+        selectOption(options);
+        while(!isFinalStep()) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                //TODO: handle exception
+            }
+        }
+        player.getMechanics().build(player, getPosition());
         if(player.getMechanics().getPath() == PathType.DOUBLE_BUILD)
-            return new SecondBuildState(player);
-        return new WaitState(player); // End of turn
+            return new SecondBuildState(player);    //PERFORM_ACTION
+        return new WaitState(player);               //PERFORM_ACTION
+        //CHANGE_WORKER and SKIP_STATE not handled cause impossible to get
     }
 }

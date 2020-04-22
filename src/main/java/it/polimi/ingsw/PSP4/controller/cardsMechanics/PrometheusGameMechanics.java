@@ -33,8 +33,7 @@ public class PrometheusGameMechanics extends GodGameMechanics {
         if (player.isWorkerLocked()) {
             ArrayList<Position> componentValid = super.getComponent().getMovePositions(player, callNum);
             return componentValid.stream().filter(position -> position.getHeight() <= player.getCurrWorker().getCurrPosition().getHeight()).collect(Collectors.toCollection(ArrayList::new));
-        }
-        else {
+        } else {
             return super.getComponent().getMovePositions(player, callNum);
         }
     }

@@ -1,13 +1,8 @@
 package it.polimi.ingsw.PSP4.controller;
 
-import it.polimi.ingsw.PSP4.controller.cardsMechanics.GameMechanics;
-import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
-import it.polimi.ingsw.PSP4.message.*;
-import it.polimi.ingsw.PSP4.model.GameState;
+import it.polimi.ingsw.PSP4.message.Message;
+import it.polimi.ingsw.PSP4.message.responses.Response;
 import it.polimi.ingsw.PSP4.observer.Observer;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Controller base class. Observes its (virtual) view
@@ -19,6 +14,10 @@ public class Controller implements Observer<Message> {
      */
     @Override
     public void update(Message message) {
-
+        //TODO: handle message instanceof Request
+        if(message instanceof Response)
+            message.getType().handleResponse((Response) message);
+        else
+            System.out.println("Received Request");
     }
 }

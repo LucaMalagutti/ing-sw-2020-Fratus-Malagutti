@@ -9,27 +9,41 @@ import java.util.ArrayList;
  * Defines the actions to perform when building for the second time after moving
  */
 public class SecondBuildState extends State {
+    //Can be skipped, cannot change worker
+    private static final StateType staticType = StateType.BUILD;
+
+    @Override
+    public boolean canBeSkipped() { return true; }
+
     /**
      * Constructor of the class SecondBuildState
      * @param player reference to current player
      */
-    public SecondBuildState(Player player) { super(player, StateType.BUILD); }
+    public SecondBuildState(Player player) { super(player, staticType); }
 
     @Override
-    public Position selectOption(ArrayList<Position> options) {
-        //To be implemented
-        return null; //Null if the player wants to skip this state
+    public synchronized void changeWorker() {
+        //TODO: signal not possible
     }
 
     @Override
-    public State performAction() {
+    public synchronized State performAction() {
         Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getBuildPositions(player, 2);
-        if(options.size() != 0) {
-            Position position = selectOption(options);
-            if (position != null)       //Player wants to build
-                player.getMechanics().build(player, position);
+        if(options.size() == 0)
+            return new WaitState(player);           //No available positions for this state
+        selectOption(options);
+        while(!isFinalStep()) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                //TODO: handle exception
+            }
         }
-        return new WaitState(player);         //End of turn
+        StateStep step = getStep();
+        if(step == StateStep.PERFORM_ACTION)
+            player.getMechanics().build(player, getPosition());
+        return new WaitState(player);               //PERFORM_ACTION || SKIP_STATE
+        //CHANGE_WORKER not handled cause impossible to get
     }
 }

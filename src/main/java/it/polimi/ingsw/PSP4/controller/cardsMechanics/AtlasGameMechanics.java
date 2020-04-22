@@ -29,20 +29,20 @@ public class AtlasGameMechanics extends GodGameMechanics {
     public boolean forceDome(Position position) {
         if(position.getHeight() == 3)
             return false;
-        //To be implemented
+        //TODO: implement, send message?
         return true;
     }
 
     @Override
     public void build(Player player, Position futurePosition) {
         if(futurePosition == null){
-            //exception
+            //TODO: handle exception
         }
         else if(futurePosition.getWorker() != null){
-            //exception
+            //TODO: handle exception
         }
         else if(futurePosition.hasDome()){
-            //exception
+            //TODO: handle exception
         }
         else {
             player.lockWorker();

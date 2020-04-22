@@ -9,31 +9,45 @@ import java.util.ArrayList;
  * Defines the actions to perform when moving for the second time
  */
 public class SecondMoveState extends State {
+    //can be skipped, cannot change worker
+    private static final StateType staticType = StateType.MOVE;
+
+    @Override
+    public boolean canBeSkipped() { return true; }
+
     /**
      * Constructor of the class SecondMoveState
      * @param player reference to current player
      */
-    public SecondMoveState(Player player) { super(player, StateType.MOVE); }
+    public SecondMoveState(Player player) { super(player, staticType); }
 
     @Override
-    public Position selectOption(ArrayList<Position> options) {
-        //To be implemented
-        return null; //Null if the player wants to skip this state
+    public synchronized void changeWorker() {
+        //TODO: signal not possible
     }
 
     @Override
-    public State performAction() {
+    public synchronized State performAction() {
         Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getMovePositions(player, 2);
-        if(options.size() != 0) {
-            Position position = selectOption(options);
-            if (position != null) {  //Player wants to move
-                player.getMechanics().move(player, position);
-                if (player.getMechanics().checkWinCondition(player)) {
-                    //handle game over : win
-                }
+        if(options.size() == 0)
+            return new StandardBuildState(player);      //No available positions for this state
+        selectOption(options);
+        while(!isFinalStep()) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                //TODO: handle exception
             }
         }
-        return new StandardBuildState(player);
+        StateStep step = getStep();
+        if(step == StateStep.PERFORM_ACTION) {
+            player.getMechanics().move(player, getPosition());
+            if (player.getMechanics().checkWinCondition(player)) {
+                //TODO: handle game over, win
+            }
+        }
+        return new StandardBuildState(player);      //PERFORM_ACTION || SKIP_STATE
+        //CHANGE_WORKER not handled cause impossible to get
     }
 }

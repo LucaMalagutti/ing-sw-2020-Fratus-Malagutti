@@ -1,11 +1,13 @@
 package it.polimi.ingsw.PSP4.server;
 
+import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.observer.Observable;
 import it.polimi.ingsw.PSP4.observer.Observer;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -72,12 +74,12 @@ public class SocketClientConnection implements Observable<String>, Runnable {
      * @return number of players for this game
      */
     public int initializeGameNumPlayer(String name) throws IOException {
-        send("Creating a new lobby to play a game as "+name);
-        send("Choose the number of players for this game: (2) or (3). Default: 2");
+        send(MessageFormat.format(Message.CREATING_LOBBY, name));
+        send(Message.CHOOSE_NUMBER_PLAYERS);
         Scanner in = new Scanner(socket.getInputStream());
         String numPlayers = in.nextLine();
         while (!numPlayers.equals("2") && !numPlayers.equals("3") && !numPlayers.equals("")) {
-            send("Not a valid number of players. Type 2 or 3");
+            send(Message.NOT_VALID_NUMBER);
             numPlayers = in.nextLine();
         }
         if (numPlayers.equals("")) {
@@ -92,7 +94,7 @@ public class SocketClientConnection implements Observable<String>, Runnable {
      * @return whitespace-stripped username
      */
     public String selectClientUsername(String alreadyTaken) {
-        send(alreadyTaken+" was already taken by another player. Select another one");
+        send(MessageFormat.format(Message.USERNAME_TAKEN, alreadyTaken));
         return selectClientUsername();
     }
 
@@ -101,12 +103,12 @@ public class SocketClientConnection implements Observable<String>, Runnable {
      * @return whitespace-stripped username
      */
     public String selectClientUsername() {
-        send("Select your username:");
+        send(Message.CHOOSE_USERNAME);
         try {
             Scanner in = new Scanner(socket.getInputStream());
             String name = in.nextLine().replaceAll("\\s", "");
             while (name.equals("") || name.length() > 15) {
-                send("Username's length has to be between 1 and 15 characters. Try again: ");
+                send(Message.USERNAME_LENGTH);
                 name = in.nextLine().replaceAll("\\s", "");
             }
             return name;

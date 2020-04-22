@@ -10,44 +10,48 @@ import java.util.ArrayList;
  * Defines the actions to perform when moving for the first time
  */
 public class StandardMoveState extends State {
-    private boolean change;     //true if the player wants to change worker
+    //Cannot be skipped, can change worker
+    private static final StateType staticType = StateType.MOVE;
 
-    //getters and setters
-    private boolean isWorkerChanged() { return change; }
-    private void changeWorker() { this.change = true; }
+    @Override
+    public boolean canChangeWorker() { return !getPlayer().isWorkerLocked(); }
 
     /**
      * Constructor of the class StandardMoveState
      * @param player reference to current player
      */
-    public StandardMoveState(Player player) {
-        super(player, StateType.MOVE);
-        this.change = false;
+    public StandardMoveState(Player player) { super(player, staticType); }
+
+    @Override
+    public synchronized void skipState() {
+        //TODO: signal not possible
     }
 
     @Override
-    public Position selectOption(ArrayList<Position> options) {
-        //To be implemented
-        //changeWorker() and return null if the player chooses to go back
-        return null; //null only if the player wants to change worker
-    }
-
-    @Override
-    public State performAction() {
+    public synchronized State performAction() {
         Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getMovePositions(player, 1);
         if(options.size() == 0) {
-            //handle game over : loss
+            //TODO: handle game over, loss
         }
-        Position position = selectOption(options);
-        if(position == null && isWorkerChanged())           //Player wants to change worker
-            return new StandardMoveState(player);
-        player.getMechanics().move(player, position);       //Player wants to build
+        selectOption(options);
+        while(!isFinalStep()) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                //TODO: handle exception
+            }
+        }
+        StateStep step = getStep();
+        if(step == StateStep.CHANGE_WORKER)
+            return new StandardMoveState(player);   //CHANGE_WORKER
+        player.getMechanics().move(player, getPosition());
         if(player.getMechanics().checkWinCondition(player)) {
-            //handle game over : win
+            //TODO: handle game over, win
         }
         if(player.getMechanics().getPath() == PathType.DOUBLE_MOVE)
-            return new SecondMoveState(player);
-        return new StandardBuildState(player);
+            return new SecondMoveState(player);     //PERFORM_ACTION
+        return new StandardBuildState(player);      //PERFORM_ACTION
+        //SKIP_STATE not handled cause impossible to get
     }
 }

@@ -2,8 +2,10 @@ package it.polimi.ingsw.PSP4;
 
 import it.polimi.ingsw.PSP4.client.CLIClient;
 import it.polimi.ingsw.PSP4.client.GUIClient;
+import it.polimi.ingsw.PSP4.message.Message;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Scanner;
 
 /**
@@ -18,13 +20,13 @@ public class ClientMain {
     private static String chooseClientUI(final Scanner stdIn) {
         String inputLine;
         do {
-            System.out.println("Choose your graphical interface:\n(Type \"GUI\" or \"CLI\", Default: CLI)");
+            System.out.println(Message.CHOOSE_INTERFACE);
             inputLine = stdIn.nextLine().toUpperCase();
         } while (!inputLine.equals("CLI") && !inputLine.equals("GUI") && !inputLine.equals(""));
         if (inputLine.equals("")) {
             inputLine = "CLI";
         }
-        System.out.println("You have chosen \""+inputLine+"\" as your UI for the game.");
+        System.out.println(MessageFormat.format(Message.CHOSEN_INTERFACE, inputLine));
         return inputLine;
     }
 
@@ -40,7 +42,7 @@ public class ClientMain {
                 System.out.println("GUI was not implemented yet :))))");
 //                client.run();
             } else {
-                System.out.println("Couldn't select a valid UI. Exiting..");
+                System.out.println(Message.NOT_VALID_UI);
             }
         } catch (IOException e) {
             System.err.print(e.getMessage());

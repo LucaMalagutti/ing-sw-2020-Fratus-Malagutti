@@ -1,23 +1,33 @@
 package it.polimi.ingsw.PSP4.controller.turnStates;
 
-import it.polimi.ingsw.PSP4.controller.turnStates.State;
-import it.polimi.ingsw.PSP4.controller.turnStates.StateType;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
-
-import java.util.ArrayList;
 
 /**
  * Defines the actions to perform when waiting
  */
 public class WaitState extends State {
+    public static final StateType staticType = StateType.WAIT;
+
     /**
      * Constructor of the class WaitState
      */
-    public WaitState(Player player) { super(player, StateType.WAIT); }
+    public WaitState(Player player) { super(player, staticType); }
 
     @Override
-    public Position selectOption(ArrayList<Position> options) { return null; }
+    public synchronized void receiveOption(Position position) {
+        //TODO: signal not possible
+    }
+
+    @Override
+    public synchronized void changeWorker() {
+        //TODO: signal not possible
+    }
+
+    @Override
+    public synchronized void skipState() {
+        //TODO: signal not possible
+    }
 
     @Override
     public State performAction() { return this; }
