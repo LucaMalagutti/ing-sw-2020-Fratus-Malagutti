@@ -1,12 +1,13 @@
 package it.polimi.ingsw.PSP4.model;
 
-import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
+import it.polimi.ingsw.PSP4.controller.cardsMechanics.*;
 import it.polimi.ingsw.PSP4.controller.turnStates.State;
 import it.polimi.ingsw.PSP4.controller.turnStates.StateType;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.requests.AssignGodRequest;
 import it.polimi.ingsw.PSP4.message.requests.ChooseAllowedGodsRequest;
 import it.polimi.ingsw.PSP4.message.requests.ChooseStartingPlayerRequest;
+import it.polimi.ingsw.PSP4.message.requests.RemovePlayerRequest;
 import it.polimi.ingsw.PSP4.observer.Observable;
 import it.polimi.ingsw.PSP4.observer.Observer;
 
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
  * It is a singleton.
  */
 public class GameState implements Observable<Message> {
-    private static GameState instance;                          //singleton instance
+    private static volatile GameState instance;                 //singleton instance
     private final ArrayList<Observer<Message>> observers = new ArrayList<>();
 
     private final Position[][] board = new Position[5][5];      //5x5 grid, represents game platform
@@ -55,18 +56,9 @@ public class GameState implements Observable<Message> {
      * Builds the board creating Position objects
      */
     private GameState(){
-        this.currPlayer = null;
-        this.players = new ArrayList<>();
-        for(int row=0; row<board.length; row++){
-            for(int col=0; col<board[row].length; col++){
-                board[row][col] = new Position(row, col);
-            }
-        }
-        for(int row=0; row<board.length; row++){
-            for(int col=0; col<board[row].length; col++){
-                board[row][col].setUpNeighbors(row, col, this);
-            }
-        }
+        if(instance != null)
+            throw new RuntimeException("Use method getInstance() instead.");
+        reset();
     }
 
     /**
@@ -80,9 +72,33 @@ public class GameState implements Observable<Message> {
      * @return single instance of GameState
      */
     public static GameState getInstance(boolean create) {
-        if(create && instance == null)
-            instance = new GameState();
+        if(create && instance == null) {
+            synchronized (GameState.class) {
+                if(instance == null)
+                    instance = new GameState();
+            }
+        }
         return instance;
+    }
+
+    /**
+     * Puts the singleton in a "clean" state, used when a new game starts
+     */
+    private synchronized void reset() {
+        //TODO: debug (important!)
+        this.currPlayer = null;
+        this.players = new ArrayList<>();
+        for(int row=0; row<board.length; row++){
+            for(int col=0; col<board[row].length; col++){
+                board[row][col] = new Position(row, col);
+            }
+        }
+        for(int row=0; row<board.length; row++){
+            for(int col=0; col<board[row].length; col++){
+                //Placed in reset() shouldn't need a reference to GameState as a parameter
+                board[row][col].setUpNeighbors(row, col, this);
+            }
+        }
     }
 
     /**
@@ -189,5 +205,49 @@ public class GameState implements Observable<Message> {
         synchronized (observers) {
             observers.remove(o);
         }
+    }
+
+    /**
+     * Checks if there are enough players to continue the game
+     * If so proceeds removing player from the game and informs all the players
+     * @param player player which cannot continue the game
+     * @param message reason for defeat
+     */
+    public void playerDefeat(Player player, String message) {
+        //end player's turn
+        player.endTurn();
+        //move currentPlayer to next player
+        newTurn();
+        //remove player from the list
+        removePlayer(player);
+        if(getPlayers().size() == 1) {
+            //the game cannot continue
+            playerVictory(getPlayers().get(0));
+            return;
+        }
+        //the game can continue
+        //remove player's workers from the board
+        ArrayList<Worker> workers = player.getWorkers();
+        for(Position[] line : board) {
+            for(Position position : line) {
+                if(workers.contains(position.getWorker()))
+                    position.setWorker(null);
+            }
+        }
+        //unwrap enemies (useless if not ATHENA)
+        player.getMechanics().playerDefeat(player);
+        //close player's connection and inform other players
+        notifyObservers(new RemovePlayerRequest(player.getUsername(), false));
+    }
+
+    /**
+     * Informs all the players that the game is over, electing the winner
+     * @param player winner of the game
+     */
+    public void playerVictory(Player player) {
+        //close every connection notifying the players
+        notifyObservers(new RemovePlayerRequest(player.getUsername(), true));
+        //cleans the GameState singleton for a new game
+        reset();
     }
 }

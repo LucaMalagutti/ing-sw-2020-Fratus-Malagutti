@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP4.controller.turnStates;
 
+import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 
@@ -23,15 +24,13 @@ public class SecondMoveState extends State {
 
     @Override
     public synchronized void changeWorker() {
-        //TODO: signal not possible
+        //not possible as checked in RemoteView.update()
     }
 
     @Override
     public synchronized State performAction() {
         Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getMovePositions(player, 2);
-        if(options.size() == 0)
-            return new StandardBuildState(player);      //No available positions for this state
         selectOption(options);
         while(!isFinalStep()) {
             try {
@@ -44,7 +43,8 @@ public class SecondMoveState extends State {
         if(step == StateStep.PERFORM_ACTION) {
             player.getMechanics().move(player, getPosition());
             if (player.getMechanics().checkWinCondition(player)) {
-                //TODO: handle game over, win
+                GameState.getInstance().playerVictory(player);
+                return new WaitState(player);
             }
         }
         return new StandardBuildState(player);      //PERFORM_ACTION || SKIP_STATE

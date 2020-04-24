@@ -52,4 +52,11 @@ abstract public class GameMechanics {
      * @param futurePosition position in which build
      */
     abstract public void build(Player player, Position futurePosition);
+
+    /**
+     * Called when a player using this god is removed
+     * Made to be overridden
+     * @param player current player
+     */
+    public void playerDefeat(Player player) {}
 }

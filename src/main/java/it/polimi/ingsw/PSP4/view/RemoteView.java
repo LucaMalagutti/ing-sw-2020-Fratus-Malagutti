@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP4.view;
 
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
 import it.polimi.ingsw.PSP4.message.*;
+import it.polimi.ingsw.PSP4.message.requests.RemovePlayerRequest;
 import it.polimi.ingsw.PSP4.message.requests.WaitRequest;
 import it.polimi.ingsw.PSP4.message.responses.*;
 import it.polimi.ingsw.PSP4.model.GameState;
@@ -11,6 +12,7 @@ import it.polimi.ingsw.PSP4.model.serializable.SerializablePosition;
 import it.polimi.ingsw.PSP4.observer.Observer;
 import it.polimi.ingsw.PSP4.server.SocketClientConnection;
 
+import java.lang.management.PlatformLoggingMXBean;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,12 +83,13 @@ public class RemoteView extends View {
 
         private void handleChoosePosition(String stringMessage) {
             stringMessage = stringMessage.toUpperCase().trim();
-            if(stringMessage.equals("CHANGE")) {
-                handleMove(new ChangeWorkerResponse(GameState.getInstance().getCurrPlayer().getUsername()));
+            Player currentPlayer = GameState.getInstance().getCurrPlayer();
+            if(stringMessage.equals("CHANGE") && currentPlayer.getState().canChangeWorker()) {
+                handleMove(new ChangeWorkerResponse(currentPlayer.getUsername()));
                 return;
             }
-            if(stringMessage.equals("SKIP")) {
-                handleMove(new SkipStateResponse(GameState.getInstance().getCurrPlayer().getUsername()));
+            if(stringMessage.equals("SKIP") && currentPlayer.getState().canBeSkipped()) {
+                handleMove(new SkipStateResponse(currentPlayer.getUsername()));
                 return;
             }
             String[] coordinates = stringMessage.split(",");
@@ -98,10 +101,10 @@ public class RemoteView extends View {
                 reportError(MessageFormat.format(Message.NOT_VALID_POSITION, stringMessage));
                 return;
             }
-            List<SerializablePosition> options = GameState.getInstance().getCurrPlayer().getState().getOptions();
+            List<SerializablePosition> options = currentPlayer.getState().getOptions();
             List<SerializablePosition> selected = options.stream().filter(p -> p.getRow() == row && p.getCol() == col).collect(Collectors.toList());
             if(selected.size() == 1) {
-                handleMove(new ChoosePositionResponse(GameState.getInstance().getCurrPlayer().getUsername(), selected.get(0)));
+                handleMove(new ChoosePositionResponse(currentPlayer.getUsername(), selected.get(0)));
             } else {
                 reportError(MessageFormat.format(Message.NOT_VALID_POSITION, stringMessage));
             }
@@ -130,8 +133,18 @@ public class RemoteView extends View {
     //message : server request
     public void update(Message message) {
         if (message.getPlayer().equals("all") || message.getPlayer().equals(getPlayer().getUsername())) {
-            clientConnection.asyncSend(message);
-            expectedMessage = message.getType();
+            if(message.getType() == MessageType.REMOVE_PLAYER) {
+                //Special case, could close the connection
+                RemovePlayerRequest rpr = (RemovePlayerRequest) message;
+                String player = getPlayer().getUsername();
+                if(rpr.isVictory() || rpr.getTargetPlayer().equals(player))
+                    clientConnection.closeConnection(rpr.getCustomMessage(player));
+                else
+                    clientConnection.asyncSend(message);
+            } else {
+                clientConnection.asyncSend(message);
+                expectedMessage = message.getType();
+            }
         }
         else {
             expectedMessage = MessageType.WAIT;

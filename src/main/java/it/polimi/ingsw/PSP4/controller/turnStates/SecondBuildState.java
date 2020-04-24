@@ -23,15 +23,13 @@ public class SecondBuildState extends State {
 
     @Override
     public synchronized void changeWorker() {
-        //TODO: signal not possible
+        //not possible as checked in RemoteView.update()
     }
 
     @Override
     public synchronized State performAction() {
         Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getBuildPositions(player, 2);
-        if(options.size() == 0)
-            return new WaitState(player);           //No available positions for this state
         selectOption(options);
         while(!isFinalStep()) {
             try {

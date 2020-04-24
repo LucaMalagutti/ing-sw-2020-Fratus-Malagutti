@@ -28,8 +28,6 @@ public class EarlyBuildState extends State {
     public synchronized State performAction() {
         Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getBuildPositions(player, 0);
-        if(options.size() == 0)
-            return new StandardMoveState(player);   //No available positions for this state
         selectOption(options);
         while(!isFinalStep()) {
             try {

@@ -13,6 +13,7 @@ public enum MessageType {
     CHOOSE_ALLOWED_GODS,
     CHOOSE_POSITION,
     CHOOSE_STARTING_PLAYER,
+    REMOVE_PLAYER,
     SKIP_STATE,
     WAIT;
 

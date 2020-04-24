@@ -67,4 +67,14 @@ public class AthenaGameMechanics extends GodGameMechanics {
             unwrapEnemies(player);
         }
     }
+
+    /**
+     * Called when a player using this god is removed
+     * Unwraps all enemies
+     * @param player current player
+     */
+    @Override
+    public void playerDefeat(Player player) {
+        unwrapEnemies(player);
+    }
 }

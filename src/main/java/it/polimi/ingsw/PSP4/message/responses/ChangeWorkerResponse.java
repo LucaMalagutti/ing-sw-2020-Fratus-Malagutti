@@ -19,9 +19,7 @@ public class ChangeWorkerResponse extends Response {
 
     @Override
     public void handle() {
-        //TODO: when to check if it's possible?
-        Player currentPlayer = GameState.getInstance().getCurrPlayer();
-        if(!currentPlayer.isWorkerLocked())
-            currentPlayer.getState().changeWorker();
+        //possible as checked in RemoteView.update()
+        GameState.getInstance().getCurrPlayer().getState().changeWorker();
     }
 }

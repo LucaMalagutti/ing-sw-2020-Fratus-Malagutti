@@ -20,7 +20,7 @@ public class SkipStateResponse extends Response {
 
     @Override
     public void handle() {
-        //TODO: when to check if it's possible?
+        //possible as checked in RemoteView.update()
         GameState.getInstance().getCurrPlayer().getState().skipState();
     }
 }

@@ -62,4 +62,11 @@ public abstract class Message implements Serializable {
     public static String NOT_YOUR_TURN = "There is a time and place for everything, but not now.";
     public static String USERNAME_LENGTH = "Username's length has to be between 1 and 15 characters. Try again:";
     public static String USERNAME_TAKEN = "{0} was already taken by another player. Select another one";
+
+    //Default game over messages
+    public static String NO_OPTIONS = "{0} ended up in a dead end. No options available.";
+    public static String VICTORY_LOSER = "Unfortunately, {0} won the game! Bow before the new sovereign of SANTORINI!";
+    public static String VICTORY_WINNER = "Congratulations {0}, you won the game! You are the new sovereign of SANTORINI!";
+    public static String DEFEAT_LOSER = "We are sorry {0}, you are out of the game!";
+    public static String DEFEAT_ENEMY = "Good news! {0} is out of the game!";
 }

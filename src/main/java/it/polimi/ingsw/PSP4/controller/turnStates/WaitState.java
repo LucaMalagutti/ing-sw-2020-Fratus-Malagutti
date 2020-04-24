@@ -21,12 +21,12 @@ public class WaitState extends State {
 
     @Override
     public synchronized void changeWorker() {
-        //TODO: signal not possible
+        //not possible as checked in RemoteView.update()
     }
 
     @Override
     public synchronized void skipState() {
-        //TODO: signal not possible
+        //not possible as checked in RemoteView.update()
     }
 
     @Override

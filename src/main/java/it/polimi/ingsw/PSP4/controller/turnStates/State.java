@@ -7,6 +7,7 @@ import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 import it.polimi.ingsw.PSP4.model.serializable.SerializablePosition;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,7 +101,11 @@ abstract public class State {
         for(Position option : options)
             serializableOptions.add(new SerializablePosition(option));
         String player = getPlayer().getUsername();
-        String text = getType().getMessage();
+        String text;
+        if(options.size() > 0)
+            text = getType().getMessage();
+        else
+            text = MessageFormat.format(Message.NO_OPTIONS, "You");
         if(canChangeWorker())
             text += Message.CHANGE_WORKER_COMMAND;
         if(canBeSkipped())

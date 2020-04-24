@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP4.controller.turnStates;
 
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.PathType;
+import it.polimi.ingsw.PSP4.message.Message;
+import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 
@@ -21,12 +23,12 @@ public class StandardBuildState extends State {
 
     @Override
     public synchronized void changeWorker() {
-        //TODO: signal not possible
+        //not possible as checked in RemoteView.update()
     }
 
     @Override
     public synchronized void skipState() {
-        //TODO: signal not possible
+        //not possible as checked in RemoteView.update()
     }
 
     @Override
@@ -34,7 +36,8 @@ public class StandardBuildState extends State {
         Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getBuildPositions(player, 1);
         if(options.size() == 0) {
-            //TODO: handle game over, loss
+            GameState.getInstance().playerDefeat(player, Message.NO_OPTIONS);
+            return new WaitState(player);
         }
         selectOption(options);
         while(!isFinalStep()) {
