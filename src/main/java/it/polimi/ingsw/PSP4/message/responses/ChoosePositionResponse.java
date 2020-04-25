@@ -28,7 +28,6 @@ public class ChoosePositionResponse extends Response {
 
     @Override
     public void handle() {
-        SerializablePosition selected = getSelected();
         Position position = GameState.getInstance().getPosition(selected.getRow(), selected.getCol());
         GameState.getInstance().getCurrPlayer().getState().receiveOption(position);
     }

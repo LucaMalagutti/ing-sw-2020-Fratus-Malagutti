@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP4.message.requests;
 
+import it.polimi.ingsw.PSP4.message.ErrorMessage;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
 
@@ -19,15 +20,23 @@ public class RemovePlayerRequest extends Request {
     public String getTargetPlayer() { return targetPlayer; }
     public boolean isVictory() { return victory; }
 
+    @Override
+    public boolean needsResponse() { return false; }
+
     /**
      * Constructor of the class RemovePlayerRequest
-     * @param targetPlayer username of the player that has been removed
+     * @param targetPlayer username of the targetPlayer
      * @param victory if true targetPlayer is the winner of the game, otherwise is out of the game
      */
     public RemovePlayerRequest(String targetPlayer, boolean victory) {
         super("all", "", staticType);
         this.targetPlayer = targetPlayer;
         this.victory = victory;
+    }
+
+    @Override
+    public Message validateResponse(String stringMessage) {
+        return new ErrorMessage(getPlayer(), Message.NOT_YOUR_TURN);
     }
 
     public String getCustomMessage(String player) {
@@ -43,7 +52,5 @@ public class RemovePlayerRequest extends Request {
     }
 
     @Override
-    public String toString() {
-        return MessageFormat.format(Message.DEFEAT_ENEMY, targetPlayer);
-    }
+    public String toString() { return MessageFormat.format(Message.DEFEAT_ENEMY, targetPlayer); }
 }

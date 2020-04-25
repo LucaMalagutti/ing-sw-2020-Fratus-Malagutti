@@ -1,8 +1,11 @@
 package it.polimi.ingsw.PSP4.message.requests;
 
+import it.polimi.ingsw.PSP4.message.ErrorMessage;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
+import it.polimi.ingsw.PSP4.message.responses.ChooseStartingPlayerResponse;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 /**
@@ -24,6 +27,15 @@ public class ChooseStartingPlayerRequest extends Request {
     public ChooseStartingPlayerRequest(String player, List<String> playerNames) {
         super(player, Message.CHOOSE_STARTING_PLAYER, staticType);
         this.playerNames = playerNames;
+    }
+
+    @Override
+    public Message validateResponse(String stringMessage) {
+        stringMessage = stringMessage.trim();
+        if (getPlayerNames().contains(stringMessage)) {
+            return new ChooseStartingPlayerResponse(getPlayer(), stringMessage);
+        }
+        return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_USERNAME, stringMessage));
     }
 
     @Override

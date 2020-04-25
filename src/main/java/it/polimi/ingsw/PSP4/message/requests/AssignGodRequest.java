@@ -1,7 +1,9 @@
 package it.polimi.ingsw.PSP4.message.requests;
 
+import it.polimi.ingsw.PSP4.message.ErrorMessage;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
+import it.polimi.ingsw.PSP4.message.responses.AssignGodResponse;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -25,6 +27,24 @@ public class AssignGodRequest extends Request {
     public AssignGodRequest(String player, List<String> allowedGods) {
         super(player, Message.CHOOSE_GOD, staticType);
         this.allowedGods = allowedGods;
+    }
+
+    @Override
+    public Message validateResponse(String stringMessage) {
+        String chosenGod = stringMessage.toUpperCase().replaceAll("\\s","");
+        List<String> allowedGods = getAllowedGods();
+        if (allowedGods.contains(chosenGod)) {
+            allowedGods.remove(chosenGod);
+            return new AssignGodResponse(getPlayer(), allowedGods, chosenGod);
+        }
+        else if (allowedGods.size() == 1) {
+            String lastGod = allowedGods.get(0);
+            allowedGods.remove(lastGod);
+            return new AssignGodResponse(getPlayer(), allowedGods, lastGod);
+        }
+        else {
+            return new ErrorMessage(getPlayer(), Message.NOT_VALID_GOD_NAME);
+        }
     }
 
     @Override

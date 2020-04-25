@@ -39,6 +39,7 @@ public abstract class Message implements Serializable {
     public static String CHOOSE_POSITION_MOVE = "Select a position to move your worker from the following list.";
     public static String CHOOSE_STARTING_PLAYER = "Choose the first player to start the game from the following list:";
     public static String CHOOSE_USERNAME = "Select your username:";
+    public static String CHOOSE_WORKER = "Select a worker from the following list of positions:";
     public static String CHOSEN_INTERFACE = "You have chosen \"{0}\" as your UI for the game.";
     public static String CREATING_LOBBY = "Creating a new lobby to play a game as {0}";
     public static String ENTERING_LOBBY = "Entering lobby as {0}";
@@ -59,6 +60,7 @@ public abstract class Message implements Serializable {
     public static String NOT_VALID_POSITION = "{0} is not a valid position. Try again.";
     public static String NOT_VALID_UI = "Couldn't select a valid UI. Exiting..";
     public static String NOT_VALID_USERNAME = "{0} is not a valid player name. Try again.";
+    public static String NOT_VALID_WORKER = "{0} is not a valid worker position. Try again.";
     public static String NOT_YOUR_TURN = "There is a time and place for everything, but not now.";
     public static String USERNAME_LENGTH = "Username's length has to be between 1 and 15 characters. Try again:";
     public static String USERNAME_TAKEN = "{0} was already taken by another player. Select another one";

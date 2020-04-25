@@ -110,7 +110,7 @@ abstract public class State {
             text += Message.CHANGE_WORKER_COMMAND;
         if(canBeSkipped())
             text += Message.SKIP_STATE_COMMAND;
-        Message message = new ChoosePositionRequest(player, text, serializableOptions);
+        Message message = new ChoosePositionRequest(player, text, serializableOptions, canBeSkipped(), canChangeWorker());
         GameState.getInstance().notifyObservers(message);
         setOptions(serializableOptions);
     }

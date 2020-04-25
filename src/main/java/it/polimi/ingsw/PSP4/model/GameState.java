@@ -4,10 +4,7 @@ import it.polimi.ingsw.PSP4.controller.cardsMechanics.*;
 import it.polimi.ingsw.PSP4.controller.turnStates.State;
 import it.polimi.ingsw.PSP4.controller.turnStates.StateType;
 import it.polimi.ingsw.PSP4.message.Message;
-import it.polimi.ingsw.PSP4.message.requests.AssignGodRequest;
-import it.polimi.ingsw.PSP4.message.requests.ChooseAllowedGodsRequest;
-import it.polimi.ingsw.PSP4.message.requests.ChooseStartingPlayerRequest;
-import it.polimi.ingsw.PSP4.message.requests.RemovePlayerRequest;
+import it.polimi.ingsw.PSP4.message.requests.*;
 import it.polimi.ingsw.PSP4.observer.Observable;
 import it.polimi.ingsw.PSP4.observer.Observer;
 
@@ -58,7 +55,19 @@ public class GameState implements Observable<Message> {
     private GameState(){
         if(instance != null)
             throw new RuntimeException("Use method getInstance() instead.");
-        reset();
+        this.currPlayer = null;
+        this.players = new ArrayList<>();
+        for(int row=0; row<board.length; row++){
+            for(int col=0; col<board[row].length; col++){
+                board[row][col] = new Position(row, col);
+            }
+        }
+        for(int row=0; row<board.length; row++){
+            for(int col=0; col<board[row].length; col++){
+                //Placed in reset() shouldn't need a reference to GameState as a parameter
+                board[row][col].setUpNeighbors(row, col, this);
+            }
+        }
     }
 
     /**
@@ -84,21 +93,11 @@ public class GameState implements Observable<Message> {
     /**
      * Puts the singleton in a "clean" state, used when a new game starts
      */
+    //TODO: must be private (public for testing)
     private synchronized void reset() {
         //TODO: debug (important!)
-        this.currPlayer = null;
-        this.players = new ArrayList<>();
-        for(int row=0; row<board.length; row++){
-            for(int col=0; col<board[row].length; col++){
-                board[row][col] = new Position(row, col);
-            }
-        }
-        for(int row=0; row<board.length; row++){
-            for(int col=0; col<board[row].length; col++){
-                //Placed in reset() shouldn't need a reference to GameState as a parameter
-                board[row][col].setUpNeighbors(row, col, this);
-            }
-        }
+        instance = null;
+        getInstance(true);
     }
 
     /**
@@ -112,6 +111,10 @@ public class GameState implements Observable<Message> {
         return flatBoard;
     }
 
+    /**
+     * @param username name of the player to get
+     * @return reference to the player with that username or null if not exists
+     */
     public Player getPlayerFromUsername (String username) {
         for (Player player:getPlayers()) {
             if (player.getUsername().equals(username))
@@ -120,8 +123,11 @@ public class GameState implements Observable<Message> {
         return null;
     }
 
-    //TODO move this to Controller?
+    /**
+     * Starts the game
+     */
     public void startGame() {
+        //TODO move this to Controller?
         System.out.println(MessageFormat.format(Message.GAME_STARTED, getNumPlayer()));
         chooseAllowedGods();
     }
@@ -130,17 +136,22 @@ public class GameState implements Observable<Message> {
      * Starts sending a ChooseAllowedGodMessage to the first player
      */
     public void chooseAllowedGods() {
-        String message = MessageFormat.format(Message.CHOOSE_ALLOWED_GODS, getNumPlayer());
         List<String> implementedGodList = GodType.getImplementedGodsList();
-        notifyObservers(new ChooseAllowedGodsRequest(currPlayer.getUsername(), message, implementedGodList));
+        notifyObservers(new ChooseAllowedGodsRequest(currPlayer.getUsername(), implementedGodList, getNumPlayer()));
     }
 
+    /**
+     * Sends to the next player the list of gods to choose from
+     */
     public void assignGod() {
-        this.skipPlayer();
+        skipPlayer();
         notifyObservers(new AssignGodRequest(currPlayer.getUsername(),
             getAllowedGods().stream().map(Enum::toString).collect(Collectors.toList())));
     }
 
+    /**
+     * Sends to the first player connected the list of players to choose who will make the first move
+     */
     public void chooseStartingPlayer() {
         List<String> playerList = this.getPlayers().stream().map(Player::getUsername).collect(Collectors.toList());
         notifyObservers(new ChooseStartingPlayerRequest(this.getCurrPlayer().getUsername(), playerList));
@@ -152,12 +163,25 @@ public class GameState implements Observable<Message> {
     }
 
     /**
+     * Sets current player's active worker and wakes runTurn()
+     * @param worker worker selected by the player
+     */
+    public synchronized void receiveWorker(Worker worker) {
+        getCurrPlayer().setCurrWorker(worker);
+        notifyAll();
+    }
+
+    /**
      * Asks currPlayer to select a worker, then sets it as current
      */
-    private void selectWorker() {
-        //TODO: implement this to choose a worker
-        //Worker worker = ???
-        //getCurrPlayer().setCurrWorker(worker);
+    private synchronized void selectWorker() {
+        List<int[]> workers = new ArrayList<>();
+        for(Worker worker : getCurrPlayer().getWorkers()) {
+            Position position = worker.getCurrPosition();
+            int[] coordinates = {position.getRow(), position.getCol()};
+            workers.add(coordinates);
+        }
+        notifyObservers(new ChooseWorkerRequest(getCurrPlayer().getUsername(), workers));
     }
 
     /**
@@ -176,8 +200,17 @@ public class GameState implements Observable<Message> {
      */
     public synchronized void runTurn() {
         while(getCurrPlayer().getState().getType() != StateType.WAIT) {
-            if(!getCurrPlayer().isWorkerLocked())
+            if(!getCurrPlayer().isWorkerLocked()) {
+                getCurrPlayer().setCurrWorker(null);
                 selectWorker();
+                while(getCurrPlayer().getCurrWorker() == null) {
+                    try {
+                        wait();
+                    } catch(InterruptedException e) {
+                        //TODO: handle exception
+                    }
+                }
+            }
             State nextState = getCurrPlayer().getState().performAction();
             getCurrPlayer().setState(nextState);
         }

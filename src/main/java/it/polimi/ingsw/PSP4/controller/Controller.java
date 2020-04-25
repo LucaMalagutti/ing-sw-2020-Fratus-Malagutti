@@ -16,7 +16,7 @@ public class Controller implements Observer<Message> {
     public void update(Message message) {
         //TODO: handle message instanceof Request
         if(message instanceof Response)
-            message.getType().handleResponse((Response) message);
+            ((Response) message).handle();
         else
             System.out.println("Received Request");
     }
