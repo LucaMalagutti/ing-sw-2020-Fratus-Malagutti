@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class SocketClientConnection implements Observable<String>, Runnable {
-    private Socket socket;
+    private final Socket socket;
     private ObjectOutputStream out;
     private final Server server;
     private boolean active = true;
@@ -42,12 +42,12 @@ public class SocketClientConnection implements Observable<String>, Runnable {
         }
     }
 
-    public void closeConnection(String message) {
+    public void closeConnection(String message, boolean resetServer) {
         send(message);
-        closeConnection();
+        closeConnection(resetServer);
     }
 
-    public void closeConnection() {
+    public void closeConnection(boolean resetServer) {
         send("Connection closed");
         try {
             socket.close();
@@ -55,10 +55,12 @@ public class SocketClientConnection implements Observable<String>, Runnable {
             e.printStackTrace();
         }
         active = false;
+        if (resetServer)
+            server.reset();
     }
 
     private void close() {
-        closeConnection();
+        closeConnection(false);
         System.out.println("Unregistering client from server");
         server.unregisterConnection(this);
         System.out.println("Connection unregistered from server");
@@ -107,8 +109,12 @@ public class SocketClientConnection implements Observable<String>, Runnable {
         try {
             Scanner in = new Scanner(socket.getInputStream());
             String name = in.nextLine().replaceAll("\\s", "");
-            while (name.equals("") || name.length() > 15) {
-                send(Message.USERNAME_LENGTH);
+            while (name.equals("") || name.length() > 15 || name.equals("@")) {
+                if (name.equals("@")) {
+                    send(Message.USERNAME_CHAR);
+                } else {
+                    send(Message.USERNAME_LENGTH);
+                }
                 name = in.nextLine().replaceAll("\\s", "");
             }
             return name;
@@ -159,25 +165,4 @@ public class SocketClientConnection implements Observable<String>, Runnable {
             }
         }
     }
-
-//    public void discardScanner() {
-//        discardingScanner = true;
-//        new Thread(() -> {
-//            Scanner in = null;
-//            try {
-//                in = new Scanner(socket.getInputStream());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            while (discardingScanner && in != null && in.hasNextLine()) {
-//                 lastLine = in.nextLine();
-//            }
-//        }).start();
-//    }
-//
-//    public void stopDiscarding() {
-//        if (discardingScanner) {
-//            discardingScanner = false;
-//        }
-//    }
 }

@@ -52,6 +52,7 @@ public abstract class Message implements Serializable {
     public static String WAIT_END_TURN = "Wait for {0} to finish his turn\n";
     public static String WAIT_LOBBY_SETUP = "Wait for the first player to set up the lobby";
     public static String WAIT_PLAYERS = "\nWaiting for the other players to join your lobby";
+    public static String FIRST_PLACE_WORKER = "Select the first placement on the board of one of your workers\nType two coordinates separated by a comma";
 
     //Default errors
     public static String NOT_VALID_GOD_LIST = "Not a valid god list. Try again with valid god names separated by a single space.";
@@ -64,6 +65,8 @@ public abstract class Message implements Serializable {
     public static String NOT_YOUR_TURN = "There is a time and place for everything, but not now.";
     public static String USERNAME_LENGTH = "Username's length has to be between 1 and 15 characters. Try again:";
     public static String USERNAME_TAKEN = "{0} was already taken by another player. Select another one";
+    public static String USERNAME_CHAR = "\"@\" is not a valid username. Try again:";
+    public static String CLIENT_EXIT_DURING_GAME = "A player has unexpectedly left the game. Exiting..";
 
     //Default game over messages
     public static String NO_OPTIONS = "{0} ended up in a dead end. No options available.";

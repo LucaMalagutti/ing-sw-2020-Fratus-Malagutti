@@ -14,5 +14,6 @@ public enum MessageType {
     CHOOSE_WORKER,
     REMOVE_PLAYER,
     SKIP_STATE,
+    FIRST_WORKER_PLACEMENT,
     WAIT
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP4.message.responses;
 
 import it.polimi.ingsw.PSP4.message.MessageType;
 import it.polimi.ingsw.PSP4.model.GameState;
+import it.polimi.ingsw.PSP4.model.Player;
 
 /**
  * Message to tell the controller who starts the game
@@ -26,8 +27,10 @@ public class ChooseStartingPlayerResponse extends Response {
 
     @Override
     public void handle() {
-        //TODO: handle null exception in player search
-        GameState.getInstance().setCurrPlayer(GameState.getInstance().getPlayerFromUsername(getSelectedPlayer()));
-        GameState.getInstance().placeWorkers();
+        Player selectedPlayer = GameState.getInstance().getPlayerFromUsername(getSelectedPlayer());
+        if (selectedPlayer == null)
+            selectedPlayer = GameState.getInstance().getCurrPlayer();
+        GameState.getInstance().setCurrPlayer(selectedPlayer);
+        GameState.getInstance().firstWorkerPlacement(0,0);
     }
 }

@@ -33,22 +33,38 @@ public class Server {
     }
 
     /**
-     * Removes a connection after its client exits
+     * Removes a connection from the server after its client exits with an IOException. Handles the server state
      * @param c connection to be unregistered
      */
     public synchronized void unregisterConnection(SocketClientConnection c) {
-        usernamesTaken.remove(waitingConnections.get(c));
-        playingConnections.remove(c);
-        waitingConnections.remove(c);
-        //Handles first client disconnection when the game is still in lobby phase
-        if (c == firstClientConnected) {
-            numPlayers = -1;
-            firstClientConnected = null;
+        //Handles first client disconnection when the game is still in lobby phase. Drops all clients.
+        if (c == firstClientConnected && waitingConnections.size() > 0) {
             for (SocketClientConnection connection: waitingConnections.keySet()) {
-                connection.closeConnection(Message.LOBBY_CREATOR_LEFT);
+                connection.closeConnection(Message.LOBBY_CREATOR_LEFT, false);
             }
-            waitingConnections.clear();
+            this.reset();
         }
+        //Handles a client disconnection when the game has started. Drops all clients and resets the server state
+        else if (playingConnections.size() > 0) {
+            GameState.getInstance().dropAllConnections();
+            this.reset();
+        }
+        else {
+            usernamesTaken.remove(waitingConnections.get(c));
+            playingConnections.remove(c);
+            waitingConnections.remove(c);
+        }
+    }
+
+    /**
+     * resets the Server object so its original state, so that another lobby can be created to play a new game
+     */
+    protected synchronized void reset() {
+        numPlayers = -1;
+        firstClientConnected = null;
+        usernamesTaken.clear();
+        waitingConnections.clear();
+        playingConnections.clear();
     }
 
     /**
@@ -87,7 +103,7 @@ public class Server {
     public synchronized void lobby(SocketClientConnection c, String name) {
         //drops connections started with an ongoing game
         if (playingConnections.size() > 0) {
-            c.closeConnection(Message.GAME_ALREADY_STARTED);
+            c.closeConnection(Message.GAME_ALREADY_STARTED, false);
         }
         waitingConnections.put(c, name);
         if (waitingConnections.size() == 1) {

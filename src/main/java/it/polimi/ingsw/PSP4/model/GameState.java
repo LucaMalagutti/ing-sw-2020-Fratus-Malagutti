@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP4.controller.turnStates.State;
 import it.polimi.ingsw.PSP4.controller.turnStates.StateType;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.requests.*;
+import it.polimi.ingsw.PSP4.model.serializable.SerializableGameState;
 import it.polimi.ingsw.PSP4.observer.Observable;
 import it.polimi.ingsw.PSP4.observer.Observer;
 
@@ -27,6 +28,7 @@ public class GameState implements Observable<Message> {
     private Player currPlayer;                                  //reference to current player
     private int numPlayer;                                      //number of players (2 or 3)
     private List<GodType> allowedGods;                          //gods the player can use during this game
+
 
     //getter and setter
     public Position[][] getBoard() { return board; }
@@ -157,9 +159,15 @@ public class GameState implements Observable<Message> {
         notifyObservers(new ChooseStartingPlayerRequest(this.getCurrPlayer().getUsername(), playerList));
     }
 
-    public void placeWorkers() {
-        //TODO implement this
-        System.out.println(this.getCurrPlayer().getUsername());
+    public void firstWorkerPlacement(int numPl, int numWorker) {
+        if (numPl == getNumPlayer() && numWorker == 0) {
+            GameState.getInstance().newTurn();
+        } else {
+            if (numWorker == 0 && numPl != 0)
+                skipPlayer();
+            SerializableGameState board = new SerializableGameState();
+            notifyObservers(new AssignFirstWorkerPlacementRequest(getCurrPlayer().getUsername(),board, numPl, numWorker));
+        }
     }
 
     /**
@@ -282,5 +290,13 @@ public class GameState implements Observable<Message> {
         notifyObservers(new RemovePlayerRequest(player.getUsername(), true));
         //cleans the GameState singleton for a new game
         reset();
+    }
+
+    /**
+     * Drops all client connection after a client left without surrendering
+     */
+    public void dropAllConnections() {
+        notifyObservers(new RemovePlayerRequest("@", false));
+        GameState.getInstance().reset();
     }
 }

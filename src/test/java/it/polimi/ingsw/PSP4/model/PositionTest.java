@@ -12,7 +12,7 @@ public class PositionTest {
     GameState gameState;
     @Before
     public void setUp() {
-        gameState = GameState.getInstance();
+        gameState = GameState.getInstance(true);
         gameState.setPlayers(new ArrayList<Player>(Arrays.asList(new Player("1"), new Player("2"))));
         gameState.setNumPlayer(2);
         gameState.setCurrPlayer(gameState.getPlayers().get(0));
