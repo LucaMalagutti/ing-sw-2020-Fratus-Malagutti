@@ -26,10 +26,11 @@ public class RemovePlayerRequest extends Request {
     /**
      * Constructor of the class RemovePlayerRequest
      * @param targetPlayer username of the targetPlayer
+     * @param message message from the sender
      * @param victory if true targetPlayer is the winner of the game, otherwise is out of the game
      */
-    public RemovePlayerRequest(String targetPlayer, boolean victory) {
-        super("@", "", staticType);
+    public RemovePlayerRequest(String targetPlayer, String message, boolean victory) {
+        super("@", null, message, staticType);
         this.targetPlayer = targetPlayer;
         this.victory = victory;
     }
@@ -48,9 +49,9 @@ public class RemovePlayerRequest extends Request {
             if (targetPlayer.equals("@")) {
                 return Message.CLIENT_EXIT_DURING_GAME;
             } else if(player.equals(targetPlayer)) {
-                return MessageFormat.format(Message.DEFEAT_LOSER, targetPlayer);
+                return MessageFormat.format(getMessage(), "You") + "\n" + MessageFormat.format(Message.DEFEAT_LOSER, targetPlayer);
             } else {
-                return MessageFormat.format(Message.DEFEAT_ENEMY, targetPlayer);
+                return MessageFormat.format(getMessage(), targetPlayer) + "\n" + MessageFormat.format(Message.DEFEAT_ENEMY, targetPlayer);
             }
         }
     }

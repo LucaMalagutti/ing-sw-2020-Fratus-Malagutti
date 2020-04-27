@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP4.controller.turnStates;
 
+import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 
@@ -16,7 +17,7 @@ public class EarlyBuildState extends State {
     public boolean canBeSkipped() { return true; }
 
     @Override
-    public boolean canChangeWorker() { return !getPlayer().isWorkerLocked(); }
+    public State getNextState() { return new StandardMoveState(getPlayer()); }
 
     /**
      * Constructor of the class EarlyBuildState
@@ -25,22 +26,17 @@ public class EarlyBuildState extends State {
     public EarlyBuildState(Player player) { super(player, staticType); }
 
     @Override
-    public synchronized State performAction() {
+    public void runState() {
         Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getBuildPositions(player, 0);
         selectOption(options);
-        while(!isFinalStep()) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                //TODO: handle exception
-            }
-        }
-        StateStep step = getStep();
-        if(step == StateStep.CHANGE_WORKER)
-            return new EarlyBuildState(player);     //CHANGE_WORKER
-        if(step == StateStep.PERFORM_ACTION)
-            player.getMechanics().build(player, getPosition());
-        return new StandardMoveState(player);       //PERFORM_ACTION || SKIP_STATE
+    }
+
+    @Override
+    public void performAction() {
+        Player player = getPlayer();
+        player.getMechanics().build(player, getPosition());
+        player.setState(getNextState());
+        GameState.getInstance().runTurn();
     }
 }

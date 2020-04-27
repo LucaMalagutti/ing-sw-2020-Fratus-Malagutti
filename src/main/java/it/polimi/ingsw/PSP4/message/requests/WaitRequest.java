@@ -3,6 +3,8 @@ package it.polimi.ingsw.PSP4.message.requests;
 import it.polimi.ingsw.PSP4.message.ErrorMessage;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
+import it.polimi.ingsw.PSP4.model.GameState;
+import it.polimi.ingsw.PSP4.model.serializable.SerializableGameState;
 
 import java.text.MessageFormat;
 
@@ -21,10 +23,11 @@ public class WaitRequest extends Request {
     /**
      * Constructor of the class WaitRequest
      * @param player username of the receiver
+     * @param board serializable copy of GameState to be printed
      * @param playingPlayer username of the current player
      */
-    public WaitRequest(String player, String playingPlayer) {
-        super(player, MessageFormat.format(Message.WAIT_END_TURN, playingPlayer), staticType);
+    public WaitRequest(String player, SerializableGameState board, String playingPlayer) {
+        super(player, board, MessageFormat.format(Message.WAIT_END_TURN, playingPlayer), staticType);
         this.playingPlayer = playingPlayer;
     }
 
@@ -35,6 +38,11 @@ public class WaitRequest extends Request {
 
     @Override
     public String toString() {
-        return getMessage();
+        SerializableGameState board = getBoard();
+        String message = "";
+        if(board != null)
+            message += board.toString();
+        message += getMessage();
+        return message;
     }
 }

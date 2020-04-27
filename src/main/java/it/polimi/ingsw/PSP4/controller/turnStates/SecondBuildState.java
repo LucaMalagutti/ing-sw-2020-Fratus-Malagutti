@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP4.controller.turnStates;
 
+import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 
@@ -15,6 +16,9 @@ public class SecondBuildState extends State {
     @Override
     public boolean canBeSkipped() { return true; }
 
+    @Override
+    public State getNextState() { return new WaitState(getPlayer()); }
+
     /**
      * Constructor of the class SecondBuildState
      * @param player reference to current player
@@ -22,26 +26,17 @@ public class SecondBuildState extends State {
     public SecondBuildState(Player player) { super(player, staticType); }
 
     @Override
-    public synchronized void changeWorker() {
-        //not possible as checked in RemoteView.update()
-    }
-
-    @Override
-    public synchronized State performAction() {
+    public void runState() {
         Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getBuildPositions(player, 2);
         selectOption(options);
-        while(!isFinalStep()) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                //TODO: handle exception
-            }
-        }
-        StateStep step = getStep();
-        if(step == StateStep.PERFORM_ACTION)
-            player.getMechanics().build(player, getPosition());
-        return new WaitState(player);               //PERFORM_ACTION || SKIP_STATE
-        //CHANGE_WORKER not handled cause impossible to get
+    }
+
+    @Override
+    public void performAction() {
+        Player player = getPlayer();
+        player.getMechanics().build(player, getPosition());
+        player.setState(getNextState());
+        GameState.getInstance().runTurn();
     }
 }

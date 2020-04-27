@@ -25,7 +25,7 @@ public class ChooseStartingPlayerRequest extends Request {
      * @param playerNames list of usernames
      */
     public ChooseStartingPlayerRequest(String player, List<String> playerNames) {
-        super(player, Message.CHOOSE_STARTING_PLAYER, staticType);
+        super(player, null, Message.CHOOSE_STARTING_PLAYER, staticType);
         this.playerNames = playerNames;
     }
 

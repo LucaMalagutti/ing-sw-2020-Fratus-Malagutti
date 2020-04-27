@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP4.controller.turnStates;
 
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.PathType;
-import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
@@ -22,35 +21,25 @@ public class StandardBuildState extends State {
     public StandardBuildState(Player player) { super(player, staticType); }
 
     @Override
-    public synchronized void changeWorker() {
-        //not possible as checked in RemoteView.update()
-    }
-
-    @Override
-    public synchronized void skipState() {
-        //not possible as checked in RemoteView.update()
-    }
-
-    @Override
-    public synchronized State performAction() {
+    public void runState() {
         Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getBuildPositions(player, 1);
-        if(options.size() == 0) {
-            GameState.getInstance().playerDefeat(player, Message.NO_OPTIONS);
-            return new WaitState(player);
-        }
         selectOption(options);
-        while(!isFinalStep()) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                //TODO: handle exception
-            }
-        }
-        player.getMechanics().build(player, getPosition());
+    }
+
+    @Override
+    public State getNextState() {
+        Player player = getPlayer();
         if(player.getMechanics().getPath() == PathType.DOUBLE_BUILD)
-            return new SecondBuildState(player);    //PERFORM_ACTION
-        return new WaitState(player);               //PERFORM_ACTION
-        //CHANGE_WORKER and SKIP_STATE not handled cause impossible to get
+            return new SecondBuildState(player);
+        return new WaitState(player);
+    }
+
+    @Override
+    public void performAction() {
+        Player player = getPlayer();
+        player.getMechanics().build(player, getPosition());
+        player.setState(getNextState());
+        GameState.getInstance().runTurn();
     }
 }

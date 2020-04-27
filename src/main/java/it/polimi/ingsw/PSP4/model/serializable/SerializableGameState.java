@@ -13,10 +13,11 @@ import java.util.stream.Collectors;
 public final class SerializableGameState implements Serializable {
     private static final long serialVersionUID = 8734470972752644234L;
 
-    private final List<SerializablePosition> board = new ArrayList<>();  //copy of GameState (straight) board
-    private final List<SerializablePlayer> players = new ArrayList<>();  //copy of GameState players
-    private final int currPlayerIndex;                                    //index of the current player
-    private final int numPlayer;                                          //number of players (2 or 3)
+    private final List<SerializablePosition> board = new ArrayList<>();     //copy of GameState (straight) board
+    private final List<SerializablePlayer> players = new ArrayList<>();     //copy of GameState players
+    private final int currPlayerIndex;                                      //index of the current player
+    private final int numPlayer;                                            //number of players (2 or 3)
+    private final List<SerializablePosition> options;                       //available options to highlight
 
     /**
      * Constructor of the class SerializableGameState
@@ -27,6 +28,11 @@ public final class SerializableGameState implements Serializable {
         gameState.getPlayers().forEach(player -> this.players.add(new SerializablePlayer(player)));
         this.currPlayerIndex = gameState.getPlayers().indexOf(gameState.getCurrPlayer());
         this.numPlayer = gameState.getNumPlayer();
+        List<SerializablePosition> options = gameState.getCurrPlayer().getState().getOptions();
+        if(options != null)
+            this.options = options;
+        else
+            this.options = new ArrayList<>();
     }
 
     //getter and setter
@@ -35,6 +41,7 @@ public final class SerializableGameState implements Serializable {
     public int getCurrPlayerIndex() { return currPlayerIndex; }
     public SerializablePlayer getCurrPlayer() { return players.get(currPlayerIndex); }
     public int getNumPlayer() { return numPlayer; }
+    public List<SerializablePosition> getOptions() { return new ArrayList<>(options); }
 
     /**
      * Gets list of free positions in all the board

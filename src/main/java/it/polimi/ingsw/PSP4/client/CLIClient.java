@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP4.client;
 
-import it.polimi.ingsw.PSP4.message.*;
+import it.polimi.ingsw.PSP4.message.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,7 +27,7 @@ public class CLIClient {
     public synchronized void setActive(boolean active) {this.active = active;}
 
     public Thread asyncReadFromSocket(final ObjectInputStream socketIn) {
-        Thread t = new Thread((Runnable) () -> {
+        Thread t = new Thread(() -> {
             try {
                 while(isActive()) {
                     Object inputObject = socketIn.readObject();
@@ -40,6 +40,7 @@ public class CLIClient {
                     }
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 setActive(false);
             }
         });
@@ -48,7 +49,7 @@ public class CLIClient {
     }
 
     public Thread asyncWriteToSocket(final Scanner stdIn, final PrintWriter socketOut) {
-        Thread t = new Thread((Runnable) () -> {
+        Thread t = new Thread(() -> {
             try {
                 while (isActive()) {
                     String inputLine = stdIn.nextLine();
@@ -56,6 +57,7 @@ public class CLIClient {
                     socketOut.flush();
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 setActive(false);
             }
         });

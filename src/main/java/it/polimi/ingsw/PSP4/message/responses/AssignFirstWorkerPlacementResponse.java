@@ -4,7 +4,6 @@ import it.polimi.ingsw.PSP4.message.MessageType;
 import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Position;
 import it.polimi.ingsw.PSP4.model.Worker;
-import it.polimi.ingsw.PSP4.model.serializable.SerializableGameState;
 import it.polimi.ingsw.PSP4.model.serializable.SerializablePosition;
 
 public class AssignFirstWorkerPlacementResponse extends Response {
@@ -38,7 +37,9 @@ public class AssignFirstWorkerPlacementResponse extends Response {
         Worker selectedWorker = GameState.getInstance().getCurrPlayer().getWorkers().get(numWorker);
         selectedWorker.setCurrPosition(selectedPosition);
         selectedPosition.setWorker(selectedWorker);
-        if (numWorker==1)
+        if(numPlayer + 1 == GameState.getInstance().getNumPlayer() && numWorker == 1)
+            GameState.getInstance().newTurn();
+        else if(numWorker == 1)
             GameState.getInstance().firstWorkerPlacement(numPlayer + 1, 0);
         else
             GameState.getInstance().firstWorkerPlacement(numPlayer, 1);

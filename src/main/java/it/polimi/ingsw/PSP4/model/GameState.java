@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP4.model;
 
-import it.polimi.ingsw.PSP4.controller.cardsMechanics.*;
-import it.polimi.ingsw.PSP4.controller.turnStates.State;
+import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
 import it.polimi.ingsw.PSP4.controller.turnStates.StateType;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.requests.*;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
  * It is a singleton.
  */
 public class GameState implements Observable<Message> {
-    private static volatile GameState instance;                 //singleton instance
+    private static volatile GameState instance = null;          //singleton instance
     private final ArrayList<Observer<Message>> observers = new ArrayList<>();
 
     private final Position[][] board = new Position[5][5];      //5x5 grid, represents game platform
@@ -28,7 +27,7 @@ public class GameState implements Observable<Message> {
     private Player currPlayer;                                  //reference to current player
     private int numPlayer;                                      //number of players (2 or 3)
     private List<GodType> allowedGods;                          //gods the player can use during this game
-
+    private volatile boolean checkingEnd;                       //while false a new turn cannot run
 
     //getter and setter
     public Position[][] getBoard() { return board; }
@@ -50,6 +49,9 @@ public class GameState implements Observable<Message> {
     public List<GodType> getAllowedGods() { return new ArrayList<>(allowedGods);}
     public synchronized void setAllowedGods(List<GodType> allowedGods) { this.allowedGods = allowedGods; }
 
+    public boolean isCheckingEnd() { return  checkingEnd; }
+    public void setCheckingEnd(boolean checkingEnd) { this.checkingEnd = checkingEnd; }
+
     /**
      * Constructor of the class GameState
      * Builds the board creating Position objects
@@ -66,10 +68,19 @@ public class GameState implements Observable<Message> {
         }
         for(int row=0; row<board.length; row++){
             for(int col=0; col<board[row].length; col++){
-                //Placed in reset() shouldn't need a reference to GameState as a parameter
                 board[row][col].setUpNeighbors(row, col, this);
             }
         }
+        this.checkingEnd = false;
+    }
+
+    /**
+     * @return a serialized copy of GameState or null if not implemented yet
+     */
+    public static SerializableGameState getSerializedInstance() {
+        if(GameState.getInstance(false) != null)
+            return new SerializableGameState();
+        return null;
     }
 
     /**
@@ -160,29 +171,24 @@ public class GameState implements Observable<Message> {
     }
 
     public void firstWorkerPlacement(int numPl, int numWorker) {
-        if (numPl == getNumPlayer() && numWorker == 0) {
-            GameState.getInstance().newTurn();
-        } else {
-            if (numWorker == 0 && numPl != 0)
-                skipPlayer();
-            SerializableGameState board = new SerializableGameState();
-            notifyObservers(new AssignFirstWorkerPlacementRequest(getCurrPlayer().getUsername(),board, numPl, numWorker));
-        }
+        if (numWorker == 0 && numPl != 0)
+            skipPlayer();
+        notifyObservers(new AssignFirstWorkerPlacementRequest(getCurrPlayer().getUsername(), numPl, numWorker));
     }
 
     /**
      * Sets current player's active worker and wakes runTurn()
      * @param worker worker selected by the player
      */
-    public synchronized void receiveWorker(Worker worker) {
+    public void receiveWorker(Worker worker) {
         getCurrPlayer().setCurrWorker(worker);
-        notifyAll();
+        getCurrPlayer().getState().runState();
     }
 
     /**
      * Asks currPlayer to select a worker, then sets it as current
      */
-    private synchronized void selectWorker() {
+    private void selectWorker() {
         List<int[]> workers = new ArrayList<>();
         for(Worker worker : getCurrPlayer().getWorkers()) {
             Position position = worker.getCurrPosition();
@@ -193,36 +199,36 @@ public class GameState implements Observable<Message> {
     }
 
     /**
-     * If no player is playing, moves currPlayer pointer forward and prepares the new player for the turn
+     * If no player is playing, moves currPlayer pointer forward, prepares and notifies the new player for the turn
      */
-    public synchronized void newTurn() {
+    public void newTurn() {
+        newTurn(true);
+    }
+
+    /**
+     * If no player is playing, moves currPlayer pointer forward and prepares the new player for the turn
+     * @param notify if true notifies the new player
+     */
+    public void newTurn(boolean notify) {
         for(Player player : getPlayers())
             if(player.getState().getType() != StateType.WAIT)
                 return;
         skipPlayer();
         getCurrPlayer().newTurn();
+        if(notify)
+            notifyObservers(new StartTurnRequest(getCurrPlayer().getUsername()));
     }
 
     /**
-     * Runs the turn until the currPlayer's state is WAIT
+     * Runs a piece of the turn, unless the player is in wait
      */
-    public synchronized void runTurn() {
-        while(getCurrPlayer().getState().getType() != StateType.WAIT) {
-            if(!getCurrPlayer().isWorkerLocked()) {
-                getCurrPlayer().setCurrWorker(null);
-                selectWorker();
-                while(getCurrPlayer().getCurrWorker() == null) {
-                    try {
-                        wait();
-                    } catch(InterruptedException e) {
-                        //TODO: handle exception
-                    }
-                }
-            }
-            State nextState = getCurrPlayer().getState().performAction();
-            getCurrPlayer().setState(nextState);
-        }
-        getCurrPlayer().endTurn();
+    public void runTurn() {
+        if (getCurrPlayer().getState().getType() == StateType.WAIT)
+            newTurn();
+        else if(!getCurrPlayer().isWorkerLocked())
+            selectWorker();
+        else
+            getCurrPlayer().getState().runState();
     }
 
     @Override
@@ -254,11 +260,9 @@ public class GameState implements Observable<Message> {
      * @param player player which cannot continue the game
      * @param message reason for defeat
      */
-    public void playerDefeat(Player player, String message) {
-        //end player's turn
-        player.endTurn();
-        //move currentPlayer to next player
-        newTurn();
+    public synchronized void playerDefeat(Player player, String message) {
+        //prepares for a possible new turn
+        newTurn(false);
         //remove player from the list
         removePlayer(player);
         if(getPlayers().size() == 1) {
@@ -278,7 +282,8 @@ public class GameState implements Observable<Message> {
         //unwrap enemies (useless if not ATHENA)
         player.getMechanics().playerDefeat(player);
         //close player's connection and inform other players
-        notifyObservers(new RemovePlayerRequest(player.getUsername(), false));
+        notifyObservers(new RemovePlayerRequest(player.getUsername(), message, false));
+        notifyObservers(new StartTurnRequest(getCurrPlayer().getUsername()));
     }
 
     /**
@@ -287,7 +292,7 @@ public class GameState implements Observable<Message> {
      */
     public void playerVictory(Player player) {
         //close every connection notifying the players
-        notifyObservers(new RemovePlayerRequest(player.getUsername(), true));
+        notifyObservers(new RemovePlayerRequest(player.getUsername(), "", true));
         //cleans the GameState singleton for a new game
         reset();
     }
@@ -296,7 +301,7 @@ public class GameState implements Observable<Message> {
      * Drops all client connection after a client left without surrendering
      */
     public void dropAllConnections() {
-        notifyObservers(new RemovePlayerRequest("@", false));
+        notifyObservers(new RemovePlayerRequest("@", "", false));
         GameState.getInstance().reset();
     }
 }

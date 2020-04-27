@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP4.model;
 
+import it.polimi.ingsw.PSP4.controller.cardsMechanics.DefaultGameMechanics;
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.GameMechanics;
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.PathType;
 import it.polimi.ingsw.PSP4.controller.turnStates.*;
@@ -52,9 +53,9 @@ public class Player {
         workers.add(new Worker());
         this.currWorker = null;
         this.workerLocked = false;
-        this.turnNum = 1;
+        this.turnNum = 0;
         this.state = new WaitState(this);
-        this.mechanics = null;
+        this.mechanics = new DefaultGameMechanics();
     }
 
     /**

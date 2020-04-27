@@ -16,6 +16,9 @@ public class SecondMoveState extends State {
     @Override
     public boolean canBeSkipped() { return true; }
 
+    @Override
+    public State getNextState() { return new StandardBuildState(getPlayer()); }
+
     /**
      * Constructor of the class SecondMoveState
      * @param player reference to current player
@@ -23,31 +26,21 @@ public class SecondMoveState extends State {
     public SecondMoveState(Player player) { super(player, staticType); }
 
     @Override
-    public synchronized void changeWorker() {
-        //not possible as checked in RemoteView.update()
-    }
-
-    @Override
-    public synchronized State performAction() {
+    public void runState() {
         Player player = getPlayer();
         ArrayList<Position> options = player.getMechanics().getMovePositions(player, 2);
         selectOption(options);
-        while(!isFinalStep()) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                //TODO: handle exception
-            }
+    }
+
+    @Override
+    public void performAction() {
+        Player player = getPlayer();
+        player.getMechanics().move(player, getPosition());
+        if (player.getMechanics().checkWinCondition(player)) {
+            player.setState(new WaitState(player));
+            GameState.getInstance().playerVictory(player);
         }
-        StateStep step = getStep();
-        if(step == StateStep.PERFORM_ACTION) {
-            player.getMechanics().move(player, getPosition());
-            if (player.getMechanics().checkWinCondition(player)) {
-                GameState.getInstance().playerVictory(player);
-                return new WaitState(player);
-            }
-        }
-        return new StandardBuildState(player);      //PERFORM_ACTION || SKIP_STATE
-        //CHANGE_WORKER not handled cause impossible to get
+        player.setState(getNextState());
+        GameState.getInstance().runTurn();
     }
 }

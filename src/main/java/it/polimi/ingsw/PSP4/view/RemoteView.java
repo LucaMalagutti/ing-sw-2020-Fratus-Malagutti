@@ -73,7 +73,7 @@ public class RemoteView extends View {
                 }
             }
         } else {
-            clientConnection.asyncSend(new WaitRequest(getPlayer().getUsername(), message.getPlayer()));
+            clientConnection.asyncSend(new WaitRequest(getPlayer().getUsername(), ((Request) message).getBoard(), message.getPlayer()));
         }
     }
 

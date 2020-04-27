@@ -2,7 +2,6 @@ package it.polimi.ingsw.PSP4.message.responses;
 
 import it.polimi.ingsw.PSP4.message.MessageType;
 import it.polimi.ingsw.PSP4.model.GameState;
-import it.polimi.ingsw.PSP4.model.Player;
 
 /**
  * Message to ask to change the currently selected worker

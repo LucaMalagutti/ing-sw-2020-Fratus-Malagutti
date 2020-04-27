@@ -14,10 +14,11 @@ public class Controller implements Observer<Message> {
      */
     @Override
     public void update(Message message) {
-        //TODO: handle message instanceof Request
-        if(message instanceof Response)
+        if (!(message instanceof Response)) {
+            //TODO: handle exception
+            System.out.println("That's not a Response");
+        } else {
             ((Response) message).handle();
-        else
-            System.out.println("Received Request");
+        }
     }
 }

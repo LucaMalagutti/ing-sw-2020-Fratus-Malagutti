@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP4.message.requests;
 
-import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
 import it.polimi.ingsw.PSP4.message.ErrorMessage;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
@@ -30,7 +29,7 @@ public class ChooseAllowedGodsRequest extends Request {
      * @param numPlayer number of players
      */
     public ChooseAllowedGodsRequest(String player, List<String> selectableGods, int numPlayer) {
-        super(player, MessageFormat.format(Message.CHOOSE_ALLOWED_GODS, numPlayer), staticType);
+        super(player, null, MessageFormat.format(Message.CHOOSE_ALLOWED_GODS, numPlayer), staticType);
         this.selectableGods = selectableGods;
         this.numPlayer = numPlayer;
     }

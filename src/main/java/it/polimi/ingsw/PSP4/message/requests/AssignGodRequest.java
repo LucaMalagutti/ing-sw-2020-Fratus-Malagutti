@@ -25,7 +25,7 @@ public class AssignGodRequest extends Request {
      * @param allowedGods list of allowed god names to choose from
      */
     public AssignGodRequest(String player, List<String> allowedGods) {
-        super(player, Message.CHOOSE_GOD, staticType);
+        super(player, null, Message.CHOOSE_GOD, staticType);
         this.allowedGods = allowedGods;
     }
 

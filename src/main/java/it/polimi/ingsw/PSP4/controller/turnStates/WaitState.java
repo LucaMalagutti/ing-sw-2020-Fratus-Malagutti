@@ -1,7 +1,10 @@
 package it.polimi.ingsw.PSP4.controller.turnStates;
 
+import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
+
+import java.util.ArrayList;
 
 /**
  * Defines the actions to perform when waiting
@@ -15,20 +18,23 @@ public class WaitState extends State {
     public WaitState(Player player) { super(player, staticType); }
 
     @Override
-    public synchronized void receiveOption(Position position) {
+    public void runState() {
+        performAction();
+    }
+
+    @Override
+    public State getNextState() {
+        return this;
+    }
+
+    @Override
+    public void receiveOption(Position position) {
         //TODO: signal not possible
     }
 
     @Override
-    public synchronized void changeWorker() {
-        //not possible as checked in RemoteView.update()
+    public void performAction() {
+        getPlayer().setState(getNextState());
+        GameState.getInstance().runTurn();
     }
-
-    @Override
-    public synchronized void skipState() {
-        //not possible as checked in RemoteView.update()
-    }
-
-    @Override
-    public State performAction() { return this; }
 }

@@ -6,6 +6,8 @@ import it.polimi.ingsw.PSP4.message.MessageType;
 import it.polimi.ingsw.PSP4.message.responses.ChangeWorkerResponse;
 import it.polimi.ingsw.PSP4.message.responses.ChoosePositionResponse;
 import it.polimi.ingsw.PSP4.message.responses.SkipStateResponse;
+import it.polimi.ingsw.PSP4.model.GameState;
+import it.polimi.ingsw.PSP4.model.serializable.SerializableGameState;
 import it.polimi.ingsw.PSP4.model.serializable.SerializablePosition;
 
 import java.text.MessageFormat;
@@ -34,7 +36,7 @@ public class ChoosePositionRequest extends Request {
      * @param canChangeWorker defines if the player can change the worker
      */
     public ChoosePositionRequest(String player, String message, List<SerializablePosition> options, boolean canBeSkipped, boolean canChangeWorker) {
-        super(player, message, staticType);
+        super(player, GameState.getSerializedInstance(), message, staticType);
         this.options = options;
         this.canBeSkipped = canBeSkipped;
         this.canChangeWorker = canChangeWorker;
@@ -52,7 +54,7 @@ public class ChoosePositionRequest extends Request {
         try {
             row = Integer.parseInt(coordinates[0]);
             col = Integer.parseInt(coordinates[1]);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
             return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_POSITION, stringMessage));
         }
         List<SerializablePosition> selected = getOptions().stream().filter(p -> p.getRow() == row && p.getCol() == col).collect(Collectors.toList());
@@ -63,7 +65,11 @@ public class ChoosePositionRequest extends Request {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(getMessage() + "\n");
+        SerializableGameState board = getBoard();
+        StringBuilder sb = new StringBuilder();
+        if(board != null)
+            sb.append(board.toString());
+        sb.append(getMessage()).append("\n");
         for (SerializablePosition position : options) {
             sb.append(position.getRow()).append(",").append(position.getCol()).append(" ");
         }

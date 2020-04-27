@@ -12,7 +12,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
     private final static int port = 31713;
@@ -123,6 +124,7 @@ public class Server {
         //When the number of waiting players is reached, initializes GameState and its dependencies and starts the game
         if (waitingConnections.size() == numPlayers) {
             GameState.getInstance(true);
+            Controller controller = new Controller();
             for (SocketClientConnection connection: waitingConnections.keySet()) {
                 Player player = new Player(waitingConnections.get(connection));
                 GameState.getInstance().addPlayer(player);
@@ -130,7 +132,6 @@ public class Server {
                     GameState.getInstance().setCurrPlayer(player);
                 }
                 View playerView = new RemoteView(player, connection);
-                Controller controller = new Controller();
                 GameState.getInstance().addObserver(playerView);
                 playerView.addObserver(controller);
                 playingConnections.put(connection, player);

@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP4.model.serializable;
 
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
 import it.polimi.ingsw.PSP4.model.Player;
+import it.polimi.ingsw.PSP4.model.Worker;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,7 +25,9 @@ public final class SerializablePlayer implements Serializable {
      */
     public SerializablePlayer(Player player) {
         this.username = player.getUsername();
-        player.getWorkers().forEach(worker -> this.workers.add(worker.getId()));
+        for(Worker worker : player.getWorkers())
+            this.workers.add(worker.getId());
+        //player.getWorkers().forEach(worker -> this.workers.add(worker.getId()));
         this.turnNum = player.getTurnNum();
         this.state = player.getState().getType().getString();
         this.card = player.getMechanics().getType();

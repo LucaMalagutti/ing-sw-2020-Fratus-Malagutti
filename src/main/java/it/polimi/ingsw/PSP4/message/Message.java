@@ -52,6 +52,7 @@ public abstract class Message implements Serializable {
     public static String WAIT_END_TURN = "Wait for {0} to finish his turn\n";
     public static String WAIT_LOBBY_SETUP = "Wait for the first player to set up the lobby";
     public static String WAIT_PLAYERS = "\nWaiting for the other players to join your lobby";
+    public static String YOUR_TURN = "It's your turn! Press Enter to start";
     public static String FIRST_PLACE_WORKER = "Select the first placement on the board of one of your workers\nType two coordinates separated by a comma";
 
     //Default errors

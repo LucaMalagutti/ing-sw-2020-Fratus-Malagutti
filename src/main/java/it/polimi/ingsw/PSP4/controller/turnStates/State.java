@@ -17,8 +17,6 @@ import java.util.List;
 abstract public class State {
     private final Player player;                    //reference to current player
     private final StateType type;                   //type of the actual state
-    private boolean finalStep;                      //if true step cannot be changed anymore
-    private StateStep step;                         //operation being performed by the state
     private List<SerializablePosition> options;     //list of positions available in current state
     private Position position;                      //position chosen by the player, initially null
 
@@ -27,12 +25,6 @@ abstract public class State {
 
     public StateType getType() { return type; }
 
-    protected boolean isFinalStep() { return finalStep; }
-    private void setFinalStep() { this.finalStep = false; }
-
-    protected StateStep getStep() { return step; }
-    protected void setStep(StateStep step) { if(!isFinalStep()) this.step = step; }
-
     public List<SerializablePosition> getOptions() { return options; }
     private void setOptions(List<SerializablePosition> options) { this.options = options; }
 
@@ -40,7 +32,9 @@ abstract public class State {
     private void setPosition(Position position) { this.position = position; }
 
     public boolean canBeSkipped() { return false; }
-    public boolean canChangeWorker() { return false; }
+    public boolean canChangeWorker() { return !player.isWorkerLocked(); }
+
+    public abstract State getNextState();
 
     /**
      * Constructor of the class State
@@ -50,8 +44,6 @@ abstract public class State {
     protected State(Player player, StateType type) {
         this.player = player;
         this.type = type;
-        this.finalStep = false;
-        this.step = StateStep.INITIALIZE;
         this.options = null;
         this.position = null;
     }
@@ -61,33 +53,30 @@ abstract public class State {
      * Sets step to PERFORM_ACTION
      * @param position reference to the position chosen by the player
      */
-    public synchronized void receiveOption(Position position) {
-        setStep(StateStep.PERFORM_ACTION);
-        setFinalStep();
+    public void receiveOption(Position position) {
         setPosition(position);
-        notifyAll();
+        performAction();
     }
 
     /**
      * Sets position attribute to null, then wakes up selectOption()
      * Sets step to CHANGE_WORKER
      */
-    public synchronized void changeWorker() {
-        setStep(StateStep.CHANGE_WORKER);
-        setFinalStep();
-        setPosition(null);
-        notifyAll();
+    public void changeWorker() {
+        if (canChangeWorker()) {
+            GameState.getInstance().runTurn();
+        }
     }
 
     /**
      * Sets position attribute to null, then wakes up selectOption()
      * Sets step to SKIP_STATE
      */
-    public synchronized void skipState() {
-        setStep(StateStep.SKIP_STATE);
-        setFinalStep();
-        setPosition(null);
-        notifyAll();
+    public void skipState() {
+        if (canBeSkipped()) {
+            getPlayer().setState(getNextState());
+            GameState.getInstance().runTurn();
+        }
     }
 
     /**
@@ -95,8 +84,7 @@ abstract public class State {
      * Sets step to WAIT_RESPONSE
      * @param options ArrayList of Position in which the action defined by the current state can be performed
      */
-    protected synchronized void selectOption(ArrayList<Position> options) {
-        setStep(StateStep.WAIT_RESPONSE);
+    protected void selectOption(ArrayList<Position> options) {
         List<SerializablePosition> serializableOptions = new ArrayList<>();
         for(Position option : options)
             serializableOptions.add(new SerializablePosition(option));
@@ -116,8 +104,30 @@ abstract public class State {
     }
 
     /**
-     * Performs the action defined by the current state
-     * @return next State of the game based on the card path
+     * Collects the possible positions
      */
-    public abstract State performAction();
+    public abstract void runState();
+
+    /**
+     * Performs the action defined by the current state
+     */
+    public void performAction() {
+        Player player = getPlayer();
+        if (options.size() == 0 && !canBeSkipped() && !canChangeWorker()) {
+            player.setState(new WaitState(player));
+            GameState.getInstance().playerDefeat(player, Message.NO_OPTIONS);
+            return;
+        }
+        if (getType() == StateType.BUILD)
+            player.getMechanics().build(player, getPosition());
+        else if (getType() == StateType.MOVE) {
+            player.getMechanics().move(player, getPosition());
+            if (player.getMechanics().checkWinCondition(player)) {
+                player.setState(new WaitState(player));
+                GameState.getInstance().playerVictory(player);
+            }
+        }
+        player.setState(getNextState());
+        GameState.getInstance().runTurn();
+    }
 }
