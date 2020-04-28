@@ -172,23 +172,23 @@ public final class SerializableGameState implements Serializable {
         if (position.getWorker() == null) {
             if (position.hasDome())
                 cellContent = CLIChar.DOME.getString();
-            if (position.getHeight() == 0)
+            else if (position.getHeight() == 0)
                 cellContent = CLIChar.BLANK.getString();
-            if (position.getHeight() == 1)
+            else if (position.getHeight() == 1)
                 cellContent = CLIChar.FIRST_LEVEL.getString();
-            if (position.getHeight() == 2)
+            else if (position.getHeight() == 2)
                 cellContent = CLIChar.SECOND_LEVEL.getString();
-            if (position.getHeight() == 3)
+            else if (position.getHeight() == 3)
                 cellContent = CLIChar.THIRD_LEVEL.getString();
         }
         else {
             if (position.getHeight() == 0)
                 cellContent = colorChar(CLIChar.WORKER_ON_GROUND,getPlayerColor(getPlayerFromWorker(position)));
-            if (position.getHeight() == 1)
+            else if (position.getHeight() == 1)
                 cellContent = colorChar(CLIChar.FIRST_LEVEL,getPlayerColor(getPlayerFromWorker(position)));
-            if (position.getHeight() == 2)
+            else if (position.getHeight() == 2)
                 cellContent = colorChar(CLIChar.SECOND_LEVEL,getPlayerColor(getPlayerFromWorker(position)));
-            if (position.getHeight() == 3)
+            else if (position.getHeight() == 3)
                 cellContent = colorChar(CLIChar.THIRD_LEVEL,getPlayerColor(getPlayerFromWorker(position)));
         }
         if (cellContent == null)

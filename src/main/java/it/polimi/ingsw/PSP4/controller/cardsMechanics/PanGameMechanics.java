@@ -23,6 +23,6 @@ public class PanGameMechanics extends GodGameMechanics {
      */
     @Override
     public boolean checkWinCondition(Player player) {
-        return super.checkWinCondition(player) || (player.getCurrWorker().getCurrPosition().getHeight() - player.getCurrWorker().getPrevPosition().getHeight() >= 2);
+        return super.checkWinCondition(player) || (player.getCurrWorker().getPrevPosition().getHeight() - player.getCurrWorker().getCurrPosition().getHeight() >= 2);
     }
 }

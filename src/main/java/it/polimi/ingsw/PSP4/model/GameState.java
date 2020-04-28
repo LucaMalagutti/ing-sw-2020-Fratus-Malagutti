@@ -27,7 +27,6 @@ public class GameState implements Observable<Message> {
     private Player currPlayer;                                  //reference to current player
     private int numPlayer;                                      //number of players (2 or 3)
     private List<GodType> allowedGods;                          //gods the player can use during this game
-    private volatile boolean checkingEnd;                       //while false a new turn cannot run
 
     //getter and setter
     public Position[][] getBoard() { return board; }
@@ -49,9 +48,6 @@ public class GameState implements Observable<Message> {
     public List<GodType> getAllowedGods() { return new ArrayList<>(allowedGods);}
     public synchronized void setAllowedGods(List<GodType> allowedGods) { this.allowedGods = allowedGods; }
 
-    public boolean isCheckingEnd() { return  checkingEnd; }
-    public void setCheckingEnd(boolean checkingEnd) { this.checkingEnd = checkingEnd; }
-
     /**
      * Constructor of the class GameState
      * Builds the board creating Position objects
@@ -71,7 +67,6 @@ public class GameState implements Observable<Message> {
                 board[row][col].setUpNeighbors(row, col, this);
             }
         }
-        this.checkingEnd = false;
     }
 
     /**

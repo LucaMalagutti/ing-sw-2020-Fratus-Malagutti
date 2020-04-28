@@ -40,7 +40,6 @@ public class CLIClient {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
                 setActive(false);
             }
         });
@@ -57,7 +56,6 @@ public class CLIClient {
                     socketOut.flush();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
                 setActive(false);
             }
         });
