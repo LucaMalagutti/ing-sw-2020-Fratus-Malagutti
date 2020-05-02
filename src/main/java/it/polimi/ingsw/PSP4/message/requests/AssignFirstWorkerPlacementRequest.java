@@ -34,15 +34,15 @@ public class AssignFirstWorkerPlacementRequest extends Request {
         String[] coordinates = stringMessage.split(",");
         int row, col;
         try {
-            row = Integer.parseInt(coordinates[0]);
+            row = Integer.parseInt(coordinateLetterToInt(coordinates[0]));
             col = Integer.parseInt(coordinates[1]);
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_POSITION, stringMessage));
+            return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_POSITION, stringMessage.equals("") ? "Null" : stringMessage));
         }
         List<SerializablePosition> selected = getBoard().getFreePositions().stream().filter(p -> p.getRow() == row && p.getCol() == col).collect(Collectors.toList());
         if (selected.size() == 1)
             return new AssignFirstWorkerPlacementResponse(getPlayer(),selected.get(0),numPlayer,numWorker);
-        return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_POSITION, stringMessage));
+        return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_POSITION, stringMessage.equals("") ? "Null" : stringMessage));
     }
 
     @Override

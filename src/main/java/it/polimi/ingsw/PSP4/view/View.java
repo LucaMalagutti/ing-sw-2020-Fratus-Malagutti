@@ -1,18 +1,20 @@
 package it.polimi.ingsw.PSP4.view;
 
 import it.polimi.ingsw.PSP4.message.Message;
+import it.polimi.ingsw.PSP4.message.requests.Request;
+import it.polimi.ingsw.PSP4.message.responses.Response;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.observer.Observable;
 import it.polimi.ingsw.PSP4.observer.Observer;
 
-public abstract class View implements Observable<Message>, Observer<Message> {
-    private Player player;
+public abstract class View implements Observable<Response>, Observer<Request> {
+    private final Player player;
 
     protected View (Player player) {this.player = player;}
 
     protected Player getPlayer() {return this.player;}
 
-    void handleMove(Message message) {
-        notifyObservers(message);
+    void handleMove(Response response) {
+        notifyObservers(response);
     };
 }

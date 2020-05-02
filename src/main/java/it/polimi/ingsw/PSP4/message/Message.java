@@ -56,6 +56,7 @@ public abstract class Message implements Serializable {
     public static String FIRST_PLACE_WORKER = "Select the first placement on the board of one of your workers\nType two coordinates separated by a comma";
 
     //Default errors
+    public static String WORKERS_STUCK = "Both of your workers are stuck! You can't complete this turn! Press Enter";
     public static String NOT_VALID_GOD_LIST = "Not a valid god list. Try again with valid god names separated by a single space.";
     public static String NOT_VALID_GOD_NAME = "Not a valid god name. Try again.";
     public static String NOT_VALID_NUMBER = "Not a valid number of players. Type 2 or 3";
@@ -75,4 +76,51 @@ public abstract class Message implements Serializable {
     public static String VICTORY_WINNER = "Congratulations {0}, you won the game! You are the new sovereign of SANTORINI!";
     public static String DEFEAT_LOSER = "We are sorry {0}, you are out of the game!";
     public static String DEFEAT_ENEMY = "Good news! {0} is out of the game!";
+
+    /**
+     * Used to switch between CLI represented row, as String, during display phase and row saved in Position, as int
+     * @param rowLetter Letter to switch to a storable int
+     * @return coordinate as number (to be parsed with ParseInt)
+     */
+    public String coordinateLetterToInt(String rowLetter) {
+        switch (rowLetter) {
+            case "a":
+            case "A":
+                return "0";
+            case "b":
+            case "B":
+                return "1";
+            case "c":
+            case "C":
+                return "2";
+            case "d":
+            case "D":
+                return "3";
+            case "e":
+            case "E":
+                return "4";
+        }
+        return rowLetter;
+    }
+
+    /**
+     * Used to switch between row saved in Position, as int and CLI represented row, as String, during display phase
+     * @param rowInt Int row coordinate to be displayed as letter
+     * @return row coordinate as single letter
+     */
+    public String coordinateIntToLetter(int rowInt) {
+        switch (rowInt) {
+            case 0:
+                return "A";
+            case 1:
+                return "B";
+            case 2:
+                return "C";
+            case 3:
+                return "D";
+            case 4:
+                return "E";
+        }
+        return String.valueOf(rowInt);
+    }
 }

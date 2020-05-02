@@ -103,18 +103,18 @@ public final class SerializableGameState implements Serializable {
         if (getNumPlayer() == 3)
             thirdPlayer = getPlayers().get((getCurrPlayerIndex()+2)%getNumPlayer());
         if (rowIndex==2)
-            return String.format("%-6s%-31s%2s","Turn: ",getCurrPlayer().getTurnNum(),"0 ");
+            return String.format("%-6s%-31s%2s","Turn: ",getCurrPlayer().getTurnNum() > 0 ? getCurrPlayer().getTurnNum() : "Initial Worker Placement","A ");
         if (rowIndex==4)
-            return String.format("%-5s - %-16s %-12s%2s",getPlayerColor(currPlayer).getName(),currPlayer.getUsername(),currPlayer.getCard(),"1 ");
+            return String.format("%-5s - %-16s %-12s%2s",getPlayerColor(currPlayer).getName(),currPlayer.getUsername(),currPlayer.getCard(),"B ");
         if (rowIndex==6)
-            return String.format("%-5s - %-16s %-12s%2s",getPlayerColor(secondPlayer).getName(),secondPlayer.getUsername(),secondPlayer.getCard(),"2 ");
+            return String.format("%-5s - %-16s %-12s%2s",getPlayerColor(secondPlayer).getName(),secondPlayer.getUsername(),secondPlayer.getCard(),"C ");
         if (rowIndex==8)
             if (thirdPlayer == null)
-                return String.format("%37s%2s"," ","3 ");
+                return String.format("%37s%2s"," ","D ");
             else
-                return String.format("%-5s - %-16s %-12s%2s",getPlayerColor(thirdPlayer).getName(),thirdPlayer.getUsername(),thirdPlayer.getCard(),"3 ");
+                return String.format("%-5s - %-16s %-12s%2s",getPlayerColor(thirdPlayer).getName(),thirdPlayer.getUsername(),thirdPlayer.getCard(),"D ");
         if (rowIndex==10)
-            return String.format("%-7s%-30s%2s","State: ", currPlayer.getState(),"4 ");
+            return String.format("%-7s%-30s%2s","State: ", currPlayer.getState(),"E ");
         return String.format("%39s"," ");
     }
 

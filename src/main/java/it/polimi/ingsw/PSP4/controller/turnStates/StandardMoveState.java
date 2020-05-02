@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP4.controller.turnStates;
 
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.PathType;
+import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;

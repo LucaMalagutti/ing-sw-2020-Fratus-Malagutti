@@ -2,6 +2,8 @@ package it.polimi.ingsw.PSP4.model;
 
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
 import it.polimi.ingsw.PSP4.controller.turnStates.StateType;
+import it.polimi.ingsw.PSP4.controller.turnStates.WaitState;
+import it.polimi.ingsw.PSP4.message.ErrorMessage;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.requests.*;
 import it.polimi.ingsw.PSP4.model.serializable.SerializableGameState;
@@ -18,9 +20,9 @@ import java.util.stream.Collectors;
  * Contains information about the game being played, its state and its board.
  * It is a singleton.
  */
-public class GameState implements Observable<Message> {
+public class GameState implements Observable<Request> {
     private static volatile GameState instance = null;          //singleton instance
-    private final ArrayList<Observer<Message>> observers = new ArrayList<>();
+    private final ArrayList<Observer<Request>> observers = new ArrayList<>();
 
     private final Position[][] board = new Position[5][5];      //5x5 grid, represents game platform
     private ArrayList<Player> players;                          //list of players
@@ -135,7 +137,6 @@ public class GameState implements Observable<Message> {
      * Starts the game
      */
     public void startGame() {
-        //TODO move this to Controller?
         System.out.println(MessageFormat.format(Message.GAME_STARTED, getNumPlayer()));
         chooseAllowedGods();
     }
@@ -185,12 +186,20 @@ public class GameState implements Observable<Message> {
      */
     private void selectWorker() {
         List<int[]> workers = new ArrayList<>();
-        for(Worker worker : getCurrPlayer().getWorkers()) {
-            Position position = worker.getCurrPosition();
-            int[] coordinates = {position.getRow(), position.getCol()};
-            workers.add(coordinates);
+        if (getCurrPlayer().getStuckWorkers().size() == 2) {
+            getCurrPlayer().setState(new WaitState(getCurrPlayer()));
+            GameState.getInstance().playerDefeat(getCurrPlayer(), Message.WORKERS_STUCK);
         }
-        notifyObservers(new ChooseWorkerRequest(getCurrPlayer().getUsername(), workers));
+        else {
+            for (Worker worker : getCurrPlayer().getWorkers()) {
+                if (!getCurrPlayer().getStuckWorkers().contains(worker)) {
+                    Position position = worker.getCurrPosition();
+                    int[] coordinates = {position.getRow(), position.getCol()};
+                    workers.add(coordinates);
+                }
+            }
+            notifyObservers(new ChooseWorkerRequest(getCurrPlayer().getUsername(), workers));
+        }
     }
 
     /**
@@ -218,6 +227,7 @@ public class GameState implements Observable<Message> {
      * Runs a piece of the turn, unless the player is in wait
      */
     public void runTurn() {
+        System.out.println(getCurrPlayer().getStuckWorkers());
         if (getCurrPlayer().getState().getType() == StateType.WAIT)
             newTurn();
         else if(!getCurrPlayer().isWorkerLocked())
@@ -227,23 +237,23 @@ public class GameState implements Observable<Message> {
     }
 
     @Override
-    public void notifyObservers(Message message) {
+    public void notifyObservers(Request request) {
         synchronized (observers) {
-            for (Observer<Message> obs: observers) {
-                obs.update(message);
+            for (Observer<Request> obs: observers) {
+                obs.update(request);
             }
         }
     }
 
     @Override
-    public void addObserver(Observer<Message> o) {
+    public void addObserver(Observer<Request> o) {
         synchronized (observers) {
             observers.add(o);
         }
     }
 
     @Override
-    public void removeObserver(Observer<Message> o) {
+    public void removeObserver(Observer<Request> o) {
         synchronized (observers) {
             observers.remove(o);
         }

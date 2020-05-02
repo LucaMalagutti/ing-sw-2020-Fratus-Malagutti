@@ -1,24 +1,19 @@
 package it.polimi.ingsw.PSP4.controller;
 
-import it.polimi.ingsw.PSP4.message.Message;
+import it.polimi.ingsw.PSP4.message.requests.Request;
 import it.polimi.ingsw.PSP4.message.responses.Response;
 import it.polimi.ingsw.PSP4.observer.Observer;
 
 /**
- * Controller base class. Observes its (virtual) view
+ * Controller base class. Observes all the (virtual) views
  */
-public class Controller implements Observer<Message> {
+public class Controller implements Observer<Response> {
     /**
      * At the view's notifyObservers(), updates the model depending on the message content
-     * @param message message sent by the view
+     * @param response Response sent by the view
      */
     @Override
-    public void update(Message message) {
-        if (!(message instanceof Response)) {
-            //TODO: handle exception
-            System.out.println("That's not a Response");
-        } else {
-            ((Response) message).handle();
-        }
+    public void update(Response response) {
+        response.handle();
     }
 }

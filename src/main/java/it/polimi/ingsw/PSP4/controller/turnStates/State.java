@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP4.controller.turnStates;
 
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.requests.ChoosePositionRequest;
+import it.polimi.ingsw.PSP4.message.requests.Request;
 import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
@@ -33,6 +34,7 @@ abstract public class State {
 
     public boolean canBeSkipped() { return false; }
     public boolean canChangeWorker() { return !player.isWorkerLocked(); }
+    public boolean workersStuck() {return player.getStuckWorkers().size() == 2;}
 
     public abstract State getNextState();
 
@@ -50,17 +52,17 @@ abstract public class State {
 
     /**
      * Sets position attribute (if null), then wakes up selectOption()
-     * Sets step to PERFORM_ACTION
+     * also empties stuckWorkers list in the player since one worker could move in this turn
      * @param position reference to the position chosen by the player
      */
     public void receiveOption(Position position) {
+        getPlayer().emptyStuckWorker();
         setPosition(position);
         performAction();
     }
 
     /**
      * Sets position attribute to null, then wakes up selectOption()
-     * Sets step to CHANGE_WORKER
      */
     public void changeWorker() {
         if (canChangeWorker()) {
@@ -70,7 +72,6 @@ abstract public class State {
 
     /**
      * Sets position attribute to null, then wakes up selectOption()
-     * Sets step to SKIP_STATE
      */
     public void skipState() {
         if (canBeSkipped()) {
@@ -81,26 +82,29 @@ abstract public class State {
 
     /**
      * Gives the player a set of Position based on his card and current state
-     * Sets step to WAIT_RESPONSE
      * @param options ArrayList of Position in which the action defined by the current state can be performed
      */
     protected void selectOption(ArrayList<Position> options) {
         List<SerializablePosition> serializableOptions = new ArrayList<>();
         for(Position option : options)
             serializableOptions.add(new SerializablePosition(option));
-        String player = getPlayer().getUsername();
+        Player player = getPlayer();
         String text;
         if(options.size() > 0)
             text = getType().getMessage();
-        else
+        else {
             text = MessageFormat.format(Message.NO_OPTIONS, "You");
+            player.addCurrentWorkerAsStuck();
+        }
         if(canChangeWorker())
             text += Message.CHANGE_WORKER_COMMAND;
         if(canBeSkipped())
             text += Message.SKIP_STATE_COMMAND;
-        Message message = new ChoosePositionRequest(player, text, serializableOptions, canBeSkipped(), canChangeWorker());
-        GameState.getInstance().notifyObservers(message);
+        if (player.getStuckWorkers().size() == 2)
+            text = Message.WORKERS_STUCK;
         setOptions(serializableOptions);
+        Request message = new ChoosePositionRequest(player.getUsername(), text, serializableOptions, canBeSkipped(), canChangeWorker(), workersStuck());
+        GameState.getInstance().notifyObservers(message);
     }
 
     /**

@@ -1,27 +1,25 @@
 package it.polimi.ingsw.PSP4.server;
 
 import it.polimi.ingsw.PSP4.message.Message;
+import it.polimi.ingsw.PSP4.message.responses.Response;
 import it.polimi.ingsw.PSP4.observer.Observable;
 import it.polimi.ingsw.PSP4.observer.Observer;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-public class SocketClientConnection implements Observable<String>, Runnable {
+public class SocketClientConnection implements Observable<Response>, Runnable {
     private final Socket socket;
     private ObjectOutputStream out;
+    private ObjectInputStream in;
     private final Server server;
     private boolean active = true;
 
-    //used for Scanner discarding during wait for lobby setup
-//    private volatile boolean discardingScanner = false;
-//    private volatile String lastLine;
-
-    private final ArrayList<Observer<String>> observers = new ArrayList<>();
+    private final ArrayList<Observer<Response>> observers = new ArrayList<>();
 
     public SocketClientConnection(Socket socket, Server server) {
         this.socket = socket;
@@ -75,14 +73,14 @@ public class SocketClientConnection implements Observable<String>, Runnable {
      * @param name name of the first player, i.e. the one who sets the number of players
      * @return number of players for this game
      */
-    public int initializeGameNumPlayer(String name) throws IOException {
+    public int initializeGameNumPlayer(String name) throws IOException, ClassNotFoundException {
         send(MessageFormat.format(Message.CREATING_LOBBY, name));
         send(Message.CHOOSE_NUMBER_PLAYERS);
-        Scanner in = new Scanner(socket.getInputStream());
-        String numPlayers = in.nextLine();
+        String numPlayers = (String) in.readObject();
+
         while (!numPlayers.equals("2") && !numPlayers.equals("3") && !numPlayers.equals("")) {
             send(Message.NOT_VALID_NUMBER);
-            numPlayers = in.nextLine();
+            numPlayers = (String) in.readObject();
         }
         if (numPlayers.equals("")) {
             numPlayers = "2";
@@ -107,60 +105,59 @@ public class SocketClientConnection implements Observable<String>, Runnable {
     public String selectClientUsername() {
         send(Message.CHOOSE_USERNAME);
         try {
-            Scanner in = new Scanner(socket.getInputStream());
-            String name = in.nextLine().replaceAll("\\s", "");
+            String name = (String) in.readObject();
+            name = name.replaceAll("\\s", "");
             while (name.equals("") || name.length() > 15 || name.equals("@")) {
                 if (name.equals("@")) {
                     send(Message.USERNAME_CHAR);
                 } else {
                     send(Message.USERNAME_LENGTH);
                 }
-                name = in.nextLine().replaceAll("\\s", "");
+                name = (String) in.readObject();
+                name = name.replaceAll("\\s", "");
             }
             return name;
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             return e.getMessage();
         }
     }
 
     @Override
     public void run() {
-        Scanner in;
         try {
-            in = new Scanner(socket.getInputStream());
+            in = new ObjectInputStream(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
             String name = server.selectUsername(this);
-            in = new Scanner(socket.getInputStream());
             server.lobby(this, name);
             while (isActive()) {
-                String read = in.nextLine();
+                Response read = (Response) in.readObject();
                 notifyObservers(read);
             }
-        } catch (IOException e) {
-            e.getStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
+            e.getMessage();
         } finally {
             close();
         }
     }
 
     @Override
-    public void addObserver(Observer<String> o) {
+    public void addObserver(Observer<Response> o) {
         synchronized (observers) {
             observers.add(o);
         }
     }
 
     @Override
-    public void removeObserver(Observer<String> o) {
+    public void removeObserver(Observer<Response> o) {
         synchronized (observers) {
             observers.remove(o);
         }
     }
 
     @Override
-    public void notifyObservers(String message) {
+    public void notifyObservers(Response message) {
         synchronized (observers) {
-            for (Observer<String> observer : observers) {
+            for (Observer<Response> observer : observers) {
                 observer.update(message);
             }
         }

@@ -76,18 +76,17 @@ public class Server {
     public String selectUsername(SocketClientConnection c) {
         if (firstClientConnected != null && numPlayers == -1) {
             c.asyncSend(Message.WAIT_LOBBY_SETUP);
-//            c.discardScanner();
         }
         synchronized (this) {
             try {
                 while(firstClientConnected != null && numPlayers == -1) {
                     wait();
                 }
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-//        c.stopDiscarding();
+
         String selectedUsername = c.selectClientUsername();
         while (usernamesTaken.contains(selectedUsername) || selectedUsername.equals("")) {
             selectedUsername = c.selectClientUsername(selectedUsername);
@@ -113,6 +112,7 @@ public class Server {
                 setNumPlayers(c.initializeGameNumPlayer(name));
                 c.asyncSend(Message.WAIT_PLAYERS);
             } catch (Exception e) {
+                e.printStackTrace();
                 unregisterConnection(c);
             } finally {
                 notifyAll();

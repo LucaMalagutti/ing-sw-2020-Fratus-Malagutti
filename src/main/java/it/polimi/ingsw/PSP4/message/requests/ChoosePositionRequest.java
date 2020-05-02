@@ -24,6 +24,7 @@ public class ChoosePositionRequest extends Request {
     private final List<SerializablePosition> options;       //List of Position to choose from
     private final boolean canBeSkipped;                     //Defines if the player can skip current state
     private final boolean canChangeWorker;                  //Defines if the player can change the worker
+    private final boolean workersStuck;                     //Defines if both of the player workers can't move
 
     public List<SerializablePosition> getOptions() { return options; }
 
@@ -35,11 +36,12 @@ public class ChoosePositionRequest extends Request {
      * @param canBeSkipped defines if the player can skip current state
      * @param canChangeWorker defines if the player can change the worker
      */
-    public ChoosePositionRequest(String player, String message, List<SerializablePosition> options, boolean canBeSkipped, boolean canChangeWorker) {
+    public ChoosePositionRequest(String player, String message, List<SerializablePosition> options, boolean canBeSkipped, boolean canChangeWorker, boolean workersStuck) {
         super(player, GameState.getSerializedInstance(), message, staticType);
         this.options = options;
         this.canBeSkipped = canBeSkipped;
         this.canChangeWorker = canChangeWorker;
+        this.workersStuck = workersStuck;
     }
 
     @Override
@@ -47,20 +49,20 @@ public class ChoosePositionRequest extends Request {
         stringMessage = stringMessage.toUpperCase().replaceAll("\\s","");
         if(stringMessage.equals("SKIP") && canBeSkipped)
             return new SkipStateResponse(getPlayer());
-        if(stringMessage.equals("CHANGE") && canChangeWorker)
+        if((stringMessage.equals("CHANGE") && canChangeWorker) || workersStuck)
             return new ChangeWorkerResponse(getPlayer());
         String[] coordinates = stringMessage.split(",");
         int row, col;
         try {
-            row = Integer.parseInt(coordinates[0]);
+            row = Integer.parseInt(coordinateLetterToInt(coordinates[0]));
             col = Integer.parseInt(coordinates[1]);
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_POSITION, stringMessage));
+            return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_POSITION, stringMessage.equals("") ? "Null" : stringMessage));
         }
         List<SerializablePosition> selected = getOptions().stream().filter(p -> p.getRow() == row && p.getCol() == col).collect(Collectors.toList());
         if(selected.size() == 1)
             return new ChoosePositionResponse(getPlayer(), selected.get(0));
-        return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_POSITION, stringMessage));
+        return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_POSITION, stringMessage.equals("") ? "Null" : stringMessage));
     }
 
     @Override
@@ -71,7 +73,7 @@ public class ChoosePositionRequest extends Request {
             sb.append(board.toString());
         sb.append(getMessage()).append("\n");
         for (SerializablePosition position : options) {
-            sb.append(position.getRow()).append(",").append(position.getCol()).append(" ");
+            sb.append(coordinateIntToLetter(position.getRow())).append(",").append(position.getCol()).append(" ");
         }
         return sb.toString();
     }

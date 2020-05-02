@@ -41,15 +41,15 @@ public class ChooseWorkerRequest extends Request {
         String[] coordinates = stringMessage.split(",");
         int[] worker = new int[2];
         try {
-            worker[0] = Integer.parseInt(coordinates[0]);
+            worker[0] = Integer.parseInt(coordinateLetterToInt(coordinates[0]));
             worker[1] = Integer.parseInt(coordinates[1]);
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_WORKER, stringMessage));
+            return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_WORKER, stringMessage.equals("") ? "Null" : stringMessage));
         }
         List<int[]> selected = getWorkers().stream().filter(w -> w[0] == worker[0] && w[1] == worker[1]).collect(Collectors.toList());
         if (selected.size() == 1)
             return new ChooseWorkerResponse(getPlayer(), selected.get(0));
-        return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_WORKER, stringMessage));
+        return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_WORKER, stringMessage.equals("") ? "Null" : stringMessage));
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ChooseWorkerRequest extends Request {
             sb.append(board.toString());
         sb.append(getMessage()).append("\n");
         for (int[] worker : workers) {
-            sb.append(worker[0]).append(",").append(worker[1]).append(" ");
+            sb.append(coordinateIntToLetter(worker[0])).append(",").append(worker[1]).append(" ");
         }
         return sb.toString();
     }
