@@ -50,6 +50,10 @@ public class GameState implements Observable<Request> {
     public List<GodType> getAllowedGods() { return new ArrayList<>(allowedGods);}
     public synchronized void setAllowedGods(List<GodType> allowedGods) { this.allowedGods = allowedGods; }
 
+    public void spawnDome(int row, int col) {
+        getPosition(row, col).setDome(true);
+    }
+
     /**
      * Constructor of the class GameState
      * Builds the board creating Position objects
@@ -57,8 +61,6 @@ public class GameState implements Observable<Request> {
     private GameState(){
         if(instance != null)
             throw new RuntimeException("Use method getInstance() instead.");
-        this.currPlayer = null;
-        this.players = new ArrayList<>();
         for(int row=0; row<board.length; row++){
             for(int col=0; col<board[row].length; col++){
                 board[row][col] = new Position(row, col);
@@ -69,6 +71,10 @@ public class GameState implements Observable<Request> {
                 board[row][col].setUpNeighbors(row, col, this);
             }
         }
+        this.players = new ArrayList<>();
+        this.currPlayer = null;
+        this.numPlayer = 0;
+        this.allowedGods = new ArrayList<>();
     }
 
     /**
@@ -227,7 +233,6 @@ public class GameState implements Observable<Request> {
      * Runs a piece of the turn, unless the player is in wait
      */
     public void runTurn() {
-        System.out.println(getCurrPlayer().getStuckWorkers());
         if (getCurrPlayer().getState().getType() == StateType.WAIT)
             newTurn();
         else if(!getCurrPlayer().isWorkerLocked())

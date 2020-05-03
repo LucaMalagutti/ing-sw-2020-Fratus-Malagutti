@@ -26,6 +26,7 @@ public class ChooseAllowedGodsResponse extends Response {
      */
     public ChooseAllowedGodsResponse(String player, List<String> selectedGods) {
         super(player, "", staticType);
+        selectedGods.replaceAll(String::toUpperCase);
         this.selectedGods = selectedGods;
     }
 

@@ -1,7 +1,11 @@
 package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
+import it.polimi.ingsw.PSP4.controller.turnStates.StateType;
+import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
+
+import java.text.MessageFormat;
 
 /**
  * Defines the mechanics of the God card Hephaestus
@@ -21,22 +25,17 @@ public class HephaestusGameMechanics extends GodGameMechanics {
         super(component);
     }
 
-    /**
-     * Ask the player if want to build a second time in the same position (not a dome)
-     * @param position position in which has to build
-     * @return false if height is 3 (no dome) or the player doesn't want to build a second block
-     */
-    public boolean doubleBuild(Position position) {
-        if(position.getHeight() >= 3)
-            return false;
-        //TODO: implement, send message?
-        return true;
-    }
-
     @Override
     public void build(Player player, Position futurePosition) {
         getComponent().build(player, futurePosition);
-        if(doubleBuild(futurePosition))
+        if(futurePosition.getHeight() < 3 && player.getState().isConfirmed())
             futurePosition.increaseHeight();
+    }
+
+    @Override
+    public String needsConfirmation(Player player, Position futurePosition) {
+        if (player.getState().getType() == StateType.BUILD && futurePosition.getHeight() < 2)
+            return Message.HEPHAESTUS_BUILD;
+        return null;
     }
 }

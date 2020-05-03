@@ -27,8 +27,9 @@ public class AssignGodResponse extends Response {
      */
     public AssignGodResponse(String player, List<String> allowedGods, String selectedGod) {
         super(player, "", staticType);
+        allowedGods.replaceAll(String::toUpperCase);
         this.allowedGods = allowedGods;
-        this.selectedGod = selectedGod;
+        this.selectedGod = selectedGod.toUpperCase();
     }
 
     @Override

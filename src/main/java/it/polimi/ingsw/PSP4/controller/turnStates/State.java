@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP4.controller.turnStates;
 
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.requests.ChoosePositionRequest;
+import it.polimi.ingsw.PSP4.message.requests.ConfirmationRequest;
 import it.polimi.ingsw.PSP4.message.requests.Request;
 import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
@@ -51,18 +52,33 @@ abstract public class State {
     }
 
     /**
-     * Sets position attribute (if null), then wakes up selectOption()
-     * also empties stuckWorkers list in the player since one worker could move in this turn
+     * Checks if the action needs a confirmation by the player, otherwise calls setOption()
+     * Empties stuckWorkers list in the player since one worker could move in this turn
      * @param position reference to the position chosen by the player
      */
     public void receiveOption(Position position) {
+        String confirmation = getPlayer().getMechanics().needsConfirmation(getPlayer(), position);
+        if(confirmation == null) {
+            setOption(position);
+            return;
+        }
+        SerializablePosition serializablePosition = new SerializablePosition(position);
+        Request request = new ConfirmationRequest(getPlayer().getUsername(), confirmation, serializablePosition);
+        GameState.getInstance().notifyObservers(request);
+    }
+
+    /**
+     * Sets position attribute, then calls performAction()
+     * @param position reference to the position chosen by the player
+     */
+    public void setOption(Position position) {
         getPlayer().emptyStuckWorker();
         setPosition(position);
         performAction();
     }
 
     /**
-     * Sets position attribute to null, then wakes up selectOption()
+     * Calls runTurn() to change worker
      */
     public void changeWorker() {
         if (canChangeWorker()) {
@@ -71,7 +87,7 @@ abstract public class State {
     }
 
     /**
-     * Sets position attribute to null, then wakes up selectOption()
+     * Sets the next state and calls runTurn()
      */
     public void skipState() {
         if (canBeSkipped()) {
@@ -82,6 +98,7 @@ abstract public class State {
 
     /**
      * Gives the player a set of Position based on his card and current state
+     * Sets step to WAIT_RESPONSE
      * @param options ArrayList of Position in which the action defined by the current state can be performed
      */
     protected void selectOption(ArrayList<Position> options) {

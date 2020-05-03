@@ -30,6 +30,7 @@ public abstract class Message implements Serializable {
     }
 
     //Default messages
+    public static String ATLAS_BUILD = "Do you want to build a dome in {0}? (Y or N)";
     public static String CHANGE_WORKER_COMMAND = "\nWrite \"change\" to change worker.";
     public static String CHOOSE_ALLOWED_GODS = "Select {0} gods from this list:";
     public static String CHOOSE_GOD = "Select your god from the following list:";
@@ -46,6 +47,7 @@ public abstract class Message implements Serializable {
     public static String GAME_ALREADY_STARTED = "A game has already started. Try again later!";
     public static String GAME_STARTED = "The game has started with {0} players.";
     public static String GAME_STARTING = "\nSTARTING A NEW SANTORINI GAME\n";
+    public static String HEPHAESTUS_BUILD = "Do you want to build two blocks in {0}? (Y or N)";
     public static String LAST_ASSIGNED_GOD = "As the last player to choose, you have been assigned {0}. Press Enter to continue";
     public static String LOBBY_CREATOR_LEFT = "The lobby creator has left.";
     public static String SKIP_STATE_COMMAND = "\nWrite \"skip\" to skip this action.";
@@ -56,6 +58,7 @@ public abstract class Message implements Serializable {
     public static String FIRST_PLACE_WORKER = "Select the first placement on the board of one of your workers\nType two coordinates separated by a comma";
 
     //Default errors
+    public static String NOT_VALID_CONFIRM = "Not a valid confirmation. Type \"Y\" or \"N\".";
     public static String WORKERS_STUCK = "Both of your workers are stuck! You can't complete this turn! Press Enter";
     public static String NOT_VALID_GOD_LIST = "Not a valid god list. Try again with valid god names separated by a single space.";
     public static String NOT_VALID_GOD_NAME = "Not a valid god name. Try again.";

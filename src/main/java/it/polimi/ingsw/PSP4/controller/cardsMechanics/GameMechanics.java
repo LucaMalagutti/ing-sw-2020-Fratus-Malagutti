@@ -54,6 +54,16 @@ abstract public class GameMechanics {
     abstract public void build(Player player, Position futurePosition);
 
     /**
+     * Check if the action to perform needs a confirmation from the player
+     * @param player current player
+     * @param futurePosition position to check
+     * @return a confirmation message or null if not required
+     */
+    public String needsConfirmation(Player player, Position futurePosition) {
+        return null;
+    }
+
+    /**
      * Called when a player using this god is removed
      * Made to be overridden
      * @param player current player

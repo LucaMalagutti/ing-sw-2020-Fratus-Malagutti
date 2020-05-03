@@ -1,7 +1,11 @@
 package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
+import it.polimi.ingsw.PSP4.controller.turnStates.StateType;
+import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
+
+import java.text.MessageFormat;
 
 /**
  * Defines the mechanics of the God card Atlas
@@ -21,18 +25,6 @@ public class AtlasGameMechanics extends GodGameMechanics {
         super(component);
     }
 
-    /**
-     * Ask the player if want to force the construction of a dome (only if height < 3)
-     * @param position position in which has to build
-     * @return false if height is 3 (no choices) or the player wants to build a block
-     */
-    public boolean forceDome(Position position) {
-        if(position.getHeight() == 3)
-            return false;
-        //TODO: implement, send message?
-        return true;
-    }
-
     @Override
     public void build(Player player, Position futurePosition) {
         if(futurePosition == null){
@@ -47,10 +39,17 @@ public class AtlasGameMechanics extends GodGameMechanics {
         else {
             player.lockWorker();
 
-            if (forceDome(futurePosition))
+            if(futurePosition.getHeight() < 3 && player.getState().isConfirmed())
                 futurePosition.setDome(true);
             else
                 futurePosition.increaseHeight();
         }
+    }
+
+    @Override
+    public String needsConfirmation(Player player, Position futurePosition) {
+        if (player.getState().getType() == StateType.BUILD && futurePosition.getHeight() < 3)
+            return Message.ATLAS_BUILD;
+        return null;
     }
 }
