@@ -31,10 +31,4 @@ public class WaitState extends State {
     public void receiveOption(Position position) {
         //TODO: signal not possible
     }
-
-    @Override
-    public void performAction() {
-        getPlayer().setState(getNextState());
-        GameState.getInstance().runTurn();
-    }
 }

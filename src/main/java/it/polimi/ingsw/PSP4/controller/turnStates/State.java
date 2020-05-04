@@ -21,6 +21,7 @@ abstract public class State {
     private final StateType type;                   //type of the actual state
     private List<SerializablePosition> options;     //list of positions available in current state
     private Position position;                      //position chosen by the player, initially null
+    private boolean confirmed;                      //if the action has been confirmed by the player, default false
 
     //getters and setters
     protected Player getPlayer() { return player; }
@@ -32,6 +33,9 @@ abstract public class State {
 
     protected Position getPosition() { return position; }
     private void setPosition(Position position) { this.position = position; }
+
+    public boolean isConfirmed() { return confirmed; }
+    public void setConfirmed(boolean confirmed) { this.confirmed = confirmed; }
 
     public boolean canBeSkipped() { return false; }
     public boolean canChangeWorker() { return !player.isWorkerLocked(); }
@@ -49,6 +53,7 @@ abstract public class State {
         this.type = type;
         this.options = null;
         this.position = null;
+        this.confirmed = false;
     }
 
     /**
@@ -146,6 +151,7 @@ abstract public class State {
             if (player.getMechanics().checkWinCondition(player)) {
                 player.setState(new WaitState(player));
                 GameState.getInstance().playerVictory(player);
+                return;
             }
         }
         player.setState(getNextState());

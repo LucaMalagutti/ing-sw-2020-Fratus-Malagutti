@@ -26,6 +26,18 @@ public class Tests {
     }
 
     /**
+     * @return true if GameState has been reset
+     */
+    public static boolean gameStateClean() {
+        return  gameStateExists() &&
+                boardEmpty() &&
+                GameState.getInstance().getPlayers().size() == 0 &&
+                GameState.getInstance().getCurrPlayer() == null &&
+                numberOfPlayers(0) &&
+                allowedGodsEmpty();
+    }
+
+    /**
      * @param exclusions list of coordinates to avoid
      * @return true if all positions, not excluded, have no workers
      */
@@ -100,7 +112,11 @@ public class Tests {
     public static boolean boardBuildings(Map<Integer, List<Coordinates>> input) {
         for (int height : input.keySet()) {
             for (Coordinates coord : input.get(height)) {
-                if(GameState.getInstance().getPosition(coord.getRow(), coord.getCol()).getHeight() != height)
+                Position position = GameState.getInstance().getPosition(coord.getRow(), coord.getCol());
+                int posHeight = position.getHeight();
+                if(position.hasDome())
+                    posHeight = 4;
+                if(posHeight != height)
                     return false;
             }
         }
@@ -182,5 +198,28 @@ public class Tests {
             expected.removeAll(actual);
         }
         return expected.size() == 0;
+    }
+
+    /**
+     * @param username username of the player to exclude from check
+     * @param god name of the wrapping god
+     * @return true if each player, username excluded, is wrapped with this god
+     */
+    public static boolean enemiesWrapped(String username, String god) {
+        for(Player player : GameState.getInstance().getPlayers())
+            if(!player.getUsername().equals(username) && !player.getMechanics().getName().equals(god))
+                return false;
+        return true;
+    }
+
+    /**
+     * @param god name of the wrapping god
+     * @return true if each player is not wrapped with this god
+     */
+    public static boolean enemiesUnwrapped(String god) {
+        for(Player player : GameState.getInstance().getPlayers())
+            if(player.getMechanics().getName().equals(god))
+                return false;
+        return true;
     }
 }

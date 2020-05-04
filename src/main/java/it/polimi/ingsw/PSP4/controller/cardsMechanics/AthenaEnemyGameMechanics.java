@@ -24,7 +24,7 @@ public class AthenaEnemyGameMechanics extends GodGameMechanics {
      * Constructor of the class AthenaEnemyGameMechanics
      * @param component reference to the game mechanics to decorate
      */
-    protected AthenaEnemyGameMechanics(GameMechanics component) { super(component); }
+    public AthenaEnemyGameMechanics(GameMechanics component) { super(component); }
 
     /**
      * Removes the possibility of moving up

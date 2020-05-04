@@ -32,16 +32,4 @@ public class SecondMoveState extends State {
         ArrayList<Position> options = player.getMechanics().getMovePositions(player, 2);
         selectOption(options);
     }
-
-    @Override
-    public void performAction() {
-        Player player = getPlayer();
-        player.getMechanics().move(player, getPosition());
-        if (player.getMechanics().checkWinCondition(player)) {
-            player.setState(new WaitState(player));
-            GameState.getInstance().playerVictory(player);
-        }
-        player.setState(getNextState());
-        GameState.getInstance().runTurn();
-    }
 }

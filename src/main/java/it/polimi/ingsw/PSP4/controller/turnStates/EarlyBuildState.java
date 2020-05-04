@@ -31,12 +31,4 @@ public class EarlyBuildState extends State {
         ArrayList<Position> options = player.getMechanics().getBuildPositions(player, 0);
         selectOption(options);
     }
-
-    @Override
-    public void performAction() {
-        Player player = getPlayer();
-        player.getMechanics().build(player, getPosition());
-        player.setState(getNextState());
-        GameState.getInstance().runTurn();
-    }
 }

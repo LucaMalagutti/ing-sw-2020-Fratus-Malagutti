@@ -34,12 +34,4 @@ public class StandardBuildState extends State {
             return new SecondBuildState(player);
         return new WaitState(player);
     }
-
-    @Override
-    public void performAction() {
-        Player player = getPlayer();
-        player.getMechanics().build(player, getPosition());
-        player.setState(getNextState());
-        GameState.getInstance().runTurn();
-    }
 }

@@ -15,24 +15,14 @@ public class GameStateTest {
 
     @Test
     public void getInstance_postImplementation() {
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardEmpty());
-        assertEquals(0, GameState.getInstance().getPlayers().size());
-        assertNull(GameState.getInstance().getCurrPlayer());
-        assertTrue(Tests.numberOfPlayers(0));
-        assertTrue(Tests.allowedGodsEmpty());
+        assertTrue(Tests.gameStateClean());
     }
 
     @Test
     public void getInstance_postReset() {
         GameState.getInstance().dropAllConnections();
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardEmpty());
-        assertEquals(0, GameState.getInstance().getPlayers().size());
-        assertNull(GameState.getInstance().getCurrPlayer());
-        assertTrue(Tests.numberOfPlayers(0));
-        assertTrue(Tests.allowedGodsEmpty());
+        assertTrue(Tests.gameStateClean());
     }
 
     @After

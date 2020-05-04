@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP4.model.Position;
 import it.polimi.ingsw.PSP4.model.Worker;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Class of static methods used to get attributes from the GameState
@@ -16,6 +17,15 @@ public class Getters {
      */
     public static int numberOfPlayers() {
         return GameState.getInstance().getNumPlayer();
+    }
+
+    /**
+     * @param username username of the player to find
+     * @return reference to the player with that username
+     */
+    public static Player player(String username) {
+        List<Player> match = GameState.getInstance().getPlayers().stream().filter(player -> player.getUsername().equals(username)).collect(Collectors.toList());
+        return match.get(0);
     }
 
     /**
