@@ -35,7 +35,7 @@ public class ClientMain {
             Scanner stdIn = new Scanner(System.in);
             String clientUI = chooseClientUI(stdIn);
             if (clientUI.equals("CLI")) {
-                CLIClient client = new CLIClient("127.0.0.1", 31713);
+                CLIClient client = new CLIClient(31713);
                 client.run();
             } else if (clientUI.equals("GUI")){
                 GUIClient client = new GUIClient();

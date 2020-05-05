@@ -7,10 +7,8 @@ import it.polimi.ingsw.PSP4.utils.*;
 import it.polimi.ingsw.PSP4.utils.Random;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.lang.reflect.AnnotatedArrayType;
 import java.util.*;
 
 import static org.junit.Assert.assertTrue;

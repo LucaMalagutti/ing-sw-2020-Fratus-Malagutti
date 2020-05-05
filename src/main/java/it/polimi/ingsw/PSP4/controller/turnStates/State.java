@@ -39,7 +39,7 @@ abstract public class State {
 
     public boolean canBeSkipped() { return false; }
     public boolean canChangeWorker() { return !player.isWorkerLocked(); }
-    public boolean workersStuck() {return player.getStuckWorkers().size() == 2;}
+    public boolean bothWorkersStuck() {return player.getStuckWorkers().size() == 2;}
 
     public abstract State getNextState();
 
@@ -111,21 +111,29 @@ abstract public class State {
         for(Position option : options)
             serializableOptions.add(new SerializablePosition(option));
         Player player = getPlayer();
+        if (options.size() == 0 && !canBeSkipped() && !canChangeWorker()) {
+            player.setState(new WaitState(player));
+            GameState.getInstance().playerDefeat(player, Message.NO_OPTIONS);
+            return;
+        }
         String text;
         if(options.size() > 0)
             text = getType().getMessage();
         else {
             text = MessageFormat.format(Message.NO_OPTIONS, "You");
             player.addCurrentWorkerAsStuck();
+            if (bothWorkersStuck()) {
+                player.setState(new WaitState(player));
+                GameState.getInstance().playerDefeat(player, Message.WORKERS_STUCK);
+                return;
+            }
         }
         if(canChangeWorker())
             text += Message.CHANGE_WORKER_COMMAND;
         if(canBeSkipped())
             text += Message.SKIP_STATE_COMMAND;
-        if (player.getStuckWorkers().size() == 2)
-            text = Message.WORKERS_STUCK;
         setOptions(serializableOptions);
-        Request message = new ChoosePositionRequest(player.getUsername(), text, serializableOptions, canBeSkipped(), canChangeWorker(), workersStuck());
+        Request message = new ChoosePositionRequest(player.getUsername(), text, serializableOptions, canBeSkipped(), canChangeWorker());
         GameState.getInstance().notifyObservers(message);
     }
 
@@ -139,18 +147,13 @@ abstract public class State {
      */
     public void performAction() {
         Player player = getPlayer();
-        if (options.size() == 0 && !canBeSkipped() && !canChangeWorker()) {
-            player.setState(new WaitState(player));
-            GameState.getInstance().playerDefeat(player, Message.NO_OPTIONS);
-            return;
-        }
         if (getType() == StateType.BUILD)
             player.getMechanics().build(player, getPosition());
         else if (getType() == StateType.MOVE) {
             player.getMechanics().move(player, getPosition());
             if (player.getMechanics().checkWinCondition(player)) {
                 player.setState(new WaitState(player));
-                GameState.getInstance().playerVictory(player);
+                GameState.getInstance().playerVictory(player, Message.WIN_CONDITION_SATISFIED);
                 return;
             }
         }

@@ -143,7 +143,7 @@ public class GameState implements Observable<Request> {
      * Starts the game
      */
     public void startGame() {
-        System.out.println(MessageFormat.format(Message.GAME_STARTED, getNumPlayer()));
+//        System.out.println(MessageFormat.format(Message.GAME_STARTED, getNumPlayer()));
         chooseAllowedGods();
     }
 
@@ -192,20 +192,14 @@ public class GameState implements Observable<Request> {
      */
     private void selectWorker() {
         List<int[]> workers = new ArrayList<>();
-        if (getCurrPlayer().getStuckWorkers().size() == 2) {
-            getCurrPlayer().setState(new WaitState(getCurrPlayer()));
-            GameState.getInstance().playerDefeat(getCurrPlayer(), Message.WORKERS_STUCK);
-        }
-        else {
-            for (Worker worker : getCurrPlayer().getWorkers()) {
-                if (!getCurrPlayer().getStuckWorkers().contains(worker)) {
-                    Position position = worker.getCurrPosition();
-                    int[] coordinates = {position.getRow(), position.getCol()};
-                    workers.add(coordinates);
-                }
+        for (Worker worker : getCurrPlayer().getWorkers()) {
+            if (!getCurrPlayer().getStuckWorkers().contains(worker)) {
+                Position position = worker.getCurrPosition();
+                int[] coordinates = {position.getRow(), position.getCol()};
+                workers.add(coordinates);
             }
-            notifyObservers(new ChooseWorkerRequest(getCurrPlayer().getUsername(), workers));
         }
+        notifyObservers(new ChooseWorkerRequest(getCurrPlayer().getUsername(), workers));
     }
 
     /**
@@ -277,7 +271,7 @@ public class GameState implements Observable<Request> {
         removePlayer(player);
         if(getPlayers().size() == 1) {
             //the game cannot continue
-            playerVictory(getPlayers().get(0));
+            playerVictory(getPlayers().get(0), message);
             return;
         }
         //the game can continue
@@ -299,10 +293,11 @@ public class GameState implements Observable<Request> {
     /**
      * Informs all the players that the game is over, electing the winner
      * @param player winner of the game
+     * @param message reason for (enemy) defeat
      */
-    public void playerVictory(Player player) {
+    public void playerVictory(Player player, String message) {
         //close every connection notifying the players
-        notifyObservers(new RemovePlayerRequest(player.getUsername(), "", true));
+        notifyObservers(new RemovePlayerRequest(player.getUsername(), message, true));
         //cleans the GameState singleton for a new game
         reset();
     }

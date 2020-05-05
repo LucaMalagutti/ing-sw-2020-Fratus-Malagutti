@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP4.model;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +14,7 @@ public class PositionTest {
     @Before
     public void setUp() {
         gameState = GameState.getInstance(true);
-        gameState.setPlayers(new ArrayList<Player>(Arrays.asList(new Player("1"), new Player("2"))));
+        gameState.setPlayers(new ArrayList<>(Arrays.asList(new Player("1"), new Player("2"))));
         gameState.setNumPlayer(2);
         gameState.setCurrPlayer(gameState.getPlayers().get(0));
         gameState.getBoard()[2][3].setWorker(gameState.getPlayers().get(1).getWorkers().get(0));
@@ -60,5 +61,10 @@ public class PositionTest {
         Position testedPosition = gameState.getBoard()[2][2];
         testedPosition.setWorker(gameState.getCurrPlayer().getWorkers().get(0));
         assertEquals(2,testedPosition.getOccupied(gameState.getCurrPlayer()).size());
+    }
+
+    @After
+    public void tearDown() {
+        GameState.getInstance().dropAllConnections();
     }
 }
