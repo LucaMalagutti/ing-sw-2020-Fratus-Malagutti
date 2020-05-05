@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP4;
 
 import it.polimi.ingsw.PSP4.client.CLIClient;
-import it.polimi.ingsw.PSP4.client.GUIClient;
+import it.polimi.ingsw.PSP4.client.gui.GUIClient;
 import it.polimi.ingsw.PSP4.message.Message;
 
 import java.io.IOException;
@@ -39,8 +39,7 @@ public class ClientMain {
                 client.run();
             } else if (clientUI.equals("GUI")){
                 GUIClient client = new GUIClient();
-                System.out.println("GUI was not implemented yet :))))");
-//                client.run();
+                client.run(args);
             } else {
                 System.out.println(Message.NOT_VALID_UI);
             }

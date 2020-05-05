@@ -41,4 +41,9 @@ public final class SerializablePosition implements Serializable {
     public String getWorker() { return worker; }
 
     public boolean hasDome() { return dome; }
+
+    //returns true if they have same coordinates
+    public boolean equals (SerializablePosition position){
+        return position.getRow() == row && position.getCol() == col;
+    }
 }

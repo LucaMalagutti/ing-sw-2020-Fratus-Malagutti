@@ -10,6 +10,8 @@ public enum CLIChar {
     BLANK(" "),
     ERROR("#"),
     WORKER_ON_GROUND("♟"),
+    AVIABLE_POSITIONS_LEFT("▸"),
+    AVIABLE_POSITIONS_RIGHT("◂"),
     END_BOARD("|"),
     KEY_TITLE("SYMBOL KEY");
 

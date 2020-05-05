@@ -18,6 +18,7 @@ public final class SerializablePlayer implements Serializable {
     private final int turnNum;                                      //number of player's turn
     private final String state;                                     //String that represents the state of the player
     private final GodType card;                                     //type of the player's card
+    private final int currWorkerIndex;                              //current player's worker
 
     /**
      * Constructor of the class SerializablePlayer
@@ -27,7 +28,7 @@ public final class SerializablePlayer implements Serializable {
         this.username = player.getUsername();
         for(Worker worker : player.getWorkers())
             this.workers.add(worker.getId());
-        //player.getWorkers().forEach(worker -> this.workers.add(worker.getId()));
+        this.currWorkerIndex = player.getWorkers().indexOf(player.getCurrWorker());
         this.turnNum = player.getTurnNum();
         this.state = player.getState().getType().getString();
         this.card = player.getMechanics().getType();
@@ -43,4 +44,11 @@ public final class SerializablePlayer implements Serializable {
     public String getState() { return state; }
 
     public GodType getCard() { return card; }
+
+    public String getCurrWorker() {
+        if(currWorkerIndex == -1)
+            return null;
+        else
+            return workers.get(currWorkerIndex);
+    }
 }

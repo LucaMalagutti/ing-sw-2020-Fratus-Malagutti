@@ -18,6 +18,7 @@ public final class SerializableGameState implements Serializable {
     private final int currPlayerIndex;                                      //index of the current player
     private final int numPlayer;                                            //number of players (2 or 3)
     private final List<SerializablePosition> options;                       //available options to highlight
+    private final List<SerializablePosition> match = new ArrayList<>();
 
     /**
      * Constructor of the class SerializableGameState
@@ -182,18 +183,31 @@ public final class SerializableGameState implements Serializable {
                 cellContent = CLIChar.THIRD_LEVEL.getString();
         }
         else {
+            SerializablePlayer player = getPlayerFromWorker(position);
+            Color currWorkerColor;
+            if(position.getWorker().equals(player.getCurrWorker()))
+                currWorkerColor = Color.PURPLE;
+            else
+                currWorkerColor = getPlayerColor(getPlayerFromWorker(position));
             if (position.getHeight() == 0)
-                cellContent = colorChar(CLIChar.WORKER_ON_GROUND,getPlayerColor(getPlayerFromWorker(position)));
+                cellContent = colorChar(CLIChar.WORKER_ON_GROUND,currWorkerColor);
             else if (position.getHeight() == 1)
-                cellContent = colorChar(CLIChar.FIRST_LEVEL,getPlayerColor(getPlayerFromWorker(position)));
+                cellContent = colorChar(CLIChar.FIRST_LEVEL,currWorkerColor);
             else if (position.getHeight() == 2)
-                cellContent = colorChar(CLIChar.SECOND_LEVEL,getPlayerColor(getPlayerFromWorker(position)));
+                cellContent = colorChar(CLIChar.SECOND_LEVEL,currWorkerColor);
             else if (position.getHeight() == 3)
-                cellContent = colorChar(CLIChar.THIRD_LEVEL,getPlayerColor(getPlayerFromWorker(position)));
+                cellContent = colorChar(CLIChar.THIRD_LEVEL,currWorkerColor);
         }
         if (cellContent == null)
             cellContent = colorChar(CLIChar.ERROR,getPlayerColor(getPlayerFromWorker(position)));
-        return String.format("| %s ",cellContent);
+        List<SerializablePosition> match = options.stream().filter(pos -> pos.equals(position)).collect(Collectors.toList());
+        if(match.size() == 1){
+            String left_arrow = colorChar(CLIChar.AVIABLE_POSITIONS_LEFT, Color.PURPLE);
+            String right_arrow = colorChar(CLIChar.AVIABLE_POSITIONS_RIGHT, Color.PURPLE);
+            return String.format("|%s%s%s",left_arrow,cellContent,right_arrow);
+        }
+        else
+            return String.format("| %s ",cellContent);
     }
 
     /**
