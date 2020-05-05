@@ -1,0 +1,246 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: State</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP4.controller.turnStates</a> ]
+</div>
+
+<h1>Coverage Summary for Class: State (it.polimi.ingsw.PSP4.controller.turnStates)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">State</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/ 18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.8%
+  </span>
+  <span class="absValue">
+    (67/ 73)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP4.controller.turnStates;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP4.message.Message;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP4.message.requests.ChoosePositionRequest;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP4.message.requests.ConfirmationRequest;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP4.message.requests.Request;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP4.model.GameState;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP4.model.Player;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP4.model.Position;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP4.model.serializable.SerializablePosition;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import java.text.MessageFormat;
+<i>13</i>&nbsp;import java.util.ArrayList;
+<i>14</i>&nbsp;import java.util.List;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;/**
+<i>17</i>&nbsp; * Basic class for the state of the turn
+<i>18</i>&nbsp; */
+<i>19</i>&nbsp;abstract public class State {
+<i>20</i>&nbsp;    private final Player player;                    //reference to current player
+<i>21</i>&nbsp;    private final StateType type;                   //type of the actual state
+<i>22</i>&nbsp;    private List&lt;SerializablePosition&gt; options;     //list of positions available in current state
+<i>23</i>&nbsp;    private Position position;                      //position chosen by the player, initially null
+<i>24</i>&nbsp;    private boolean confirmed;                      //if the action has been confirmed by the player, default false
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    //getters and setters
+<b class="fc"><i>27</i>&nbsp;    protected Player getPlayer() { return player; }</b>
+<i>28</i>&nbsp;
+<b class="fc"><i>29</i>&nbsp;    public StateType getType() { return type; }</b>
+<i>30</i>&nbsp;
+<b class="fc"><i>31</i>&nbsp;    public List&lt;SerializablePosition&gt; getOptions() { return options; }</b>
+<b class="fc"><i>32</i>&nbsp;    private void setOptions(List&lt;SerializablePosition&gt; options) { this.options = options; }</b>
+<i>33</i>&nbsp;
+<b class="fc"><i>34</i>&nbsp;    protected Position getPosition() { return position; }</b>
+<b class="fc"><i>35</i>&nbsp;    private void setPosition(Position position) { this.position = position; }</b>
+<i>36</i>&nbsp;
+<b class="fc"><i>37</i>&nbsp;    public boolean isConfirmed() { return confirmed; }</b>
+<b class="fc"><i>38</i>&nbsp;    public void setConfirmed(boolean confirmed) { this.confirmed = confirmed; }</b>
+<i>39</i>&nbsp;
+<b class="fc"><i>40</i>&nbsp;    public boolean canBeSkipped() { return false; }</b>
+<b class="fc"><i>41</i>&nbsp;    public boolean canChangeWorker() { return !player.isWorkerLocked(); }</b>
+<b class="fc"><i>42</i>&nbsp;    public boolean bothWorkersStuck() {return player.getStuckWorkers().size() == 2;}</b>
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    public abstract State getNextState();
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /**
+<i>47</i>&nbsp;     * Constructor of the class State
+<i>48</i>&nbsp;     * @param player reference to current player
+<i>49</i>&nbsp;     * @param type type of the actual state
+<i>50</i>&nbsp;     */
+<b class="fc"><i>51</i>&nbsp;    protected State(Player player, StateType type) {</b>
+<b class="fc"><i>52</i>&nbsp;        this.player = player;</b>
+<b class="fc"><i>53</i>&nbsp;        this.type = type;</b>
+<b class="fc"><i>54</i>&nbsp;        this.options = null;</b>
+<b class="fc"><i>55</i>&nbsp;        this.position = null;</b>
+<b class="fc"><i>56</i>&nbsp;        this.confirmed = false;</b>
+<b class="fc"><i>57</i>&nbsp;    }</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * Checks if the action needs a confirmation by the player, otherwise calls setOption()
+<i>61</i>&nbsp;     * Empties stuckWorkers list in the player since one worker could move in this turn
+<i>62</i>&nbsp;     * @param position reference to the position chosen by the player
+<i>63</i>&nbsp;     */
+<i>64</i>&nbsp;    public void receiveOption(Position position) {
+<b class="fc"><i>65</i>&nbsp;        String confirmation = getPlayer().getMechanics().needsConfirmation(getPlayer(), position);</b>
+<b class="fc"><i>66</i>&nbsp;        if(confirmation == null) {</b>
+<b class="fc"><i>67</i>&nbsp;            setOption(position);</b>
+<b class="fc"><i>68</i>&nbsp;            return;</b>
+<i>69</i>&nbsp;        }
+<b class="fc"><i>70</i>&nbsp;        SerializablePosition serializablePosition = new SerializablePosition(position);</b>
+<b class="fc"><i>71</i>&nbsp;        Request request = new ConfirmationRequest(getPlayer().getUsername(), confirmation, serializablePosition);</b>
+<b class="fc"><i>72</i>&nbsp;        GameState.getInstance().notifyObservers(request);</b>
+<b class="fc"><i>73</i>&nbsp;    }</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    /**
+<i>76</i>&nbsp;     * Sets position attribute, then calls performAction()
+<i>77</i>&nbsp;     * @param position reference to the position chosen by the player
+<i>78</i>&nbsp;     */
+<i>79</i>&nbsp;    public void setOption(Position position) {
+<b class="fc"><i>80</i>&nbsp;        getPlayer().emptyStuckWorker();</b>
+<b class="fc"><i>81</i>&nbsp;        setPosition(position);</b>
+<b class="fc"><i>82</i>&nbsp;        performAction();</b>
+<b class="fc"><i>83</i>&nbsp;    }</b>
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /**
+<i>86</i>&nbsp;     * Calls runTurn() to change worker
+<i>87</i>&nbsp;     */
+<i>88</i>&nbsp;    public void changeWorker() {
+<b class="fc"><i>89</i>&nbsp;        if (canChangeWorker()) {</b>
+<b class="fc"><i>90</i>&nbsp;            GameState.getInstance().runTurn();</b>
+<i>91</i>&nbsp;        }
+<b class="fc"><i>92</i>&nbsp;    }</b>
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    /**
+<i>95</i>&nbsp;     * Sets the next state and calls runTurn()
+<i>96</i>&nbsp;     */
+<i>97</i>&nbsp;    public void skipState() {
+<b class="fc"><i>98</i>&nbsp;        if (canBeSkipped()) {</b>
+<b class="fc"><i>99</i>&nbsp;            getPlayer().setState(getNextState());</b>
+<b class="fc"><i>100</i>&nbsp;            GameState.getInstance().runTurn();</b>
+<i>101</i>&nbsp;        }
+<b class="fc"><i>102</i>&nbsp;    }</b>
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * Gives the player a set of Position based on his card and current state
+<i>106</i>&nbsp;     * Sets step to WAIT_RESPONSE
+<i>107</i>&nbsp;     * @param options ArrayList of Position in which the action defined by the current state can be performed
+<i>108</i>&nbsp;     */
+<i>109</i>&nbsp;    protected void selectOption(ArrayList&lt;Position&gt; options) {
+<b class="fc"><i>110</i>&nbsp;        List&lt;SerializablePosition&gt; serializableOptions = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>111</i>&nbsp;        for(Position option : options)</b>
+<b class="fc"><i>112</i>&nbsp;            serializableOptions.add(new SerializablePosition(option));</b>
+<b class="fc"><i>113</i>&nbsp;        Player player = getPlayer();</b>
+<b class="fc"><i>114</i>&nbsp;        if (options.size() == 0 &amp;&amp; !canBeSkipped() &amp;&amp; !canChangeWorker()) {</b>
+<b class="nc"><i>115</i>&nbsp;            player.setState(new WaitState(player));</b>
+<b class="nc"><i>116</i>&nbsp;            GameState.getInstance().playerDefeat(player, Message.NO_OPTIONS);</b>
+<b class="nc"><i>117</i>&nbsp;            return;</b>
+<i>118</i>&nbsp;        }
+<i>119</i>&nbsp;        String text;
+<b class="fc"><i>120</i>&nbsp;        if(options.size() &gt; 0)</b>
+<b class="fc"><i>121</i>&nbsp;            text = getType().getMessage();</b>
+<i>122</i>&nbsp;        else {
+<b class="fc"><i>123</i>&nbsp;            text = MessageFormat.format(Message.NO_OPTIONS, &quot;You&quot;);</b>
+<b class="fc"><i>124</i>&nbsp;            player.addCurrentWorkerAsStuck();</b>
+<b class="fc"><i>125</i>&nbsp;            if (bothWorkersStuck()) {</b>
+<b class="nc"><i>126</i>&nbsp;                player.setState(new WaitState(player));</b>
+<b class="nc"><i>127</i>&nbsp;                GameState.getInstance().playerDefeat(player, Message.WORKERS_STUCK);</b>
+<b class="nc"><i>128</i>&nbsp;                return;</b>
+<i>129</i>&nbsp;            }
+<i>130</i>&nbsp;        }
+<b class="fc"><i>131</i>&nbsp;        if(canChangeWorker())</b>
+<b class="fc"><i>132</i>&nbsp;            text += Message.CHANGE_WORKER_COMMAND;</b>
+<b class="fc"><i>133</i>&nbsp;        if(canBeSkipped())</b>
+<b class="fc"><i>134</i>&nbsp;            text += Message.SKIP_STATE_COMMAND;</b>
+<b class="fc"><i>135</i>&nbsp;        setOptions(serializableOptions);</b>
+<b class="fc"><i>136</i>&nbsp;        Request message = new ChoosePositionRequest(player.getUsername(), text, serializableOptions, canBeSkipped(), canChangeWorker());</b>
+<b class="fc"><i>137</i>&nbsp;        GameState.getInstance().notifyObservers(message);</b>
+<b class="fc"><i>138</i>&nbsp;    }</b>
+<i>139</i>&nbsp;
+<i>140</i>&nbsp;    /**
+<i>141</i>&nbsp;     * Collects the possible positions
+<i>142</i>&nbsp;     */
+<i>143</i>&nbsp;    public abstract void runState();
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;    /**
+<i>146</i>&nbsp;     * Performs the action defined by the current state
+<i>147</i>&nbsp;     */
+<i>148</i>&nbsp;    public void performAction() {
+<b class="fc"><i>149</i>&nbsp;        Player player = getPlayer();</b>
+<b class="fc"><i>150</i>&nbsp;        if (getType() == StateType.BUILD)</b>
+<b class="fc"><i>151</i>&nbsp;            player.getMechanics().build(player, getPosition());</b>
+<b class="fc"><i>152</i>&nbsp;        else if (getType() == StateType.MOVE) {</b>
+<b class="fc"><i>153</i>&nbsp;            player.getMechanics().move(player, getPosition());</b>
+<b class="fc"><i>154</i>&nbsp;            if (player.getMechanics().checkWinCondition(player)) {</b>
+<b class="fc"><i>155</i>&nbsp;                player.setState(new WaitState(player));</b>
+<b class="fc"><i>156</i>&nbsp;                GameState.getInstance().playerVictory(player, Message.WIN_CONDITION_SATISFIED);</b>
+<b class="fc"><i>157</i>&nbsp;                return;</b>
+<i>158</i>&nbsp;            }
+<i>159</i>&nbsp;        }
+<b class="fc"><i>160</i>&nbsp;        player.setState(getNextState());</b>
+<b class="fc"><i>161</i>&nbsp;        GameState.getInstance().runTurn();</b>
+<b class="fc"><i>162</i>&nbsp;    }</b>
+<i>163</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-05 12:21</div>
+</div>
+</body>
+</html>

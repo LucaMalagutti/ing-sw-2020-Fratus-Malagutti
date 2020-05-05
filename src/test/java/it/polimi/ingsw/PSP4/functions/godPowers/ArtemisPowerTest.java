@@ -8,7 +8,6 @@ import it.polimi.ingsw.PSP4.utils.*;
 import it.polimi.ingsw.PSP4.utils.Random;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
@@ -41,7 +40,6 @@ public class ArtemisPowerTest {
                 new Coordinates(2, 2)
         );
         Coordinates movePosition = new Coordinates(0, 2);
-        List<Coordinates> expectedSecondMoveOptions = new ArrayList<>();
 
         Actions.addPlayers(new ArrayList<>(players));
         Actions.assignGods(new LinkedHashMap<>(gods));
@@ -69,7 +67,8 @@ public class ArtemisPowerTest {
 
         assertTrue(Tests.currentState(new SecondMoveState(Getters.player(startingPlayer))));
         assertTrue(Tests.currentWorker(movePosition, true));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedSecondMoveOptions)));
+        //No options left for second move, forced to skip
+        assertTrue(Tests.stateOptions(new ArrayList<>()));
 
         Actions.skipCurrentState();
 

@@ -1,8 +1,6 @@
 package it.polimi.ingsw.PSP4.controller.turnStates;
 
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.PathType;
-import it.polimi.ingsw.PSP4.message.Message;
-import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 
@@ -31,7 +29,7 @@ public class StandardMoveState extends State {
     @Override
     public State getNextState() {
         Player player = getPlayer();
-        if(player.getMechanics().getPath() == PathType.DOUBLE_MOVE)
+        if (player.getMechanics().getPath() == PathType.DOUBLE_MOVE)
             return new SecondMoveState(player);
         return new StandardBuildState(player);
     }

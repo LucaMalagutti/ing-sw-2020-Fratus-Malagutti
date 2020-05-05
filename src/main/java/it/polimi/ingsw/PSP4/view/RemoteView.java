@@ -10,23 +10,15 @@ import it.polimi.ingsw.PSP4.observer.Observer;
 import it.polimi.ingsw.PSP4.server.SocketClientConnection;
 
 import java.util.ArrayList;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class RemoteView extends View {
     private final ArrayList<Observer<Response>> observers = new ArrayList<>();
     private final SocketClientConnection clientConnection;
 
-    private final BlockingQueue<Request> requests;
-
     private class MessageReceiver implements Observer<Response> {
         @Override
         //response : client response
         public void update(Response response) {
-            if (requests.peek() == null) {
-                return;
-            }
-            requests.poll();
             handleMove(response);
         }
     }
@@ -34,11 +26,8 @@ public class RemoteView extends View {
     public RemoteView(Player player, SocketClientConnection c) {
         super(player);
         this.clientConnection = c;
-        this.requests = new LinkedBlockingQueue<>();
         c.addObserver(new MessageReceiver());
     }
-
-    public void reportError(String message) { clientConnection.asyncSend(message); }
 
     @Override
     public void update(Request request) {
@@ -54,13 +43,6 @@ public class RemoteView extends View {
                 }
             }
             clientConnection.asyncSend(request);
-            if(request.needsResponse()) {
-                try {
-                    requests.put(request);
-                } catch (Exception e) {
-                    //TODO: handle exceptions
-                }
-            }
         } else {
             clientConnection.asyncSend(new WaitRequest(getPlayer().getUsername(), request.getBoard(), request.getPlayer()));
         }

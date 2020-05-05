@@ -27,6 +27,7 @@ public class Runner {
         addPlayers(numPlayers);
         Actions.assignGods(Random.godsAssignments(Getters.playerList()));
     }
+
     /**
      * Run until random gods are assigned
      */

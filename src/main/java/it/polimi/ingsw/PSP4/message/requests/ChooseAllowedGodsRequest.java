@@ -7,7 +7,9 @@ import it.polimi.ingsw.PSP4.message.responses.ChooseAllowedGodsResponse;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Message to ask the first player connected to choose the gods to be used during the game
@@ -44,6 +46,10 @@ public class ChooseAllowedGodsRequest extends Request {
                     return new ErrorMessage(getPlayer(), Message.NOT_VALID_GOD_LIST);
                 allowedGods.add(godName.toUpperCase());
             }
+            //check for duplicates in the god list
+            Set<String> godSet = new HashSet<>(allowedGods);
+            if (godSet.size() < allowedGods.size())
+                return new ErrorMessage(getPlayer(), Message.NOT_VALID_GOD_LIST_DUPLICATES);
             return new ChooseAllowedGodsResponse(getPlayer(), allowedGods);
         }
         return new ErrorMessage(getPlayer(), Message.NOT_VALID_GOD_LIST);

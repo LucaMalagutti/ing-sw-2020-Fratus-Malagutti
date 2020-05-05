@@ -43,13 +43,13 @@ public class RemovePlayerRequest extends Request {
     public String getCustomMessage(String player) {
         if(isVictory()) {
             if(player.equals(targetPlayer))
-                return MessageFormat.format(Message.VICTORY_WINNER, targetPlayer);
-            return MessageFormat.format(Message.VICTORY_LOSER, targetPlayer);
+                return MessageFormat.format(getMessage(), "A player") + MessageFormat.format(Message.VICTORY_WINNER, targetPlayer);
+            return MessageFormat.format(getMessage(), player) + MessageFormat.format(Message.VICTORY_LOSER, targetPlayer);
         } else {
             if (targetPlayer.equals("@")) {
                 return Message.CLIENT_EXIT_DURING_GAME;
             } else if(player.equals(targetPlayer)) {
-                return MessageFormat.format(getMessage(), "You") + "\n" + MessageFormat.format(Message.DEFEAT_LOSER, targetPlayer);
+                return MessageFormat.format(getMessage(), player) + "\n" + MessageFormat.format(Message.DEFEAT_LOSER, targetPlayer);
             } else {
                 return MessageFormat.format(getMessage(), targetPlayer) + "\n" + MessageFormat.format(Message.DEFEAT_ENEMY, targetPlayer);
             }
