@@ -1,0 +1,39 @@
+@import "fonts.css";
+
+.layout {
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+}
+.layout.launcher-narrow {
+    -fx-background-image: url("../images/layout/launcher-background-narrow.png");
+}
+.layout.launcher-wide {
+    -fx-background-image: url("../images/layout/launcher-background-wide.png");
+}
+.layout.lobby-background {
+    -fx-background-image: url("../images/layout/lobby-background.png");
+}
+.layout.lobby-foreground {
+    -fx-background-image: url("../images/layout/lobby-foreground.png");
+}
+
+.hover-effect-out:hover {
+    -fx-cursor: hand;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.text-field.blue-border {
+    -fx-font-family: "LillyBelle";
+    -fx-text-box-border: #1d6fa7;
+    -fx-control-inner-background: #fdfdfd;
+    -fx-focus-color: #1d6fa7;
+    -fx-background-radius: 15px, 12px;
+    -fx-background-insets: 0, 3px;
+    -fx-prompt-text-fill: #1d6fa7;
+    -fx-text-fill: #333333;
+    -fx-font-size: 18px;
+    -fx-padding: 7px 10px;
+    -fx-text-alignment: center;
+}

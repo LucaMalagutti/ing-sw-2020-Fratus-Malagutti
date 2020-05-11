@@ -140,54 +140,100 @@ public class StandardTurnTest {
         assertTrue(Tests.allowedGodsEmpty());
     }
 
-//    @Test
-//    public void standardTurn_twoPlayers_playerDefeatAtMove() {
-//        Map<String, String> gods = new LinkedHashMap<>();
-//        gods.put("Hero", "Default");
-//        gods.put("Enemy", "Default");
-//
-//        Actions.addPlayers(new ArrayList<>(gods.keySet()));
-//        Actions.assignGods(new LinkedHashMap<>(gods));
-//        Actions.selectStartingPlayer("Enemy");
-//
-//        Map<String, List<Coordinates>> workers = new LinkedHashMap<>();
-//        workers.put("Hero", Arrays.asList(new Coordinates(1, 3), new Coordinates(3, 4)));
-//        workers.put("Enemy", Arrays.asList(new Coordinates(1, 1), new Coordinates(3, 2)));
-//
-//        Actions.placeWorkers(new LinkedHashMap<>(workers));
-//
-//        Map<Integer, List<Coordinates>> buildings = new LinkedHashMap<>();
-//        buildings.put(4, Arrays.asList(
-//                new Coordinates(0, 0), new Coordinates(0, 1),
-//                new Coordinates(0, 2), new Coordinates(1, 0),
-//                new Coordinates(1, 2), new Coordinates(2, 0),
-//                new Coordinates(2, 1), new Coordinates(2, 2),
-//                new Coordinates(2, 3), new Coordinates(3, 1),
-//                new Coordinates(3, 3), new Coordinates(4, 1),
-//                new Coordinates(4, 2), new Coordinates(4, 3)
-//        ));
-//        Coordinates firstWorker = workers.get("Enemy").get(0);
-//
-//        Actions.fillBoard(buildings);
-//        Actions.setCurrentWorker(firstWorker);
-//        assertTrue(Tests.currentWorker(firstWorker, false));
-//        assertTrue(Tests.stateOptions(new ArrayList<>()));
-//
-//        Coordinates secondWorker = workers.get("Enemy").get(1);
-//
-//        Actions.changeCurrentWorker(secondWorker);
-//        assertTrue(Tests.currentWorker(secondWorker, false));
-//        assertTrue(Tests.stateOptions(new ArrayList<>()));
-//
-//        //SOMETHING MISSING
-//
-//        assertTrue(Tests.gameStateExists());
-//        assertTrue(Tests.boardEmpty());
-//        assertEquals(0, GameState.getInstance().getPlayers().size());
-//        assertNull(GameState.getInstance().getCurrPlayer());
-//        assertTrue(Tests.numberOfPlayers(0));
-//        assertTrue(Tests.allowedGodsEmpty());
-//    }
+    @Test
+    public void standardTurn_twoPlayers_playerDefeat() {
+        Map<String, String> gods = new LinkedHashMap<>();
+        gods.put("Hero", "Default");
+        gods.put("Enemy", "Default");
+
+        Actions.addPlayers(new ArrayList<>(gods.keySet()));
+        Actions.assignGods(new LinkedHashMap<>(gods));
+        Actions.selectStartingPlayer("Enemy");
+
+        Map<String, List<Coordinates>> workers = new LinkedHashMap<>();
+        workers.put("Hero", Arrays.asList(new Coordinates(1, 3), new Coordinates(3, 4)));
+        workers.put("Enemy", Arrays.asList(new Coordinates(1, 1), new Coordinates(3, 2)));
+
+        Actions.placeWorkers(new LinkedHashMap<>(workers));
+
+        Map<Integer, List<Coordinates>> buildings = new LinkedHashMap<>();
+        buildings.put(4, Arrays.asList(
+                new Coordinates(0, 0), new Coordinates(0, 1),
+                new Coordinates(0, 2), new Coordinates(1, 0),
+                new Coordinates(1, 2), new Coordinates(2, 0),
+                new Coordinates(2, 1), new Coordinates(2, 2),
+                new Coordinates(2, 3), new Coordinates(3, 1),
+                new Coordinates(3, 3), new Coordinates(4, 1),
+                new Coordinates(4, 2), new Coordinates(4, 3)
+        ));
+        Coordinates firstWorker = workers.get("Enemy").get(0);
+
+        Actions.fillBoard(buildings);
+        Actions.setCurrentWorker(firstWorker);
+        assertTrue(Tests.currentWorker(firstWorker, false));
+        assertTrue(Tests.stateOptions(new ArrayList<>()));
+
+        Coordinates secondWorker = workers.get("Enemy").get(1);
+
+        Actions.changeCurrentWorker(secondWorker);
+
+        assertTrue(Tests.gameStateExists());
+        assertTrue(Tests.boardEmpty());
+        assertEquals(0, GameState.getInstance().getPlayers().size());
+        assertNull(GameState.getInstance().getCurrPlayer());
+        assertTrue(Tests.numberOfPlayers(0));
+        assertTrue(Tests.allowedGodsEmpty());
+    }
+
+    @Test
+    public void standardTurn_threePlayers_playerDefeat() {
+        Map<String, String> gods = new LinkedHashMap<>();
+        gods.put("Hero", "Default");
+        gods.put("Enemy1", "Default");
+        gods.put("Enemy2", "Default");
+
+        Actions.addPlayers(new ArrayList<>(gods.keySet()));
+        Actions.assignGods(new LinkedHashMap<>(gods));
+        Actions.selectStartingPlayer("Enemy1");
+
+        Map<String, List<Coordinates>> workers = new LinkedHashMap<>();
+        workers.put("Hero", Arrays.asList(new Coordinates(1, 3), new Coordinates(3, 4)));
+        workers.put("Enemy1", Arrays.asList(new Coordinates(1, 1), new Coordinates(3, 2)));
+        workers.put("Enemy2", Arrays.asList(new Coordinates(4, 0), new Coordinates(4, 4)));
+
+        Actions.placeWorkers(new LinkedHashMap<>(workers));
+
+        Map<Integer, List<Coordinates>> buildings = new LinkedHashMap<>();
+        buildings.put(4, Arrays.asList(
+                new Coordinates(0, 0), new Coordinates(0, 1),
+                new Coordinates(0, 2), new Coordinates(1, 0),
+                new Coordinates(1, 2), new Coordinates(2, 0),
+                new Coordinates(2, 1), new Coordinates(2, 2),
+                new Coordinates(2, 3), new Coordinates(3, 1),
+                new Coordinates(3, 3), new Coordinates(4, 1),
+                new Coordinates(4, 2), new Coordinates(4, 3)
+        ));
+        Coordinates firstWorker = workers.get("Enemy1").get(0);
+
+        Actions.fillBoard(buildings);
+        Actions.setCurrentWorker(firstWorker);
+        assertTrue(Tests.currentWorker(firstWorker, false));
+        assertTrue(Tests.stateOptions(new ArrayList<>()));
+
+        Coordinates secondWorker = workers.get("Enemy1").get(1);
+
+        Actions.changeCurrentWorker(secondWorker);
+        gods.remove("Enemy1");
+        workers.remove("Enemy1");
+
+        assertTrue(Tests.gameStateExists());
+        assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
+        assertTrue(Tests.numberOfPlayers(2));
+        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
+        assertTrue(Tests.currentPlayer("Enemy2"));
+        assertTrue(Tests.newTurn());
+    }
 
     @After
     public void tearDown() { GameState.getInstance().dropAllConnections(); }

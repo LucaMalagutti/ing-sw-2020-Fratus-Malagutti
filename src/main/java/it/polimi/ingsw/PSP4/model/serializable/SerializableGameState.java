@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP4.model.GameState;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -30,10 +31,7 @@ public final class SerializableGameState implements Serializable {
         this.currPlayerIndex = gameState.getPlayers().indexOf(gameState.getCurrPlayer());
         this.numPlayer = gameState.getNumPlayer();
         List<SerializablePosition> options = gameState.getCurrPlayer().getState().getOptions();
-        if(options != null)
-            this.options = options;
-        else
-            this.options = new ArrayList<>();
+        this.options = Objects.requireNonNullElseGet(options, ArrayList::new);
     }
 
     //getter and setter
@@ -106,14 +104,14 @@ public final class SerializableGameState implements Serializable {
         if (rowIndex==2)
             return String.format("%-6s%-31s%2s","Turn: ",getCurrPlayer().getTurnNum() > 0 ? getCurrPlayer().getTurnNum() : "Initial Worker Placement","A ");
         if (rowIndex==4)
-            return String.format("%-5s - %-16s %-12s%2s",getPlayerColor(currPlayer).getName(),currPlayer.getUsername(),currPlayer.getCard(),"B ");
+            return String.format("%-16s   %-18s%2s",colorPlayer(currPlayer),currPlayer.getCard(),"B ");
         if (rowIndex==6)
-            return String.format("%-5s - %-16s %-12s%2s",getPlayerColor(secondPlayer).getName(),secondPlayer.getUsername(),secondPlayer.getCard(),"C ");
+            return String.format("%-16s   %-18s%2s",colorPlayer(secondPlayer),secondPlayer.getCard(),"C ");
         if (rowIndex==8)
             if (thirdPlayer == null)
                 return String.format("%37s%2s"," ","D ");
             else
-                return String.format("%-5s - %-16s %-12s%2s",getPlayerColor(thirdPlayer).getName(),thirdPlayer.getUsername(),thirdPlayer.getCard(),"D ");
+                return String.format("%-16s   %-18s%2s",colorPlayer(thirdPlayer),thirdPlayer.getCard(),"D ");
         if (rowIndex==10)
             return String.format("%-7s%-30s%2s","State: ", currPlayer.getState(),"E ");
         return String.format("%39s"," ");
@@ -202,8 +200,8 @@ public final class SerializableGameState implements Serializable {
             cellContent = colorChar(CLIChar.ERROR,getPlayerColor(getPlayerFromWorker(position)));
         List<SerializablePosition> match = options.stream().filter(pos -> pos.equals(position)).collect(Collectors.toList());
         if(match.size() == 1){
-            String left_arrow = colorChar(CLIChar.AVIABLE_POSITIONS_LEFT, Color.PURPLE);
-            String right_arrow = colorChar(CLIChar.AVIABLE_POSITIONS_RIGHT, Color.PURPLE);
+            String left_arrow = colorChar(CLIChar.AVAILABLE_POSITIONS_LEFT, Color.PURPLE);
+            String right_arrow = colorChar(CLIChar.AVAILABLE_POSITIONS_RIGHT, Color.PURPLE);
             return String.format("|%s%s%s",left_arrow,cellContent,right_arrow);
         }
         else
@@ -225,8 +223,7 @@ public final class SerializableGameState implements Serializable {
         return getCurrPlayer();
     }
 
-    //TODO color the player name instead of printing his color.
-//    private String colorPlayer(String username, SerializablePlayer player) {
-//        return getPlayerColor(player)+username+Color.RESET;
-//    }
+    private String colorPlayer(SerializablePlayer player) {
+        return String.format("%s%-16s%s", getPlayerColor(player),player.getUsername(),Color.RESET);
+    }
 }

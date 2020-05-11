@@ -217,6 +217,7 @@ public class GameState implements Observable<Request> {
         for(Player player : getPlayers())
             if(player.getState().getType() != StateType.WAIT)
                 return;
+        getCurrPlayer().endTurn();
         skipPlayer();
         getCurrPlayer().newTurn();
         if(notify)
@@ -275,6 +276,7 @@ public class GameState implements Observable<Request> {
             return;
         }
         //the game can continue
+        setNumPlayer(getPlayers().size());
         //remove player's workers from the board
         ArrayList<Worker> workers = player.getWorkers();
         for(Position[] line : board) {

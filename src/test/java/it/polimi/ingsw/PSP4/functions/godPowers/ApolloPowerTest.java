@@ -294,7 +294,6 @@ public class ApolloPowerTest {
         assertTrue(Tests.currentWorker(movePosition, true));
     }
 
-    @Ignore
     @Test
     public void powerUsed_noBuildOptions_gameLost() {
         int numPlayer = 2;
@@ -340,8 +339,6 @@ public class ApolloPowerTest {
         assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
 
         Actions.selectOption(movePosition);
-
-        //Something missing
 
         assertTrue(Tests.gameStateClean());
     }
