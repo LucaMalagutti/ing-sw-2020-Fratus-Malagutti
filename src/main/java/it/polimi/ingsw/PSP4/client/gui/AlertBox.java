@@ -13,7 +13,6 @@ public class AlertBox {
 
     //shows the error message in a new window
     public static void displayError(String title, String message){
-
         Stage window = new Stage();
 
         window.initModality(Modality.APPLICATION_MODAL);

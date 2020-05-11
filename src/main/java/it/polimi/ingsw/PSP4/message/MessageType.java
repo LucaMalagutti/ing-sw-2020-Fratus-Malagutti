@@ -14,6 +14,7 @@ public enum MessageType {
     CONFIRMATION,
     ERROR,
     REMOVE_PLAYER,
+    PING,
     SKIP_STATE,
     START_TURN,
     FIRST_WORKER_PLACEMENT,
