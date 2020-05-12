@@ -3,9 +3,7 @@ package it.polimi.ingsw.PSP4.client.gui;
 import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,19 +12,7 @@ public class GUIControls {
     public TextField server;
     public TextField username;
 
-    public ImageView godCardApollo;
-    public ImageView godCardArtemis;
-    public ImageView godCardAthena;
-    public ImageView godCardAtlas;
-    public ImageView godCardDemeter;
-    public ImageView godCardHephaestus;
-    public ImageView godCardMinotaur;
-    public ImageView godCardPan;
-    public ImageView godCardPrometheus;
-
     public GridPane implementedGodsGrid;
-
-
 
     public void launchGame() {
         GUIClient.updateScene(FXMLFile.LAUNCHER_FORM, false);
@@ -48,6 +34,8 @@ public class GUIControls {
 
     public void setTwoPlayers() {
         System.out.println("2 players selected");
+        GUIClient.window.setX(GUIClient.window.getX() - 240);
+        GUIClient.window.setY(GUIClient.window.getY() - 60);
         GUIClient.updateScene(FXMLFile.LOBBY_ALLOWED_GODS, false);
     }
 

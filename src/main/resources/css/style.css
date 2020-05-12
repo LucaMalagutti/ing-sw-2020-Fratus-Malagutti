@@ -1,5 +1,6 @@
 @import "fonts.css";
 
+/* SCENE BACKGROUND AND FOREGROUND */
 .layout {
     -fx-background-position: center center;
     -fx-background-repeat: no-repeat;
@@ -18,29 +19,143 @@
     -fx-background-image: url("../images/layout/lobby-foreground.png");
 }
 
+/* FULL-SIZE GOD IMAGE */
 .god-card {
     -fx-background-position: center center;
     -fx-background-repeat: no-repeat;
     -fx-background-size: contain;
     -fx-background-image: url("../images/godCards/fullGodCards/full_default.png");
+    -fx-pref-width: 260px;
 }
-
+.god-card.apollo {
+    -fx-background-image: url("../images/godCards/fullGodCards/full_apollo.png");
+}
 .god-card.artemis {
     -fx-background-image: url("../images/godCards/fullGodCards/full_artemis.png");
 }
+.god-card.athena {
+    -fx-background-image: url("../images/godCards/fullGodCards/full_athena.png");
+}
+.god-card.atlas {
+    -fx-background-image: url("../images/godCards/fullGodCards/full_atlas.png");
+}
+.god-card.demeter {
+    -fx-background-image: url("../images/godCards/fullGodCards/full_demeter.png");
+}
+.god-card.hephaestus {
+    -fx-background-image: url("../images/godCards/fullGodCards/full_hephaestus.png");
+}
+.god-card.minotaur {
+    -fx-background-image: url("../images/godCards/fullGodCards/full_minotaur.png");
+}
+.god-card.pan {
+    -fx-background-image: url("../images/godCards/fullGodCards/full_pan.png");
+}
+.god-card.prometheus {
+    -fx-background-image: url("../images/godCards/fullGodCards/full_prometheus.png");
+}
 
+/* SMALL GOD IMAGES WITH FRAME */
+.selectable-god {
+    -fx-cursor: hand;
+    -fx-pref-height: 130px;
+}
+.selectable-god * {
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+}
+.selectable-god .selectable-image {
+    -fx-scale-x: 0.90;
+    -fx-scale-y: 0.90;
+}
+.selectable-god:hover .selectable-image {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+.selectable-god:hover .selectable-frame {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+.selectable-god .selectable-frame {
+    -fx-background-image: url("../images/utility/frame-white.png");
+}
+.selectable-god.selected .selectable-frame {
+    -fx-background-image: url("../images/utility/frame-yellow.png");
+}
+.selectable-god.apollo .selectable-image {
+    -fx-background-image: url("../images/godCards/god_card_apollo.png");
+}
+.selectable-god.artemis .selectable-image {
+    -fx-background-image: url("../images/godCards/god_card_artemis.png");
+}
+.selectable-god.athena .selectable-image {
+    -fx-background-image: url("../images/godCards/god_card_athena.png");
+}
+.selectable-god.atlas .selectable-image {
+    -fx-background-image: url("../images/godCards/god_card_atlas.png");
+}
+.selectable-god.demeter .selectable-image {
+    -fx-background-image: url("../images/godCards/god_card_demeter.png");
+}
+.selectable-god.hephaestus .selectable-image {
+    -fx-background-image: url("../images/godCards/god_card_hephaestus.png");
+}
+.selectable-god.minotaur .selectable-image {
+    -fx-background-image: url("../images/godCards/god_card_minotaur.png");
+}
+.selectable-god.pan .selectable-image {
+    -fx-background-image: url("../images/godCards/god_card_pan.png");
+}
+.selectable-god.prometheus .selectable-image {
+    -fx-background-image: url("../images/godCards/god_card_prometheus.png");
+}
+
+/* ANIMATIONS */
 .hover-effect-out:hover {
     -fx-cursor: hand;
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
 }
-
 .hover-effect-in:hover {
     -fx-cursor: hand;
     -fx-scale-x: 0.95;
     -fx-scale-y: 0.95;
 }
 
+/* TEXT */
+.text.lillybelle {
+    -fx-font-family: "LillyBelle";
+}
+.text.minion-pro {
+    -fx-font-family: "Minion Pro";
+}
+
+.text.white {
+    -fx-fill: #ffffff;
+}
+.text.black {
+    -fx-fill: #000000;
+}
+.text.brown {
+    -fx-fill: #685541;
+}
+
+.text.small {
+    -fx-font-size: 20px;
+}
+.text.medium {
+    -fx-font-size: 22px;
+}
+.text.big {
+    -fx-font-size: 24px;
+}
+
+.text.shadow {
+    -fx-effect: dropshadow(three-pass-box, #000000 , 0, 0, 0, 3.0);
+}
+
+/* DESIGN BLOCKS */
 .text-field.blue-border {
     -fx-font-family: "LillyBelle";
     -fx-text-box-border: #1d6fa7;
@@ -55,22 +170,18 @@
     -fx-text-alignment: center;
 }
 
-.selectable-god {
-    -fx-cursor: hand;
-}
-
-.selectable-god:hover * {
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-}
-
-.selectable-god .frame {
+.green-button {
+    -fx-background-image: url("../images/buttons/btn_green.png");
     -fx-background-position: center center;
     -fx-background-repeat: no-repeat;
     -fx-background-size: contain;
-    -fx-background-image: url("../images/utility/frame-white.png");
+    -fx-pref-height: 50px;
+    -fx-padding: 0 0 12px 0;
 }
-
-.selectable-god.selected .frame {
-    -fx-background-image: url("../images/utility/frame-yellow.png");
+.green-button:hover {
+    -fx-background-image: url("../images/buttons/btn_green_pressed.png");
+    -fx-padding: 0 0 9px 0;
+}
+.green-button .text {
+    -fx-end-margin: 12px;
 }
