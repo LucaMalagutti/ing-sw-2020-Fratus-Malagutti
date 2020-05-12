@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP4.client;
+package it.polimi.ingsw.PSP4.client.cli;
 
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class CLIClient {
     private String ipAddress = "127.0.0.1";     //ipAddress of the server to connect to. HARDCODED ONLY DURING DEVELOPMENT
-    private final int port;                     //port of the server to connect to. Should be hardcoded in ClientMain
     private final Socket socket = new Socket();
     private ObjectOutputStream socketOut;
     private ObjectInputStream socketIn;
@@ -31,21 +30,17 @@ public class CLIClient {
     private Request lastRequestReceived;
     private volatile long lastTimestamp = -1;
 
-    public CLIClient(int port) {
-        this.port = port;
-    }
-
     public synchronized boolean isActive() {return active;}
     public synchronized void setActive(boolean active) {this.active = active;}
     public synchronized void setLastRequestReceived(Request lastRequest) {this.lastRequestReceived = lastRequest;}
     public synchronized Request getLastRequestReceived() {return this.lastRequestReceived;}
 
     public synchronized void setLastTimestamp(long lastTimestamp) {
-        if (this.lastTimestamp == -1) {
+        if (this.lastTimestamp != -1) {
             this.lastTimestamp = lastTimestamp;
-            serverCheck();
         } else {
             this.lastTimestamp = lastTimestamp;
+            serverCheck();
         }
     }
 
@@ -69,7 +64,8 @@ public class CLIClient {
      * @param pingRequest request to be answered
      */
     private void answerPing(Request pingRequest) {
-        PingRequest ping = (PingRequest) pingRequest;
+        PingRequest ping;
+        ping = (PingRequest) pingRequest;
         setLastTimestamp(ping.getTimestamp());
         new Thread (() -> {
             try {
@@ -95,9 +91,8 @@ public class CLIClient {
                     }
                     else if (inputObject instanceof Request) {
                         Request request = (Request) inputObject;
-                        if (request.getType() == MessageType.PING) {
+                        if (request.getType() == MessageType.PING)
                             answerPing(request);
-                        }
                         else {
                             setLastRequestReceived(request);
                             if (isActive())
@@ -122,16 +117,11 @@ public class CLIClient {
             try {
                 while (isActive()) {
                     String inputLine = stdIn.nextLine();
-                    if (getLastRequestReceived() == null) {
-                        socketOut.writeObject(inputLine);
-                    } else {
-                        Message validated = getLastRequestReceived().validateResponse(inputLine);
-                        if (validated.getType() == MessageType.ERROR && isActive())
-                            System.out.println(validated.getMessage());
-                        else
-                            socketOut.writeObject(validated);
-
-                    }
+                    Message validated = getLastRequestReceived().validateResponse(inputLine);
+                    if (validated.getType() == MessageType.ERROR && isActive())
+                        System.out.println(validated.getMessage());
+                    else
+                        socketOut.writeObject(validated);
                     socketOut.flush();
                 }
             } catch (Exception e) {
@@ -147,7 +137,7 @@ public class CLIClient {
      * @param stdIn stdInput to read from
      * @return InetSocketAddress with the chosen IPAddress and the hardcoded server port
      */
-    public InetSocketAddress chooseServerIP(Scanner stdIn) {
+    public InetSocketAddress chooseServerIP(Scanner stdIn, int port) {
         System.out.println(Message.CHOOSE_SERVER_IP);
         String address = stdIn.nextLine();
         InetSocketAddress socketAddress;
@@ -167,15 +157,15 @@ public class CLIClient {
      * Handles the connection to the server and sets up two threads, one receiving and the other writing on the socket.
      * @throws IOException in case something goes wrong during the connection or the users forces a client exit
      */
-    public void run() throws IOException {
+    public void run(int port) throws IOException {
         Scanner stdIn = new Scanner(System.in);
         if (ipAddress == null) {
             try {
-                InetSocketAddress socketAddress = chooseServerIP(stdIn);
+                InetSocketAddress socketAddress = chooseServerIP(stdIn, port);
                 socket.connect(socketAddress, 3000);
             } catch (SocketTimeoutException e) {
                 System.out.println(Message.CONNECTION_ATTEMPT_TIMED_OUT);
-                chooseServerIP(stdIn);
+                chooseServerIP(stdIn, port);
             }
         } else {
             socket.connect(new InetSocketAddress(ipAddress, port));

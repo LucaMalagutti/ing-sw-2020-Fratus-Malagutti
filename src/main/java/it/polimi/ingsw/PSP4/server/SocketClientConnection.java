@@ -2,7 +2,11 @@ package it.polimi.ingsw.PSP4.server;
 
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
+import it.polimi.ingsw.PSP4.message.requests.ChooseNumPlayersRequest;
+import it.polimi.ingsw.PSP4.message.requests.ChooseUsernameRequest;
 import it.polimi.ingsw.PSP4.message.requests.PingRequest;
+import it.polimi.ingsw.PSP4.message.responses.ChooseNumPlayersResponse;
+import it.polimi.ingsw.PSP4.message.responses.ChooseUsernameResponse;
 import it.polimi.ingsw.PSP4.message.responses.PingResponse;
 import it.polimi.ingsw.PSP4.message.responses.Response;
 import it.polimi.ingsw.PSP4.observer.Observable;
@@ -85,22 +89,18 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
 
     /**
      * Asks the first player in the lobby to select how many players will play this game
-     * @param name name of the first player, i.e. the one who sets the number of players
+     * @param username username of the first player, i.e. the one who sets the number of players
      * @return number of players for this game
      */
-    public int initializeGameNumPlayer(String name) throws IOException, ClassNotFoundException {
-        send(MessageFormat.format(Message.CREATING_LOBBY, name));
-        send(Message.CHOOSE_NUMBER_PLAYERS);
-        String numPlayers = (String) in.readObject();
-
-        while (!numPlayers.equals("2") && !numPlayers.equals("3") && !numPlayers.equals("")) {
-            send(Message.NOT_VALID_NUMBER);
-            numPlayers = (String) in.readObject();
+    public int initializeGameNumPlayer(String username) throws IOException, ClassNotFoundException {
+        send(MessageFormat.format(Message.CREATING_LOBBY, username));
+        send(new ChooseNumPlayersRequest(username));
+        Response numPlayersResponse = (Response) in.readObject();
+        if (numPlayersResponse.getType() == MessageType.CHOOSE_NUM_PLAYERS) {
+            ChooseNumPlayersResponse chooseNumPlayersResponse = (ChooseNumPlayersResponse) numPlayersResponse;
+            return chooseNumPlayersResponse.getSelectedNumPlayers();
         }
-        if (numPlayers.equals("")) {
-            numPlayers = "2";
-        }
-        return Integer.parseInt(numPlayers);
+        else return 2;
     }
 
     /**
@@ -116,20 +116,16 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
      * @return whitespace-stripped username
      */
     public String selectClientUsername() {
-        send(Message.CHOOSE_USERNAME);
+        send(new ChooseUsernameRequest());
         try {
-            String name = (String) in.readObject();
-            name = name.replaceAll("\\s", "");
-            while (name.equals("") || name.length() > 15 || name.equals("@")) {
-                if (name.equals("@")) {
-                    send(Message.USERNAME_CHAR);
-                } else {
-                    send(Message.USERNAME_LENGTH);
-                }
-                name = (String) in.readObject();
-                name = name.replaceAll("\\s", "");
+            Response response = (Response) in.readObject();
+            if (response.getType() == MessageType.CHOOSE_USERNAME) {
+                ChooseUsernameResponse usernameResponse = (ChooseUsernameResponse) response;
+                return usernameResponse.getSelectedUsername();
             }
-            return name;
+            else {
+                return "USERNAME_ERROR";
+            }
         } catch (IOException | ClassNotFoundException e) {
             return e.getMessage();
         }
@@ -144,7 +140,7 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
             try {
                 Thread.sleep(pongTimeout*1000);
                 if (getLastTimestampReceived() != timestamp)
-                    closeConnection("Pong timeout exceeded", true);
+                    close();
             } catch (InterruptedException e) {
                 closeConnection(true);
             }
@@ -191,7 +187,8 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
         } catch (IOException | ClassNotFoundException e) {
             e.getMessage();
         } finally {
-            close();
+            if (isActive())
+                close();
         }
     }
 

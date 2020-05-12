@@ -65,7 +65,7 @@ public abstract class Message implements Serializable {
     public static String NOT_VALID_GOD_LIST = "Not a valid god list. Try again with valid god names separated by a single space.";
     public static String NOT_VALID_GOD_LIST_DUPLICATES = "The god list can't contain duplicates. Try again with valid god names separated by a single space.";
     public static String NOT_VALID_GOD_NAME = "Not a valid god name. Try again.";
-    public static String NOT_VALID_NUMBER = "Not a valid number of players. Type 2 or 3";
+    public static String NOT_VALID_PLAYER_NUMBER = "Not a valid number of players. Type 2 or 3";
     public static String NOT_VALID_POSITION = "{0} is not a valid position. Try again.";
     public static String NOT_VALID_SERVER_IP = "This IP address is invalid. Try again";
     public static String NOT_VALID_UI = "Couldn't select a valid UI. Exiting..";

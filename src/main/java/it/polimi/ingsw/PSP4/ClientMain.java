@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP4;
 
-import it.polimi.ingsw.PSP4.client.CLIClient;
+import it.polimi.ingsw.PSP4.client.cli.CLIClient;
 import it.polimi.ingsw.PSP4.client.gui.GUIClient;
 import it.polimi.ingsw.PSP4.message.Message;
 
@@ -35,11 +35,11 @@ public class ClientMain {
             Scanner stdIn = new Scanner(System.in);
             String clientUI = chooseClientUI(stdIn);
             if (clientUI.equals("CLI")) {
-                CLIClient client = new CLIClient(31713);
-                client.run();
+                CLIClient client = new CLIClient();
+                client.run(31713);
             } else if (clientUI.equals("GUI")){
                 GUIClient client = new GUIClient();
-                client.run(args);
+                client.run(args, 31713);
             } else {
                 System.out.println(Message.NOT_VALID_UI);
             }

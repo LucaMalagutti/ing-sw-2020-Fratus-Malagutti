@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP4.model.serializable;
+package it.polimi.ingsw.PSP4.client.cli;
 
 public enum CLIChar {
     NUMBER_HORIZONTAL("  0   1   2   3   4  "),

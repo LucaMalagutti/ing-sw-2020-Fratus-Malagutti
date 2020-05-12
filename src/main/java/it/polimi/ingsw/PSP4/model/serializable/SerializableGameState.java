@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP4.model.serializable;
 
+import it.polimi.ingsw.PSP4.client.cli.CLIChar;
+import it.polimi.ingsw.PSP4.client.cli.Color;
 import it.polimi.ingsw.PSP4.model.GameState;
 
 import java.io.Serializable;

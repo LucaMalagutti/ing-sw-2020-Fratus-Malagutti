@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP4.model.serializable;
+package it.polimi.ingsw.PSP4.client.cli;
 
 public enum Color {
     RED("\u001B[1;31m"),
