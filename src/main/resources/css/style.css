@@ -18,6 +18,21 @@
 .layout.lobby-foreground {
     -fx-background-image: url("../images/layout/lobby-foreground.png");
 }
+.layout.lobby-background-windows {
+    -fx-background-image: url("../images/layout/lobby-background-windows.png");
+}
+.layout.lobby-foreground-starting-player-selection-2 {
+    -fx-background-image: url("../images/layout/lobby-foreground-two-windows.png");
+}
+.layout.lobby-foreground-starting-player-selection-3 {
+    -fx-background-image: url("../images/layout/lobby-foreground-three-windows.png");
+}
+.layout.lobby-background-your-god-selection-2 {
+    -fx-background-image: url("../images/layout/lobby-foreground-double.png");
+}
+.layout.lobby-background-your-god-selection-3 {
+    -fx-background-image: url("../images/layout/lobby-foreground-triple.png");
+}
 
 /* FULL-SIZE GOD IMAGE */
 .god-card {
@@ -26,6 +41,9 @@
     -fx-background-size: contain;
     -fx-background-image: url("../images/godCards/fullGodCards/full_default.png");
     -fx-pref-width: 260px;
+}
+.god-card.cropped {
+    -fx-background-size: cover;
 }
 .god-card.apollo {
     -fx-background-image: url("../images/godCards/fullGodCards/full_apollo.png");

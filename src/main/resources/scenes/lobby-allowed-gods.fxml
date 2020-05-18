@@ -25,8 +25,10 @@
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
+                        <RowConstraints fillHeight="false" maxHeight="311.58448791503906" minHeight="10.0" prefHeight="133.03269958496094" vgrow="SOMETIMES" />
                       <RowConstraints fillHeight="false" maxHeight="311.58448791503906" minHeight="10.0" prefHeight="133.03269958496094" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="264.1544494628906" minHeight="10.0" prefHeight="129.8973388671875" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="252.02847290039062" minHeight="10.0" prefHeight="131.1026611328125" vgrow="SOMETIMES" />
@@ -76,7 +78,7 @@
                               <String fx:value="athena" />
                            </styleClass>
                         </StackPane>
-                        <StackPane layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.rowIndex="1">
+                        <StackPane layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="3">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -91,7 +93,7 @@
                               <String fx:value="atlas" />
                            </styleClass>
                         </StackPane>
-                        <StackPane layoutX="102.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <StackPane layoutX="102.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.rowIndex="1">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -106,7 +108,7 @@
                               <String fx:value="demeter" />
                            </styleClass>
                         </StackPane>
-                        <StackPane layoutX="196.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <StackPane layoutX="196.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -121,7 +123,7 @@
                               <String fx:value="hephaestus" />
                            </styleClass>
                         </StackPane>
-                        <StackPane layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.rowIndex="2">
+                        <StackPane layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -136,7 +138,7 @@
                               <String fx:value="minotaur" />
                            </styleClass>
                         </StackPane>
-                        <StackPane layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <StackPane layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -151,7 +153,7 @@
                               <String fx:value="pan" />
                            </styleClass>
                         </StackPane>
-                        <StackPane layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <StackPane layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.rowIndex="2">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -165,6 +167,76 @@
                               <String fx:value="selectable-god" />
                               <String fx:value="prometheus" />
                            </styleClass>
+                        </StackPane>
+                        <StackPane layoutX="20.0" layoutY="10.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </Pane>
+                              <Pane styleClass="selectable-frame" />
+                           </children>
+                        </StackPane>
+                        <StackPane layoutX="20.0" layoutY="112.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                           <children>
+                              <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </Pane>
+                              <Pane styleClass="selectable-frame" />
+                           </children>
+                        </StackPane>
+                        <StackPane layoutX="218.0" layoutY="112.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                           <children>
+                              <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </Pane>
+                              <Pane styleClass="selectable-frame" />
+                           </children>
+                        </StackPane>
+                        <StackPane layoutX="86.0" layoutY="10.0" onMousePressed="#toggleGodSelection" GridPane.rowIndex="3">
+                           <children>
+                              <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </Pane>
+                              <Pane styleClass="selectable-frame" />
+                           </children>
+                        </StackPane>
+                        <StackPane layoutX="218.0" layoutY="10.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <children>
+                              <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </Pane>
+                              <Pane styleClass="selectable-frame" />
+                           </children>
+                        </StackPane>
+                        <StackPane layoutX="152.0" layoutY="10.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                           <children>
+                              <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </Pane>
+                              <Pane styleClass="selectable-frame" />
+                           </children>
+                        </StackPane>
+                        <StackPane layoutX="218.0" layoutY="213.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                           <children>
+                              <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </Pane>
+                              <Pane styleClass="selectable-frame" />
+                           </children>
                         </StackPane>
                      </children>
                      <HBox.margin>
@@ -247,7 +319,7 @@
    <bottom>
       <StackPane styleClass="green-button" BorderPane.alignment="CENTER">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="START GAME">
+            <Text onMousePressed="#setTwoGods" strokeType="OUTSIDE" strokeWidth="0.0" text="START GAME">
                <styleClass>
                   <String fx:value="text" />
                   <String fx:value="lillybelle" />

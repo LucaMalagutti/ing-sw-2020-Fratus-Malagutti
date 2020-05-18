@@ -44,6 +44,26 @@ public class GUIControls {
         GUIClient.updateScene(FXMLFile.LOBBY_ALLOWED_GODS, false);
     }
 
+    public void setTwoGods() {
+        System.out.println("2 Gods selected");
+        GUIClient.updateScene(FXMLFile.LOBBY_YOUR_GOD_SELECTION_TWO, false);
+    }
+
+    public void setThreeGods() {
+        System.out.println("3 Gods selected");
+        GUIClient.updateScene(FXMLFile.LOBBY_YOUR_GOD_SELECTION_THREE, false);
+    }
+
+    public void godSelectedTwo() {
+        //TODO GET THE SELECTED GODS
+        GUIClient.updateScene(FXMLFile.LOBBY_STARTING_PLAYER_SELECTION_TWO, false);
+    }
+
+    public void godSelectedThree() {
+        //TODO GET THE SELECTED GODS
+        GUIClient.updateScene(FXMLFile.LOBBY_STARTING_PLAYER_SELECTION_THREE, false);
+    }
+
     public void toggleGodSelection(Event event){
         Node god = (Node)event.getSource();
         List<Node> selectedGods = implementedGodsGrid.getChildren().stream().filter(card->card.getStyleClass().contains("selected")).collect(Collectors.toList());
