@@ -5,11 +5,11 @@ public enum FXMLFile {
     LAUNCHER_FORM("launcher-form.fxml"),
     LAUNCHER_NUMBER_PLAYERS("launcher-number-players.fxml"),
     LOBBY_ALLOWED_GODS("lobby-allowed-gods.fxml"),
-    LOBBY_YOUR_GOD_SELECTION_TWO("lobby-your-god-selection-two.fxml"),
-    LOBBY_YOUR_GOD_SELECTION_THREE("lobby-your-god-selection-three.fxml"),
+    LOBBY_SELECT_GOD("lobby-select-god.fxml"),
     LOBBY_STARTING_PLAYER_SELECTION_TWO("lobby-starting-player-selection-two.fxml"),
     LOBBY_STARTING_PLAYER_SELECTION_THREE("lobby-starting-player-selection-three.fxml"),
-    LOBBY_WAIT("lobby-wait.fxml");
+    LOBBY_WAIT("lobby-wait.fxml"),
+    BOARD("board.fxml");
 
     private final String fileName;
 

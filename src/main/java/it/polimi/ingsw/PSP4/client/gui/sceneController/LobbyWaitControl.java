@@ -13,12 +13,7 @@ public class LobbyWaitControl extends GUIController{
         } else if (req.getType() == MessageType.CHOOSE_ALLOWED_GODS) {
             getClient().updateScene(FXMLFile.LOBBY_ALLOWED_GODS, req,false);
         } else if (req.getType() == MessageType.ASSIGN_GOD) {
-            AssignGodRequest r = (AssignGodRequest) req;
-            if (r.getAllowedGods().size() == 2) {
-                getClient().updateScene(FXMLFile.LOBBY_YOUR_GOD_SELECTION_TWO, req, false);
-            } else {
-                getClient().updateScene(FXMLFile.LOBBY_YOUR_GOD_SELECTION_THREE, req, false);
-            }
+            getClient().updateScene(FXMLFile.LOBBY_SELECT_GOD, req, false);
         }
     }
 

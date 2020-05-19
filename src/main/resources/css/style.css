@@ -33,6 +33,15 @@
 .layout.lobby-background-your-god-selection-3 {
     -fx-background-image: url("../images/layout/lobby-foreground-triple.png");
 }
+.layout.board-background {
+    -fx-background-image: url("../images/layout/board-background.png");
+}
+.layout.winner-foreground {
+    -fx-background-image: url("../images/layout/winner-foreground.png");
+}
+.layout.loser-foreground {
+    -fx-background-image: url("../images/layout/loser-foreground.png");
+}
 
 /* FULL-SIZE GOD IMAGE */
 .god-card {
@@ -202,4 +211,40 @@
 }
 .green-button .text {
     -fx-end-margin: 12px;
+}
+
+.players-list-background {
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-image: url("../images/layout/players-list-background.png");
+    -fx-translate-x: 320px;
+}
+
+/* ENTITIES */
+.entity {
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 80%;
+}
+.entity.level-1 {
+    -fx-background-image: url("../images/entities/single-level-1.png");
+}
+.entity.level-2 {
+    -fx-background-image: url("../images/entities/single-level-2.png");
+}
+.entity.level-3 {
+    -fx-background-image: url("../images/entities/single-level-3.png");
+}
+.entity.dome {
+    -fx-background-image: url("../images/entities/single-dome.png");
+}
+.entity.red-worker {
+    -fx-background-image: url("../images/entities/worker-red-full.png");
+}
+.entity.green-worker {
+    -fx-background-image: url("../images/entities/worker-green-full.png");
+}
+.entity.blue-worker {
+    -fx-background-image: url("../images/entities/worker-blue-full.png");
 }

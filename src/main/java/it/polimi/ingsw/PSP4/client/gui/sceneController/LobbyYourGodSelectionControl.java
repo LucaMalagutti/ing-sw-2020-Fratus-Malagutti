@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class LobbyYourGodSelectionControl extends GUIController {
+    //TODO Remove this class, here because can be useful to develop other scenes
     public VBox godPicturesVBox;
     public Pane selectedGodPicture;
     public Text selectedGodText;

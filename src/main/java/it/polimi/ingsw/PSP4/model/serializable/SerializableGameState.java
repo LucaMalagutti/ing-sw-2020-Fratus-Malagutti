@@ -145,7 +145,7 @@ public final class SerializableGameState implements Serializable {
      * @param player player
      * @return the player's color
      */
-    private Color getPlayerColor(SerializablePlayer player) {
+    public Color getPlayerColor(SerializablePlayer player) {
         int playerIndex = getPlayers().indexOf(player);
         if (playerIndex == 1)
             return Color.BLUE;
@@ -215,7 +215,7 @@ public final class SerializableGameState implements Serializable {
      * @param position position occupied by a worker
      * @return player who owns the worker
      */
-    private SerializablePlayer getPlayerFromWorker(SerializablePosition position) {
+    public SerializablePlayer getPlayerFromWorker(SerializablePosition position) {
         for (SerializablePlayer player: getPlayers()) {
             for (String worker: player.getWorkers()) {
                 if (worker.equals(position.getWorker()))

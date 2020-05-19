@@ -1,8 +1,10 @@
 package it.polimi.ingsw.PSP4.client.gui;
 
+import it.polimi.ingsw.PSP4.client.gui.sceneController.BoardController;
 import it.polimi.ingsw.PSP4.client.gui.sceneController.GUIController;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
+import it.polimi.ingsw.PSP4.message.requests.AssignFirstWorkerPlacementRequest;
 import it.polimi.ingsw.PSP4.message.requests.PingRequest;
 import it.polimi.ingsw.PSP4.message.requests.Request;
 import javafx.application.Application;
@@ -172,6 +174,8 @@ public class GUIClient extends Application{
             closeProgram();
         });
         updateScene(FXMLFile.LAUNCHER_PLAY, null, false);
+        //To debug the BOARD scene, please don't remove
+//        updateScene(FXMLFile.BOARD, new AssignFirstWorkerPlacementRequest("Lorenzo", 0, 0), false);
     }
 
     public void closeProgram(){
