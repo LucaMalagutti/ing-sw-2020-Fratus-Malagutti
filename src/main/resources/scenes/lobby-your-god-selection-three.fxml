@@ -32,11 +32,8 @@
                                     <styleClass>
                                         <String fx:value="god-card" />
                                         <String fx:value="artemis" />
-                                        <String fx:value="cropped" />
+                              <String fx:value="cropped" />
                                     </styleClass>
-                                    <VBox.margin>
-                                        <Insets />
-                                    </VBox.margin>
                                 </Pane>
                         <Pane prefHeight="200.0" prefWidth="200.0">
                            <styleClass>

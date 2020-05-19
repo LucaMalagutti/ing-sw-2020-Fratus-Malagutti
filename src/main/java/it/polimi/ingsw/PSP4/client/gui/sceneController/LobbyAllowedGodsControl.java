@@ -8,12 +8,16 @@ import it.polimi.ingsw.PSP4.message.requests.Request;
 import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class LobbyAllowedGodsControl extends GUIController {
     public GridPane implementedGodsGrid;
+    public Text callToAction;
     private int numPlayers;
 
     public void toggleGodSelection(Event event){
@@ -56,5 +60,17 @@ public class LobbyAllowedGodsControl extends GUIController {
     public void setupAttributes(Request req) {
         ChooseAllowedGodsRequest r = (ChooseAllowedGodsRequest) req;
         numPlayers = r.getNumPlayer();
+        callToAction.setText("SELECT " + numPlayers + " GODS");
+//        for(String god : r.getSelectableGods()) {
+//            Pane photo = new Pane(), frame = new Pane();
+//            StackPane card = new StackPane();
+//            photo.getStyleClass().add("selectable-image");
+//            frame.getStyleClass().add("selectable-frame");
+//            card.getStyleClass().addAll("hover-effect-out", "selectable-god", god.toLowerCase());
+//            card.getChildren().addAll(photo, frame);
+//            card.setOnMousePressed(this::toggleGodSelection);
+//            if(implementedGodsGrid.getChildren().size() < 16)
+//                implementedGodsGrid.getChildren().add(card);
+//        }
     }
 }

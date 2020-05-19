@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP4.client.gui.sceneController.LobbyWaitControl">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP4.client.gui.sceneController.LobbyWaitControl">
     <styleClass>
         <String fx:value="layout" />
-        <String fx:value="launcher-narrow" />
+        <String fx:value="launcher-wide" />
     </styleClass>
-    <bottom>
-        <ImageView accessibleRole="BUTTON" fitHeight="189.0" fitWidth="411.0" pickOnBounds="true" preserveRatio="true" styleClass="hover-effect-out" BorderPane.alignment="TOP_CENTER">
+   <center>
+        <ImageView accessibleRole="BUTTON" fitHeight="189.0" fitWidth="411.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
             <image>
                 <Image url="@../images/buttons/button-please-wait.png" />
             </image>
             <BorderPane.margin>
-                <Insets bottom="150.0" />
+                <Insets />
             </BorderPane.margin>
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>
         </ImageView>
-    </bottom>
+   </center>
 </BorderPane>

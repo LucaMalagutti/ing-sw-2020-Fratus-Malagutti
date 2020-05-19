@@ -43,7 +43,7 @@
     -fx-pref-width: 260px;
 }
 .god-card.cropped {
-    -fx-background-size: cover;
+    -fx-background-size: 100%;
 }
 .god-card.apollo {
     -fx-background-image: url("../images/godCards/fullGodCards/full_apollo.png");

@@ -34,7 +34,7 @@
                       <RowConstraints maxHeight="252.02847290039062" minHeight="10.0" prefHeight="131.1026611328125" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <StackPane onMousePressed="#toggleGodSelection" GridPane.halignment="CENTER" GridPane.valignment="CENTER"  id="Apollo">
+                        <StackPane id="Apollo" onMousePressed="#toggleGodSelection" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -48,7 +48,7 @@
                               <String fx:value="apollo" />
                            </styleClass>
                         </StackPane>
-                        <StackPane layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="1"  id="Artemis">
+                        <StackPane id="Artemis" layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="1">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -63,7 +63,7 @@
                               <String fx:value="artemis" />
                            </styleClass>
                         </StackPane>
-                        <StackPane layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="2" id="Athena">
+                        <StackPane id="Athena" layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="2">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -78,7 +78,7 @@
                               <String fx:value="athena" />
                            </styleClass>
                         </StackPane>
-                        <StackPane layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="3" id="Atlas">
+                        <StackPane id="Atlas" layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="3">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -93,7 +93,7 @@
                               <String fx:value="atlas" />
                            </styleClass>
                         </StackPane>
-                        <StackPane layoutX="102.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.rowIndex="1" id="Demeter">
+                        <StackPane id="Demeter" layoutX="102.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.rowIndex="1">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -108,7 +108,7 @@
                               <String fx:value="demeter" />
                            </styleClass>
                         </StackPane>
-                        <StackPane layoutX="196.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="1" GridPane.rowIndex="1" id="Hephaestus">
+                        <StackPane id="Hephaestus" layoutX="196.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -123,7 +123,7 @@
                               <String fx:value="hephaestus" />
                            </styleClass>
                         </StackPane>
-                        <StackPane layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="2" GridPane.rowIndex="1" id="Minotaur">
+                        <StackPane id="Minotaur" layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -138,7 +138,7 @@
                               <String fx:value="minotaur" />
                            </styleClass>
                         </StackPane>
-                        <StackPane layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="3" GridPane.rowIndex="1" id="Pan">
+                        <StackPane id="Pan" layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -153,7 +153,7 @@
                               <String fx:value="pan" />
                            </styleClass>
                         </StackPane>
-                        <StackPane layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.rowIndex="2" id="Prometheus">
+                        <StackPane id="Prometheus" layoutX="9.0" layoutY="12.0" onMousePressed="#toggleGodSelection" GridPane.rowIndex="2">
                            <children>
                               <Pane scaleX="0.0" scaleY="0.0" styleClass="selectable-image">
                                  <StackPane.margin>
@@ -282,7 +282,7 @@
             </Pane>
             <AnchorPane mouseTransparent="true">
                <children>
-                  <Text layoutX="252.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SELECT 2 GODS">
+                  <Text fx:id="callToAction" layoutX="252.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SELECT 2 GODS">
                      <styleClass>
                         <String fx:value="text" />
                         <String fx:value="lillybelle" />
