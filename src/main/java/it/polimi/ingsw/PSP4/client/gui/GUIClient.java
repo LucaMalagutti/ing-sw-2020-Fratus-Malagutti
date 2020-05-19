@@ -1,10 +1,12 @@
 package it.polimi.ingsw.PSP4.client.gui;
 
+import it.polimi.ingsw.PSP4.client.gui.sceneController.GUIController;
+import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
 import it.polimi.ingsw.PSP4.message.requests.PingRequest;
 import it.polimi.ingsw.PSP4.message.requests.Request;
-import it.polimi.ingsw.PSP4.message.responses.Response;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,26 +18,31 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.NoSuchElementException;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class GUIClient extends Application{
-    private String ipAddress = "127.0.0.1";     //ipAddress of the server to connect to. HARDCODED ONLY DURING DEVELOPMENT
+    public int port = 31713;
     private final Socket socket = new Socket();
     private ObjectOutputStream socketOut;
     private ObjectInputStream socketIn;
+    private GUIController sceneController;
+    private boolean connected = false;
+
+    public static Stage window;
 
     private boolean active = true;
     private Request lastRequestReceived;
     private volatile long lastTimestamp = -1;
 
+    public boolean isConnected() { return connected; }
+    public void setConnected(boolean connected) { this.connected = connected; }
     public synchronized boolean isActive() {return active;}
     public synchronized void setActive(boolean active) {this.active = active;}
     public synchronized void setLastRequestReceived(Request lastRequest) {this.lastRequestReceived = lastRequest;}
-    public synchronized Request getLastRequestReceived() {return this.lastRequestReceived;}
-
+    public synchronized Request getLastRequestReceived() { return this.lastRequestReceived; }
     public synchronized void setLastTimestamp(long lastTimestamp) {
         if (this.lastTimestamp != -1) {
             this.lastTimestamp = lastTimestamp;
@@ -45,24 +52,98 @@ public class GUIClient extends Application{
         }
     }
 
-    static Stage window;
+    public void validate(String stringMessage) {
+        Message message = getLastRequestReceived().validateResponse(stringMessage);
+        if (message.getType() == MessageType.ERROR) {
+            AlertBox.displayError("Error", message.getMessage());
+        }
+        else {
+            asyncWriteToSocket(message);
+        }
+    }
 
-    public void run(String[] args, int port) throws IOException {
-        //TODO implement ipAddress selection
-        socket.connect(new InetSocketAddress(ipAddress, port));
+    public void run(String[] args) {
+        launch(args);
+    }
+
+    public boolean connectToServer(String address) throws IOException {
+        InetSocketAddress socketAddress = new InetSocketAddress(address, port);
+        if (socketAddress.isUnresolved())
+            return false;
+        try {
+            socket.connect(socketAddress, 3000);
+        } catch (SocketTimeoutException e) {
+            return false;
+        }
         socketOut = new ObjectOutputStream(socket.getOutputStream());
         socketIn = new ObjectInputStream(socket.getInputStream());
-        try {
-            Thread t0 = asyncReadFromSocket();
-            launch(args);
-            t0.join();
-        } catch (InterruptedException | NoSuchElementException e) {
-            System.out.println("Connection closed from client side");
-        } finally {
-            socketIn.close();
-            socketOut.close();
-            socket.close();
-        }
+        asyncReadFromSocket();
+        return true;
+    }
+
+    public void asyncReadFromSocket() {
+        Thread t = new Thread(() -> {
+            try {
+                while(isActive()) {
+                    Object inputObject = socketIn.readObject();
+                    Request request = (Request) inputObject;
+                    System.out.println("READ "+request.getMessage());
+                    if (request.getType() == MessageType.PING) {
+                        Platform.runLater(() -> answerPing(request));
+                    }
+                    else {
+                        Platform.runLater(() -> {
+                            setLastRequestReceived(request);
+                            sceneController.updateUI(request);
+                        });
+                    }
+                }
+            } catch (Exception e) {
+                setActive(false);
+            } finally {
+                try {
+                    socketIn.close();
+                    socketOut.close();
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    Platform.runLater(()-> window.close());
+                }
+            }
+        });
+        t.start();
+    }
+
+    //The corresponding request should have already been validated externally, this method should only be used to send a response
+    public void asyncWriteToSocket(Message responseToSend) {
+        Thread t = new Thread(() -> {
+            try {
+                socketOut.reset();
+                socketOut.writeObject(responseToSend);
+                socketOut.flush();
+                System.out.println("WRITE "+responseToSend.getType());
+            } catch (Exception e) {
+                setActive(false);
+                e.printStackTrace();
+            }
+        });
+        t.start();
+    }
+
+    private void serverCheck() {
+        int serverCheckTimeout = 20;
+        ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+        exec.scheduleAtFixedRate(() -> {
+            if (System.currentTimeMillis()/1000L - lastTimestamp > serverCheckTimeout) {
+                Platform.runLater(() -> {
+                    setActive(false);
+                    AlertBox.displayError("Server Lost", "Lost connection to the server");
+                    closeProgram();
+                });
+                exec.shutdown();
+            }
+        }, 0, 1, TimeUnit.SECONDS);
     }
 
     private void answerPing(Request pingRequest) {
@@ -79,69 +160,10 @@ public class GUIClient extends Application{
         }).start();
     }
 
-    public Thread asyncReadFromSocket() {
-        Thread t = new Thread(() -> {
-            try {
-                while(isActive()) {
-                    Object inputObject = socketIn.readObject();
-                    if (inputObject instanceof String) {
-                        //TODO Display on screen
-                    }
-                    else if (inputObject instanceof Request) {
-                        Request request = (Request) inputObject;
-                        if (request.getType() == MessageType.PING) {
-                            answerPing(request);
-                        }
-                        else {
-                            setLastRequestReceived(request);
-                            if (isActive()) {
-                                //TODO send message to objects involved
-                            }
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                setActive(false);
-            }
-        });
-        t.start();
-        return t;
-    }
-
-    //The corresponding request should have already been validated externally, this method should only be used to send a response
-    public Thread asyncWriteToSocket(final Response responseToSend) {
-        Thread t = new Thread(() -> {
-            try {
-                while (isActive()) {
-                    socketOut.reset();
-                    socketOut.writeObject(responseToSend);
-                    socketOut.flush();
-                }
-            } catch (Exception e) {
-                setActive(false);
-            }
-        });
-        t.start();
-        return t;
-    }
-
-    private void serverCheck() {
-        int serverCheckTimeout = 20;
-        ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
-        exec.scheduleAtFixedRate(() -> {
-            if (System.currentTimeMillis()/1000L - lastTimestamp > serverCheckTimeout) {
-                setActive(false);
-                //TODO show alert box indicating that the connection was lost, then close the window
-                exec.shutdown();
-            }
-        }, 0, 1, TimeUnit.SECONDS);
-    }
-
 
     @Override
     public void start(Stage stage) {
         window = stage;
-
         window.getIcons().add(new Image(GUIClient.class.getResourceAsStream("/images/icon.png")));
         window.setTitle("Launcher - Santorini");
         window.setResizable(false);
@@ -149,21 +171,28 @@ public class GUIClient extends Application{
             e.consume();
             closeProgram();
         });
-
-        GUIClient.updateScene(FXMLFile.LAUNCHER_PLAY, false);
+        updateScene(FXMLFile.LAUNCHER_PLAY, null, false);
     }
 
     public void closeProgram(){
         boolean answer = ConfirmBox.displayConfirm("We'll miss you", "Are you sure you want to leave Santorini?");
-        if(answer)
+        if(answer) {
+            setActive(false);
             window.close();
+        }
     }
 
-    public static void updateScene(FXMLFile file, boolean fullScreen) {
+    public void updateScene(FXMLFile file, Request initReq, boolean fullScreen) {
         Parent root;
         try {
-            root = FXMLLoader.load(GUIClient.class.getResource("/scenes/" + file.getFileName()));
+            FXMLLoader loader = new FXMLLoader(GUIClient.class.getResource("/scenes/" + file.getFileName()));
+            root = loader.load();
+            GUIController guiController = loader.getController();
+            guiController.setupAttributes(initReq);
+            guiController.setClient(this);
+            sceneController = guiController;
         } catch (Exception e) {
+            e.printStackTrace();
             AlertBox.displayError("Unexpected error", "We are sorry, something is not working");
             window.close();
             return;

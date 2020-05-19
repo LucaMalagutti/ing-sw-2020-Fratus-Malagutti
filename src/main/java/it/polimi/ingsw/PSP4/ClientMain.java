@@ -24,7 +24,7 @@ public class ClientMain {
             inputLine = stdIn.nextLine().toUpperCase();
         } while (!inputLine.equals("CLI") && !inputLine.equals("GUI") && !inputLine.equals(""));
         if (inputLine.equals("")) {
-            inputLine = "CLI";
+            inputLine = "GUI";
         }
         System.out.println(MessageFormat.format(Message.CHOSEN_INTERFACE, inputLine));
         return inputLine;
@@ -36,10 +36,10 @@ public class ClientMain {
             String clientUI = chooseClientUI(stdIn);
             if (clientUI.equals("CLI")) {
                 CLIClient client = new CLIClient();
-                client.run(31713);
+                client.run();
             } else if (clientUI.equals("GUI")){
                 GUIClient client = new GUIClient();
-                client.run(args, 31713);
+                client.run(args);
             } else {
                 System.out.println(Message.NOT_VALID_UI);
             }

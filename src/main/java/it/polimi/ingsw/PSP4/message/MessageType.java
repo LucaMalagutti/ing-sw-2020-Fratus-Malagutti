@@ -15,6 +15,7 @@ public enum MessageType {
     CHOOSE_WORKER,
     CONFIRMATION,
     ERROR,
+    INFO,
     REMOVE_PLAYER,
     PING,
     SKIP_STATE,

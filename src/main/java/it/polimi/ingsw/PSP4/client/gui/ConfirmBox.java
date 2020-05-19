@@ -44,7 +44,7 @@ public class ConfirmBox {
 
         HBox buttons = new HBox(10);
 
-        buttons.getChildren().addAll(noButton, yesButton);
+        buttons.getChildren().addAll(yesButton, noButton);
         buttons.setAlignment(Pos.CENTER);
 
         VBox layout = new VBox(10);

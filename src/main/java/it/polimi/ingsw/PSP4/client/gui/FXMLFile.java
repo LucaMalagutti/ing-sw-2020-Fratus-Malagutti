@@ -8,7 +8,8 @@ public enum FXMLFile {
     LOBBY_YOUR_GOD_SELECTION_TWO("lobby-your-god-selection-two.fxml"),
     LOBBY_YOUR_GOD_SELECTION_THREE("lobby-your-god-selection-three.fxml"),
     LOBBY_STARTING_PLAYER_SELECTION_TWO("lobby-starting-player-selection-two.fxml"),
-    LOBBY_STARTING_PLAYER_SELECTION_THREE("lobby-starting-player-selection-three.fxml");
+    LOBBY_STARTING_PLAYER_SELECTION_THREE("lobby-starting-player-selection-three.fxml"),
+    LOBBY_WAIT("lobby-wait.fxml");
 
     private final String fileName;
 

@@ -38,7 +38,7 @@ public class ChooseAllowedGodsRequest extends Request {
 
     @Override
     public Message validateResponse(String stringMessage) {
-        String[] godNames = stringMessage.split(" ");
+        String[] godNames = stringMessage.trim().split(" ");
         if (godNames.length == getNumPlayer()) {
             List<String> allowedGods = new ArrayList<>();
             for (String godName: godNames) {

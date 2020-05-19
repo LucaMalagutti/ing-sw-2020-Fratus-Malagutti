@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP4.client.gui.GUIControls">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP4.client.gui.sceneController.LobbyYourGodSelectionControl">
     <styleClass>
         <String fx:value="layout" />
         <String fx:value="lobby-background" />
@@ -23,7 +23,7 @@
             <children>
                 <HBox alignment="TOP_CENTER" stylesheets="@../css/style.css">
                     <children>
-                        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="434.0" prefWidth="280.0" spacing="40.0" stylesheets="@../css/style.css">
+                        <VBox fx:id="godPicturesVBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="434.0" prefWidth="280.0" spacing="40.0" stylesheets="@../css/style.css">
                             <HBox.margin>
                                 <Insets top="136.0" />
                             </HBox.margin>
@@ -54,7 +54,7 @@
                                 </Pane>
                             </children>
                         </VBox>
-                        <Pane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="260.0" stylesheets="@../css/style.css">
+                        <Pane fx:id="selectedGodPicture" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="260.0" stylesheets="@../css/style.css">
                             <HBox.margin>
                                 <Insets bottom="81.0" left="30.0" right="30.0" />
                             </HBox.margin>
@@ -97,7 +97,7 @@
                                 <Font size="20.0" />
                             </font>
                         </Text>
-                        <Text layoutX="887.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ARTEMIS">
+                        <Text fx:id="selectedGodText" layoutX="887.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ARTEMIS">
                             <styleClass>
                                 <String fx:value="text" />
                                 <String fx:value="lillybelle" />
@@ -122,7 +122,7 @@
     <bottom>
         <StackPane prefHeight="150.0" prefWidth="200.0" styleClass="green-button" stylesheets="@../css/style.css" BorderPane.alignment="CENTER">
             <children>
-                <Text onMousePressed="#godSelectedThree" strokeType="OUTSIDE" strokeWidth="0.0" text="SELECT">
+                <Text onMousePressed="#selectedGod" strokeType="OUTSIDE" strokeWidth="0.0" text="SELECT">
                     <styleClass>
                         <String fx:value="text" />
                         <String fx:value="lillybelle" />

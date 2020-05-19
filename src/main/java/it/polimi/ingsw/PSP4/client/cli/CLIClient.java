@@ -86,18 +86,14 @@ public class CLIClient {
             try {
                 while(isActive()) {
                     Object inputObject = socketIn.readObject();
-                    if (inputObject instanceof String) {
-                        System.out.println(inputObject);
-                    }
-                    else if (inputObject instanceof Request) {
-                        Request request = (Request) inputObject;
-                        if (request.getType() == MessageType.PING)
-                            answerPing(request);
-                        else {
+                    Request request = (Request) inputObject;
+                    if (request.getType() == MessageType.PING)
+                        answerPing(request);
+                    else {
+                        if (request.getType() != MessageType.INFO)
                             setLastRequestReceived(request);
-                            if (isActive())
-                                System.out.println(request.toString());
-                        }
+                        if (isActive())
+                            System.out.println(request.toString());
                     }
                 }
             } catch (Exception e) {
@@ -157,7 +153,8 @@ public class CLIClient {
      * Handles the connection to the server and sets up two threads, one receiving and the other writing on the socket.
      * @throws IOException in case something goes wrong during the connection or the users forces a client exit
      */
-    public void run(int port) throws IOException {
+    public void run() throws IOException {
+        int port = 31713;
         Scanner stdIn = new Scanner(System.in);
         if (ipAddress == null) {
             try {

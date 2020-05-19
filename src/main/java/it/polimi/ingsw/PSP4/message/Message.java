@@ -34,7 +34,7 @@ public abstract class Message implements Serializable {
     public static String CHANGE_WORKER_COMMAND = "\nWrite \"change\" to change worker.";
     public static String CHOOSE_ALLOWED_GODS = "Select {0} gods from this list:";
     public static String CHOOSE_GOD = "Select your god from the following list:";
-    public static String CHOOSE_INTERFACE = "Choose your graphical interface:\n(Type \"GUI\" or \"CLI\", Default: CLI)";
+    public static String CHOOSE_INTERFACE = "Choose your graphical interface:\n(Type \"GUI\" or \"CLI\", Default: GUI)";
     public static String CHOOSE_NUMBER_PLAYERS = "Choose the number of players for this game: (2) or (3). Default: 2";
     public static String CHOOSE_POSITION_BUILD = "Select a position to build a new level from the following list.";
     public static String CHOOSE_POSITION_MOVE = "Select a position to move your worker from the following list.";

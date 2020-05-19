@@ -2,9 +2,7 @@ package it.polimi.ingsw.PSP4.server;
 
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
-import it.polimi.ingsw.PSP4.message.requests.ChooseNumPlayersRequest;
-import it.polimi.ingsw.PSP4.message.requests.ChooseUsernameRequest;
-import it.polimi.ingsw.PSP4.message.requests.PingRequest;
+import it.polimi.ingsw.PSP4.message.requests.*;
 import it.polimi.ingsw.PSP4.message.responses.ChooseNumPlayersResponse;
 import it.polimi.ingsw.PSP4.message.responses.ChooseUsernameResponse;
 import it.polimi.ingsw.PSP4.message.responses.PingResponse;
@@ -34,7 +32,7 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
     private boolean active = true;
 
     private final int pingInterval = 8;
-    private final int pongTimeout = pingInterval / 2;
+    private final int pongTimeout = pingInterval - 2;
 
     private long lastTimestampReceived;
 
@@ -49,7 +47,7 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
         this.server = server;
     }
 
-    private synchronized void send(Object message) {
+    private synchronized void send(Request message) {
         try {
             out.reset();
             out.writeObject(message);
@@ -60,12 +58,12 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
     }
 
     public void closeConnection(String message, boolean resetServer) {
-        send(message);
+        send(new InfoRequest(null, message));
         closeConnection(resetServer);
     }
 
     public void closeConnection(boolean resetServer) {
-        send("Connection closed");
+        send(new InfoRequest(null, "Connection Closed"));
         try {
             socket.close();
         } catch (IOException e) {
@@ -83,7 +81,7 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
         System.out.println("Connection unregistered from server");
     }
 
-    public void asyncSend(Object message) {
+    public void asyncSend(Request message) {
         new Thread(() -> send(message)).start();
     }
 
@@ -93,21 +91,22 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
      * @return number of players for this game
      */
     public int initializeGameNumPlayer(String username) throws IOException, ClassNotFoundException {
-        send(MessageFormat.format(Message.CREATING_LOBBY, username));
+        send(new InfoRequest(username, MessageFormat.format(Message.CREATING_LOBBY, username)));
         send(new ChooseNumPlayersRequest(username));
-        Response numPlayersResponse = (Response) in.readObject();
-        if (numPlayersResponse.getType() == MessageType.CHOOSE_NUM_PLAYERS) {
-            ChooseNumPlayersResponse chooseNumPlayersResponse = (ChooseNumPlayersResponse) numPlayersResponse;
-            return chooseNumPlayersResponse.getSelectedNumPlayers();
+        Response numPlayersResponse;
+        do {
+           numPlayersResponse = (Response) in.readObject();
         }
-        else return 2;
+        while (numPlayersResponse.getType() != MessageType.CHOOSE_NUM_PLAYERS);
+        ChooseNumPlayersResponse chooseNumPlayersResponse = (ChooseNumPlayersResponse) numPlayersResponse;
+        return chooseNumPlayersResponse.getSelectedNumPlayers();
     }
 
     /**
      * Overloading method
      */
     public String selectClientUsername(String alreadyTaken) {
-        send(MessageFormat.format(Message.USERNAME_TAKEN, alreadyTaken));
+        send(new InfoRequest(null, MessageFormat.format(Message.USERNAME_TAKEN, alreadyTaken)));
         return selectClientUsername();
     }
 
@@ -139,8 +138,10 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
         new Thread(() -> {
             try {
                 Thread.sleep(pongTimeout*1000);
-                if (getLastTimestampReceived() != timestamp)
+                if (getLastTimestampReceived() != timestamp && isActive()) {
+                    System.out.println("CLOSING CLIENT CONNECTION TIMEOUT");
                     close();
+                }
             } catch (InterruptedException e) {
                 closeConnection(true);
             }
@@ -157,8 +158,8 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
         exec.scheduleAtFixedRate(() -> {
             if (isActive()) {
                 long timestamp = currentTimeMillis() / 1000L;
-                //System.out.println("Sent ping @" + timestamp + " to " + username);
-                asyncSend(new PingRequest(username, null, timestamp));
+                System.out.println("Sent ping @" + timestamp + " to " + username);
+                send(new PingRequest(username, null, timestamp));
                 checkPingTimeout(timestamp);
             } else {
                 exec.shutdown();
@@ -176,12 +177,13 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
             clientPing(name);
             while (isActive()) {
                 Response read = (Response) in.readObject();
-                if (read.getType() != MessageType.PING)
-                    notifyObservers(read);
-                else {
+                if (read.getType() == MessageType.PING) {
                     PingResponse pong = (PingResponse) read;
-                    //System.out.println("Received pong " + pong.getTimestamp()  + " from " + name);
+                    System.out.println("Received pong " + pong.getTimestamp() + " from " + name);
                     setLastTimestampReceived(pong.getTimestamp());
+                }
+                else {
+                    notifyObservers(read);
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
