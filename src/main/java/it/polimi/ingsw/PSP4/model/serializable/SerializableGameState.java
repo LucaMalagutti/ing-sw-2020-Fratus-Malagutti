@@ -21,7 +21,6 @@ public final class SerializableGameState implements Serializable {
     private final int currPlayerIndex;                                      //index of the current player
     private final int numPlayer;                                            //number of players (2 or 3)
     private final List<SerializablePosition> options;                       //available options to highlight
-    private final List<SerializablePosition> match = new ArrayList<>();
 
     /**
      * Constructor of the class SerializableGameState

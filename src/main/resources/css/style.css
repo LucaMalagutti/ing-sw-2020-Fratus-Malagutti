@@ -42,6 +42,21 @@
 .layout.loser-foreground {
     -fx-background-image: url("../images/layout/loser-foreground.png");
 }
+.layout.player-red {
+    -fx-background-color: linear-gradient(from 0% 100% to 20% 0%, #d76351 15%, transparent 40%);
+}
+.layout.player-green {
+    -fx-background-color: linear-gradient(from 0% 100% to 20% 0%, #209f49 15%, transparent 40%);
+}
+.layout.player-blue {
+    -fx-background-color: linear-gradient(from 0% 100% to 20% 0%, #396aa0 15%, transparent 40%);
+}
+.layout.player-winner {
+    -fx-background-color: linear-gradient(from 0% 100% to 20% 0%, #ffd00e 15%, transparent 40%);
+}
+.layout.player-loser {
+    -fx-background-color: linear-gradient(from 0% 100% to 20% 0%, #767676 15%, transparent 40%);
+}
 
 /* FULL-SIZE GOD IMAGE */
 .god-card {
@@ -138,6 +153,80 @@
     -fx-background-image: url("../images/godCards/god_card_prometheus.png");
 }
 
+/* PODIUM GODS */
+.podium-god {
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+}
+.podium-god.podium {
+    -fx-background-image: url("../images/godCards/godPodium/podium.png");
+}
+.player-winner .podium-god.podium {
+    -fx-background-image: url("../images/godCards/godPodium/podium_gold.png");
+}
+.podium-god.apollo {
+    -fx-background-image: url("../images/godCards/godPodium/podium-apollo.png");
+}
+.podium-god.artemis {
+    -fx-background-image: url("../images/godCards/godPodium/podium-artemis.png");
+}
+.podium-god.athena {
+    -fx-background-image: url("../images/godCards/godPodium/podium-athena.png");
+}
+.podium-god.atlas {
+    -fx-background-image: url("../images/godCards/godPodium/podium-atlas.png");
+}
+.podium-god.demeter {
+    -fx-background-image: url("../images/godCards/godPodium/podium-demeter.png");
+}
+.podium-god.hephaestus {
+    -fx-background-image: url("../images/godCards/godPodium/podium-hephaestus.png");
+}
+.podium-god.minotaur {
+    -fx-background-image: url("../images/godCards/godPodium/podium-minotaur.png");
+}
+.podium-god.pan {
+    -fx-background-image: url("../images/godCards/godPodium/podium-pan.png");
+}
+.podium-god.prometheus {
+    -fx-background-image: url("../images/godCards/godPodium/podium-prometheus.png");
+}
+
+.god-power {
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-pref-height: 60;
+}
+.god-power.apollo {
+    -fx-background-image: url("../images/godPowers/apollo_power.png");
+}
+.god-power.artemis {
+    -fx-background-image: url("../images/godPowers/artemis_power.png");
+}
+.god-power.athena {
+    -fx-background-image: url("../images/godPowers/athena_power.png");
+}
+.god-power.atlas {
+    -fx-background-image: url("../images/godPowers/atlas_power.png");
+}
+.god-power.demeter {
+    -fx-background-image: url("../images/godPowers/demeter_power.png");
+}
+.god-power.hephaestus {
+    -fx-background-image: url("../images/godPowers/hephaestus_power.png");
+}
+.god-power.minotaur {
+    -fx-background-image: url("../images/godPowers/minotaur_power.png");
+}
+.god-power.pan {
+    -fx-background-image: url("../images/godPowers/pan_power.png");
+}
+.god-power.prometheus {
+    -fx-background-image: url("../images/godPowers/prometheus_power.png");
+}
+
 /* ANIMATIONS */
 .hover-effect-out:hover {
     -fx-cursor: hand;
@@ -158,6 +247,10 @@
     -fx-font-family: "Minion Pro";
 }
 
+.text.bold {
+    -fx-font-weight: bold;
+}
+
 .text.white {
     -fx-fill: #ffffff;
 }
@@ -168,6 +261,9 @@
     -fx-fill: #685541;
 }
 
+.text.tiny {
+    -fx-font-size: 16px;
+}
 .text.small {
     -fx-font-size: 20px;
 }
@@ -177,9 +273,18 @@
 .text.big {
     -fx-font-size: 24px;
 }
+.text.enormous {
+    -fx-font-size: 32px;
+}
+.text.insane {
+    -fx-font-size: 45px;
+}
 
 .text.shadow {
     -fx-effect: dropshadow(three-pass-box, #000000 , 0, 0, 0, 3.0);
+}
+.text.tiny.shadow {
+    -fx-effect: dropshadow(three-pass-box, #000000 , 0, 0, 0, 2.0);
 }
 
 /* DESIGN BLOCKS */
@@ -197,20 +302,31 @@
     -fx-text-alignment: center;
 }
 
-.green-button {
-    -fx-background-image: url("../images/buttons/btn_green.png");
+.text-button {
     -fx-background-position: center center;
     -fx-background-repeat: no-repeat;
     -fx-background-size: contain;
     -fx-pref-height: 50px;
     -fx-padding: 0 0 12px 0;
+    -fx-cursor: hand;
 }
-.green-button:hover {
-    -fx-background-image: url("../images/buttons/btn_green_pressed.png");
+.text-button:hover {
     -fx-padding: 0 0 9px 0;
 }
-.green-button .text {
+.text-button .text {
     -fx-end-margin: 12px;
+}
+.text-button.green {
+    -fx-background-image: url("../images/buttons/btn_green.png");
+}
+.text-button.green:hover {
+    -fx-background-image: url("../images/buttons/btn_green_pressed.png");
+}
+.text-button.blue {
+    -fx-background-image: url("../images/buttons/btn_blue.png");
+}
+.text-button.blue:hover {
+    -fx-background-image: url("../images/buttons/btn_blue_pressed.png");
 }
 
 .players-list-background {
@@ -221,23 +337,57 @@
     -fx-translate-x: 320px;
 }
 
+.status-button {
+    -fx-background-position: left center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-pref-height: 104px;
+}
+.status-button.no-way-up {
+    -fx-background-image: url("../images/buttons/no-way-up.png");
+}
+.status-button.change-worker {
+    -fx-background-image: url("../images/buttons/change-worker.png");
+}
+.status-button.skip,
+.status-button.confirm {
+    visibility: hidden;
+}
+.status-button.skip.artemis {
+    visibility: visible;
+    -fx-background-image: url("../images/buttons/skip-move.png");
+}
+.status-button.skip.demeter,
+.status-button.skip.prometheus {
+    visibility: visible;
+    -fx-background-image: url("../images/buttons/skip-build.png");
+}
+.status-button.confirm.atlas {
+    visibility: visible;
+    -fx-background-image: url("../images/buttons/build-dome.png");
+}
+.status-button.confirm.hephaestus {
+    visibility: visible;
+    -fx-background-image: url("../images/buttons/build-twice.png");
+}
+
 /* ENTITIES */
 .entity {
     -fx-background-position: center center;
     -fx-background-repeat: no-repeat;
-    -fx-background-size: 80%;
+    -fx-background-size: cover;
 }
 .entity.level-1 {
-    -fx-background-image: url("../images/entities/single-level-1.png");
+    -fx-background-image: url("../images/entities/level-1.png");
 }
 .entity.level-2 {
-    -fx-background-image: url("../images/entities/single-level-2.png");
+    -fx-background-image: url("../images/entities/level-2.png");
 }
 .entity.level-3 {
-    -fx-background-image: url("../images/entities/single-level-3.png");
+    -fx-background-image: url("../images/entities/level-3.png");
 }
 .entity.dome {
-    -fx-background-image: url("../images/entities/single-dome.png");
+    -fx-background-image: url("../images/entities/dome.png");
 }
 .entity.red-worker {
     -fx-background-image: url("../images/entities/worker-red-full.png");
@@ -247,4 +397,41 @@
 }
 .entity.blue-worker {
     -fx-background-image: url("../images/entities/worker-blue-full.png");
+}
+.entity.number {
+    -fx-opacity: 0;
+}
+.entity.number:hover {
+    -fx-opacity: 1;
+}
+.entity.number.light-1 {
+    -fx-background-image: url("../images/entities/number-1-light.png");
+}
+.entity.number.light-2 {
+    -fx-background-image: url("../images/entities/number-2-light.png");
+}
+.entity.number.light-3 {
+    -fx-background-image: url("../images/entities/number-3-light.png");
+}
+.entity.number.light-4 {
+    -fx-background-image: url("../images/entities/number-4-light.png");
+}
+.entity.number.dark-1 {
+    -fx-background-image: url("../images/entities/number-1-dark.png");
+}
+.entity.number.dark-2 {
+    -fx-background-image: url("../images/entities/number-2-dark.png");
+}
+.entity.number.dark-3 {
+    -fx-background-image: url("../images/entities/number-3-dark.png");
+}
+.entity.number.dark-4 {
+    -fx-background-image: url("../images/entities/number-4-dark.png");
+}
+.entity.highlight {
+    -fx-background-image: url("../images/entities/highlight.png");
+    -fx-opacity: .75;
+}
+.cell:hover .entity.highlight {
+    -fx-opacity: 1;
 }

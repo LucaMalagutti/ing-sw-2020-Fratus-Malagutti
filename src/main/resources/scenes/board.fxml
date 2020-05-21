@@ -2,16 +2,16 @@
 
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<StackPane prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP4.client.gui.sceneController.BoardController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP4.client.gui.sceneController.BoardController">
    <children>
       <GridPane fx:id="board" alignment="CENTER" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="435.0" vgap="10.0">
         <columnConstraints>
@@ -52,122 +52,122 @@
                   <String fx:value="big" />
                   <String fx:value="shadow" />
                </styleClass>
-            </Text>
-            <HBox fx:id="player1" mouseTransparent="true" visible="false">
                <VBox.margin>
-                  <Insets top="25.0" />
+                  <Insets bottom="25.0" />
                </VBox.margin>
-               <children>
-                  <StackPane prefWidth="80.0" styleClass="selectable-god">
-                     <children>
-                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="selectable-image" />
-                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="selectable-frame" />
-                     </children>
-                  </StackPane>
-                  <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Apollo">
-                           <styleClass>
-                              <String fx:value="text" />
-                              <String fx:value="lillybelle" />
-                              <String fx:value="brown" />
-                              <String fx:value="big" />
-                           </styleClass>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="RandomName">
-                           <styleClass>
-                              <String fx:value="text" />
-                              <String fx:value="minion-pro" />
-                              <String fx:value="black" />
-                              <String fx:value="small" />
-                           </styleClass>
-                        </Text>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </VBox>
-               </children>
-            </HBox>
-            <HBox fx:id="player2" mouseTransparent="true" visible="false">
-               <children>
-                  <StackPane prefWidth="80.0" styleClass="selectable-god">
-                     <children>
-                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="selectable-image" />
-                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="selectable-frame" />
-                     </children>
-                  </StackPane>
-                  <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Apollo">
-                           <styleClass>
-                              <String fx:value="text" />
-                              <String fx:value="lillybelle" />
-                              <String fx:value="brown" />
-                              <String fx:value="big" />
-                           </styleClass>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="RandomName">
-                           <styleClass>
-                              <String fx:value="text" />
-                              <String fx:value="minion-pro" />
-                              <String fx:value="black" />
-                              <String fx:value="small" />
-                           </styleClass>
-                        </Text>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </VBox>
-               </children>
-            </HBox>
-            <HBox fx:id="player3" mouseTransparent="true" visible="false">
-               <children>
-                  <StackPane prefWidth="80.0" styleClass="selectable-god">
-                     <children>
-                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="selectable-image" />
-                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="selectable-frame" />
-                     </children>
-                  </StackPane>
-                  <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Apollo">
-                           <styleClass>
-                              <String fx:value="text" />
-                              <String fx:value="lillybelle" />
-                              <String fx:value="brown" />
-                              <String fx:value="big" />
-                           </styleClass>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="RandomName">
-                           <styleClass>
-                              <String fx:value="text" />
-                              <String fx:value="minion-pro" />
-                              <String fx:value="black" />
-                              <String fx:value="small" />
-                           </styleClass>
-                        </Text>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </VBox>
-               </children>
-            </HBox>
+            </Text>
          </children>
          <padding>
             <Insets bottom="30.0" left="130.0" right="25.0" top="50.0" />
          </padding>
+      </VBox>
+      <VBox fx:id="statusButtons" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="375.0" prefWidth="200.0" spacing="30.0" StackPane.alignment="TOP_LEFT">
+         <StackPane.margin>
+            <Insets left="30.0" top="60.0" />
+         </StackPane.margin>
+      </VBox>
+      <AnchorPane fx:id="activePlayerPane" mouseTransparent="true" prefHeight="200.0" prefWidth="200.0" styleClass="layout">
+         <children>
+            <Pane layoutX="15.0" layoutY="585.0" prefHeight="135.0" prefWidth="250.0" translateY="30.0">
+               <styleClass>
+                  <String fx:value="podium-god" />
+                  <String fx:value="podium" />
+               </styleClass>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Pane>
+            <Pane layoutX="40.0" layoutY="383.0" prefHeight="300.0" prefWidth="200.0" styleClass="podium-god" />
+            <Text layoutX="245.0" layoutY="660.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Apollo">
+               <styleClass>
+                  <String fx:value="text" />
+                  <String fx:value="lillybelle" />
+                  <String fx:value="white" />
+                  <String fx:value="insane" />
+               </styleClass>
+            </Text>
+            <Text fx:id="activePlayerAction" layoutX="270.0" layoutY="705.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MOVE A WORKER">
+               <styleClass>
+                  <String fx:value="text" />
+                  <String fx:value="minion-pro" />
+                  <String fx:value="white" />
+                  <String fx:value="enormous" />
+                  <String fx:value="bold" />
+               </styleClass>
+            </Text>
+         </children>
+      </AnchorPane>
+      <VBox fx:id="endPane" alignment="CENTER" visible="false" StackPane.alignment="CENTER">
+         <styleClass>
+            <String fx:value="layout" />
+            <String fx:value="winner-foreground" />
+         </styleClass>
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username" textAlignment="CENTER" VBox.vgrow="NEVER">
+               <styleClass>
+                  <String fx:value="text" />
+                  <String fx:value="lillybelle" />
+                  <String fx:value="white" />
+                  <String fx:value="tiny" />
+                  <String fx:value="shadow" />
+               </styleClass>
+               <VBox.margin>
+                  <Insets bottom="-10.0" />
+               </VBox.margin>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="VICTORY">
+               <styleClass>
+                  <String fx:value="text" />
+                  <String fx:value="lillybelle" />
+                  <String fx:value="white" />
+                  <String fx:value="enormous" />
+                  <String fx:value="shadow" />
+               </styleClass>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Text>
+            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" onMousePressed="#playAgain" prefHeight="150.0" prefWidth="200.0">
+               <styleClass>
+                  <String fx:value="text-button" />
+                  <String fx:value="blue" />
+               </styleClass>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="PLAY AGAIN">
+                     <styleClass>
+                        <String fx:value="text" />
+                        <String fx:value="lillybelle" />
+                        <String fx:value="white" />
+                        <String fx:value="small" />
+                        <String fx:value="shadow" />
+                     </styleClass>
+                  </Text>
+               </children>
+               <VBox.margin>
+                  <Insets top="80.0" />
+               </VBox.margin>
+            </StackPane>
+            <StackPane layoutX="550.0" layoutY="391.0" maxHeight="-Infinity" maxWidth="-Infinity" onMousePressed="#closeGame" prefHeight="150.0" prefWidth="200.0">
+               <styleClass>
+                  <String fx:value="text-button" />
+                  <String fx:value="blue" />
+               </styleClass>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CLOSE GAME">
+                     <styleClass>
+                        <String fx:value="text" />
+                        <String fx:value="lillybelle" />
+                        <String fx:value="white" />
+                        <String fx:value="small" />
+                        <String fx:value="shadow" />
+                     </styleClass>
+                  </Text>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="50.0" top="30.0" />
+               </VBox.margin>
+            </StackPane>
+         </children>
       </VBox>
    </children>
    <styleClass>

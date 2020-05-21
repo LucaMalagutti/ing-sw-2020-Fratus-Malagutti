@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP4.client.gui.GUIControls">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <StackPane BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -37,7 +37,7 @@
                   <String fx:value="lobby-foreground-starting-player-selection-2" />
                </styleClass>
                <children>
-                  <Text layoutX="498.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WHO STARTS ?" textAlignment="CENTER" wrappingWidth="283.40283203125">
+                  <Text layoutX="498.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WHO STARTS?" textAlignment="CENTER" wrappingWidth="283.40283203125">
                      <styleClass>
                         <String fx:value="text" />
                         <String fx:value="lillybelle" />
@@ -61,7 +61,7 @@
             <Insets bottom="95.0" />
          </BorderPane.margin>
          <children>
-            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="257.0" styleClass="green-button" stylesheets="@../css/style.css" StackPane.alignment="BOTTOM_CENTER">
+            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="257.0" stylesheets="@../css/style.css" StackPane.alignment="BOTTOM_CENTER">
                <StackPane.margin>
                   <Insets right="286.0" />
                </StackPane.margin>
@@ -76,8 +76,12 @@
                      </styleClass>
                   </Text>
                </children>
+               <styleClass>
+                  <String fx:value="text-button" />
+                  <String fx:value="green" />
+               </styleClass>
             </StackPane>
-            <StackPane alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="257.0" styleClass="green-button" stylesheets="@../css/style.css" StackPane.alignment="BOTTOM_CENTER">
+            <StackPane alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="257.0" stylesheets="@../css/style.css" StackPane.alignment="BOTTOM_CENTER">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -95,6 +99,10 @@
                      </styleClass>
                   </Text>
                </children>
+               <styleClass>
+                  <String fx:value="text-button" />
+                  <String fx:value="green" />
+               </styleClass>
             </StackPane>
          </children>
       </StackPane>

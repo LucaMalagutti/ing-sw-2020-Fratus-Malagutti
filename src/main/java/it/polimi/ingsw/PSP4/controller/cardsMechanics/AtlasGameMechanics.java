@@ -39,10 +39,9 @@ public class AtlasGameMechanics extends GodGameMechanics {
         else {
             player.lockWorker();
 
-            if(futurePosition.getHeight() < 3 && player.getState().isConfirmed())
+            futurePosition.increaseHeight();
+            if(player.getState().isConfirmed())
                 futurePosition.setDome(true);
-            else
-                futurePosition.increaseHeight();
         }
     }
 

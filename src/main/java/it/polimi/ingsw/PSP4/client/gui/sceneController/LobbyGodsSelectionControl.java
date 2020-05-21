@@ -1,0 +1,130 @@
+package it.polimi.ingsw.PSP4.client.gui.sceneController;
+
+import it.polimi.ingsw.PSP4.client.gui.AlertBox;
+import it.polimi.ingsw.PSP4.client.gui.FXMLFile;
+import it.polimi.ingsw.PSP4.client.gui.GodPower;
+import it.polimi.ingsw.PSP4.message.MessageType;
+import it.polimi.ingsw.PSP4.message.requests.AssignGodRequest;
+import it.polimi.ingsw.PSP4.message.requests.ChooseAllowedGodsRequest;
+import it.polimi.ingsw.PSP4.message.requests.Request;
+import javafx.event.Event;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class LobbyGodsSelectionControl extends GUIController {
+    public GridPane implementedGodsGrid;
+    public Text callToAction;
+    public VBox godInfo;
+    public Text button;
+    private int numPlayers;
+
+    public void toggleGodSelection(Event event){
+        Node god = (Node)event.getSource();
+        List<Node> selectedGods = implementedGodsGrid.getChildren().stream().filter(card->card.getStyleClass().contains("selected")).collect(Collectors.toList());
+        if (!selectedGods.contains(god) && selectedGods.size() < numPlayers) {
+            god.getStyleClass().add("selected");
+        } else {
+            god.getStyleClass().remove("selected");
+        }
+    }
+
+    public void showGodInfo(MouseEvent event) {
+        String god = ((Node) event.getSource()).getId();
+
+        Text godName = (Text) godInfo.getChildren().get(0);
+        godName.setText(god);
+
+        StackPane descriptionContainer = (StackPane) godInfo.getChildren().get(1);
+        Text description = (Text) descriptionContainer.getChildren().get(0);
+        String content = GodPower.getPowerFromGod(god).getDescription();
+        description.setText(content);
+
+        Pane powerImage = (Pane) godInfo.getChildren().get(2);
+        List<String> powerClassNames = powerImage.getStyleClass();
+        powerClassNames = powerClassNames.stream().filter(c -> !c.equals("god-power")).collect(Collectors.toList());
+        powerImage.getStyleClass().removeAll(powerClassNames);
+        powerImage.getStyleClass().add(god.toLowerCase());
+    }
+
+    public void sendAllowedGods() {
+        List<Node> selectedGods = implementedGodsGrid.getChildren().stream().filter(card->card.getStyleClass().contains("selected")).collect(Collectors.toList());
+        if (selectedGods.size() == numPlayers) {
+            List<String> selectedGodsNames = implementedGodsGrid.getChildren().stream().filter(card->card.getStyleClass().contains("selected")).map(Node::getId).collect(Collectors.toList());
+            StringBuilder sb = new StringBuilder();
+            for (String name: selectedGodsNames) {
+                sb.append(name).append(" ");
+            }
+            System.out.println(sb.toString());
+            getClient().validate(sb.toString());
+        }
+    }
+
+    public void sendPersonalGod() {
+        List<Node> selectedGods = implementedGodsGrid.getChildren().stream().filter(card->card.getStyleClass().contains("selected")).collect(Collectors.toList());
+        if(selectedGods.size() == numPlayers)
+            System.out.println(selectedGods.get(0));
+        //TODO IMPLEMENT
+    }
+
+    private void addGodCard(String god, int index) {
+        Pane image = new Pane(), frame = new Pane();
+        image.getStyleClass().add("selectable-image");
+        frame.getStyleClass().add("selectable-frame");
+
+        StackPane card = new StackPane();
+        card.getStyleClass().addAll("hover-effect-out", "selectable-god", god.toLowerCase());
+        card.setId(god);
+        card.setOnMousePressed(this::toggleGodSelection);
+        card.setOnMouseEntered(this::showGodInfo);
+        card.getChildren().addAll(image, frame);
+
+        int colNum = implementedGodsGrid.getColumnCount();
+        implementedGodsGrid.add(card, index % colNum, index / colNum);
+    }
+
+    private void setupAllowedGods(ChooseAllowedGodsRequest req) {
+        numPlayers = req.getNumPlayer();
+        callToAction.setText("SELECT " + numPlayers + " GODS");
+        List<String> godList = req.getSelectableGods();
+        for(int i = 0; i < godList.size(); i++)
+            addGodCard(godList.get(i), i);
+        button.setOnMousePressed(e -> sendAllowedGods());
+    }
+
+    private void setupPersonalGod(AssignGodRequest req) {
+        numPlayers = 1;
+        callToAction.setText("SELECT YOUR GOD");
+        List<String> godList = req.getAllowedGods();
+        for(int i = 0; i < godList.size(); i++)
+            addGodCard(godList.get(i), i);
+        button.setOnMousePressed(e -> sendPersonalGod());
+    }
+
+    public void updateUI (Request req) {
+        if (req.getType() == MessageType.ASSIGN_GOD) {
+            getClient().updateScene(FXMLFile.LOBBY_GODS_SELECTION, req, false);
+        } else if (req.getType() == MessageType.WAIT) {
+            getClient().updateScene(FXMLFile.LOBBY_WAIT, null, false);
+        } else if (req.getType() == MessageType.INFO) {
+            AlertBox.displayError("Info", req.getMessage());
+        } else {
+            System.out.println("Unexpected"+ req.getType());
+        }
+        //TODO IMPLEMENT SECOND HALF (PERSONAL GOD SELECTED)
+    }
+
+    public void setupAttributes(Request req) {
+        if(req instanceof ChooseAllowedGodsRequest)
+            setupAllowedGods((ChooseAllowedGodsRequest) req);
+        else if(req instanceof AssignGodRequest)
+            setupPersonalGod((AssignGodRequest) req);
+    }
+}

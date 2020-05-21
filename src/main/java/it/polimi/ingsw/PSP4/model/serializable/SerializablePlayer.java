@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Worker;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -15,9 +16,11 @@ public final class SerializablePlayer implements Serializable {
 
     private final String username;                                  //player's username
     private final ArrayList<String> workers = new ArrayList<>();    //list of player's worker ids
+    private final ArrayList<SerializablePosition> workersPositions = new ArrayList<>();
     private final int turnNum;                                      //number of player's turn
     private final String state;                                     //String that represents the state of the player
     private final GodType card;                                     //type of the player's card
+    private final String wrapper;                                   //name of the god that is wrapping the player or null
     private final int currWorkerIndex;                              //current player's worker
 
     /**
@@ -26,12 +29,19 @@ public final class SerializablePlayer implements Serializable {
      */
     public SerializablePlayer(Player player) {
         this.username = player.getUsername();
-        for(Worker worker : player.getWorkers())
+        for(Worker worker : player.getWorkers()) {
             this.workers.add(worker.getId());
+            if(worker.getCurrPosition() != null)
+                this.workersPositions.add(new SerializablePosition(worker.getCurrPosition()));
+        }
         this.currWorkerIndex = player.getWorkers().indexOf(player.getCurrWorker());
         this.turnNum = player.getTurnNum();
         this.state = player.getState().getType().getString();
         this.card = player.getMechanics().getType();
+        if(!this.card.getName().equals(player.getMechanics().getName()))
+            this.wrapper = player.getMechanics().getName();
+        else
+            this.wrapper = null;
     }
 
     //getter and setter
@@ -39,11 +49,15 @@ public final class SerializablePlayer implements Serializable {
 
     public ArrayList<String> getWorkers() { return new ArrayList<>(workers); }
 
+    public ArrayList<SerializablePosition> getWorkersPositions() { return new ArrayList<>(workersPositions); }
+
     public int getTurnNum() { return turnNum; }
 
     public String getState() { return state; }
 
     public GodType getCard() { return card; }
+
+    public String getWrapper() { return wrapper; }
 
     public String getCurrWorker() {
         if(currWorkerIndex == -1)

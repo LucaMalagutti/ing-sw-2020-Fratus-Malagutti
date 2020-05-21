@@ -50,6 +50,7 @@ public class LauncherFormControl extends GUIController {
             firstTime = false;
             getClient().validate(chosenUsername);
         }  else if (req.getType() == MessageType.CHOOSE_NUM_PLAYERS) {
+            getClient().setUsername(chosenUsername);
             getClient().updateScene(FXMLFile.LAUNCHER_NUMBER_PLAYERS, null,false);
         } else if (req.getType() == MessageType.INFO) {
             if (req.getMessage().equals(Message.WAIT_LOBBY_SETUP)) {
@@ -64,6 +65,7 @@ public class LauncherFormControl extends GUIController {
                 AlertBox.displayError("Info", req.getMessage());
             }
         } else if (req.getType() == MessageType.WAIT) {
+            getClient().setUsername(chosenUsername);
             getClient().updateScene(FXMLFile.LOBBY_WAIT, null,false);
         }
         else {

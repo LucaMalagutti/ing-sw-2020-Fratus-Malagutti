@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP4.client.gui;
 
-import it.polimi.ingsw.PSP4.client.gui.sceneController.BoardController;
 import it.polimi.ingsw.PSP4.client.gui.sceneController.GUIController;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
@@ -31,6 +30,7 @@ public class GUIClient extends Application{
     private ObjectOutputStream socketOut;
     private ObjectInputStream socketIn;
     private GUIController sceneController;
+    private String username = null;
     private boolean connected = false;
 
     public static Stage window;
@@ -39,6 +39,8 @@ public class GUIClient extends Application{
     private Request lastRequestReceived;
     private volatile long lastTimestamp = -1;
 
+    public String getUsername() { return username; }
+    public void setUsername(String username) { if(this.username == null) this.username = username; }
     public boolean isConnected() { return connected; }
     public void setConnected(boolean connected) { this.connected = connected; }
     public synchronized boolean isActive() {return active;}

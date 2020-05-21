@@ -26,6 +26,8 @@ public class ChoosePositionRequest extends Request {
     private final boolean canChangeWorker;                  //Defines if the player can change the worker
 
     public List<SerializablePosition> getOptions() { return options; }
+    public boolean canBeSkipped() { return canBeSkipped; }
+    public boolean canChangeWorker() { return canChangeWorker; }
 
     /**
      * Constructor of the class ChoosePositionRequest

@@ -45,15 +45,37 @@ public class GameStateTest {
 
     @Ignore
     @Test
-    public void gameState_guiTest() {
-        Runner.workersPlacement(3, 0);
+    public void gameState_guiTest() {Map<String, String> gods = new LinkedHashMap<>();
+        gods.put("Hero", "Athena");
+        gods.put("Enemy", "Demeter");
+
+        Actions.addPlayers(new ArrayList<>(gods.keySet()));
+        Actions.assignGods(new LinkedHashMap<>(gods));
+        Actions.selectStartingPlayer("Hero");
+
         Map<Integer, List<Coordinates>> buildings = new LinkedHashMap<>();
-        buildings.put(1, Arrays.asList(new Coordinates(0, 1), new Coordinates(0, 2)));
-        buildings.put(2, Collections.singletonList(new Coordinates(1, 0)));
-        buildings.put(3, Collections.singletonList(new Coordinates(2, 1)));
-        buildings.put(4, Arrays.asList(new Coordinates(0, 0), new Coordinates(1, 3)));
+        buildings.put(1, Collections.singletonList(new Coordinates(0, 1)));
         Actions.fillBoard(buildings);
-        Actions.setCurrentWorker(Getters.workersOnBoard().get(Getters.currentPlayer()).get(0));
+
+        Map<String, List<Coordinates>> workers = new LinkedHashMap<>();
+        workers.put("Hero", Arrays.asList(new Coordinates(0, 0), new Coordinates(4, 4)));
+        workers.put("Enemy", Arrays.asList(new Coordinates(1, 0), new Coordinates(4, 0)));
+
+        Actions.placeWorkers(new LinkedHashMap<>(workers));
+
+        Coordinates startingPosition = new Coordinates(0, 0);
+
+        Actions.setCurrentWorker(startingPosition);
+
+        Coordinates movePosition = new Coordinates(0, 1);
+        workers.replace("Hero", Arrays.asList(movePosition, new Coordinates(4, 4)));
+
+        Actions.selectOption(movePosition);
+
+        Coordinates buildPosition = new Coordinates(1, 1);
+        buildings.replace(1, Arrays.asList(buildPosition, new Coordinates(0, 1)));
+
+        Actions.selectOption(buildPosition);
         GUIClient guiClient = new GUIClient();
         guiClient.run(new String[]{});
     }

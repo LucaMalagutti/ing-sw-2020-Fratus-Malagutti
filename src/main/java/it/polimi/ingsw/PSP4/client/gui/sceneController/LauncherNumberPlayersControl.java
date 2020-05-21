@@ -26,7 +26,7 @@ public class LauncherNumberPlayersControl extends GUIController {
     public void updateUI (Request req) {
         if (req.getType() == MessageType.CHOOSE_ALLOWED_GODS) {
 
-            getClient().updateScene(FXMLFile.LOBBY_ALLOWED_GODS, req,false);
+            getClient().updateScene(FXMLFile.LOBBY_GODS_SELECTION, req,false);
         } else if (req.getType() == MessageType.INFO) {
             if (req.getMessage().equals(Message.WAIT_PLAYERS)) {
                 AlertBox.displayError("Info", req.getMessage());
