@@ -10,10 +10,7 @@ import it.polimi.ingsw.PSP4.message.requests.Request;
 import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.util.List;
@@ -25,6 +22,7 @@ public class LobbyGodsSelectionControl extends GUIController {
     public VBox godInfo;
     public Text button;
     private int numPlayers;
+    public HBox highlightedGod;
 
     public void toggleGodSelection(Event event){
         Node god = (Node)event.getSource();
@@ -52,6 +50,13 @@ public class LobbyGodsSelectionControl extends GUIController {
         powerClassNames = powerClassNames.stream().filter(c -> !c.equals("god-power")).collect(Collectors.toList());
         powerImage.getStyleClass().removeAll(powerClassNames);
         powerImage.getStyleClass().add(god.toLowerCase());
+
+        Pane godImage = (Pane) highlightedGod.getChildren().get(1);
+        List<String> imageClassNames = godImage.getStyleClass();
+        imageClassNames = imageClassNames.stream().filter(c -> !c.equals("god-card")).collect(Collectors.toList());
+        godImage.getStyleClass().removeAll(imageClassNames);
+        godImage.getStyleClass().add(god.toLowerCase());
+
     }
 
     public void sendAllowedGods() {
