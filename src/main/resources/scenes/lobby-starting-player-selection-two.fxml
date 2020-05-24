@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Text?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP4.client.gui.sceneController.LobbyStartingPlayerSelectionControl">
    <center>
       <StackPane BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="-246.0" />
          </BorderPane.margin>
          <children>
-            <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="490.0" prefWidth="547.0" spacing="27.0" stylesheets="@../css/style.css">
+            <HBox fx:id="godPicturesHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="490.0" prefWidth="547.0" spacing="27.0" stylesheets="@../css/style.css">
                <children>
                   <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="265.0" stylesheets="@../css/style.css">
                      <styleClass>
@@ -61,12 +58,12 @@
             <Insets bottom="95.0" />
          </BorderPane.margin>
          <children>
-            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="257.0" stylesheets="@../css/style.css" StackPane.alignment="BOTTOM_CENTER">
+            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#sendStartingPlayer" prefHeight="150.0" prefWidth="257.0" stylesheets="@../css/style.css" StackPane.alignment="BOTTOM_CENTER">
                <StackPane.margin>
                   <Insets right="286.0" />
                </StackPane.margin>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ARTEMIS" textAlignment="CENTER" StackPane.alignment="CENTER">
+                  <Text fx:id="firstPlayerButton" strokeType="OUTSIDE" strokeWidth="0.0" text="ARTEMIS" textAlignment="CENTER" StackPane.alignment="CENTER">
                      <styleClass>
                         <String fx:value="text" />
                         <String fx:value="lillybelle" />
@@ -81,7 +78,7 @@
                   <String fx:value="green" />
                </styleClass>
             </StackPane>
-            <StackPane alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="257.0" stylesheets="@../css/style.css" StackPane.alignment="BOTTOM_CENTER">
+            <StackPane alignment="TOP_LEFT" onMouseClicked="#sendStartingPlayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="257.0" stylesheets="@../css/style.css" StackPane.alignment="BOTTOM_CENTER">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -89,7 +86,7 @@
                   <Insets left="286.0" />
                </StackPane.margin>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="PROMETHEUS" textAlignment="CENTER" wrappingWidth="130.0059814453125" StackPane.alignment="CENTER">
+                  <Text fx:id="secondPlayerButton" strokeType="OUTSIDE" strokeWidth="0.0" text="PROMETHEUS" textAlignment="CENTER" StackPane.alignment="CENTER">
                      <styleClass>
                         <String fx:value="text" />
                         <String fx:value="lillybelle" />

@@ -36,10 +36,10 @@ public class RemoteView extends View {
                 //Special case, could close the connection
                 RemovePlayerRequest rpr = (RemovePlayerRequest) request;
                 String player = getPlayer().getUsername();
-                if (!rpr.isVictory() && rpr.getTargetPlayer().equals(player))
-                    clientConnection.closeConnection(rpr.getCustomMessage(player), false);
-                else if (rpr.isVictory() || rpr.getTargetPlayer().equals("@")) {
-                    clientConnection.closeConnection(rpr.getCustomMessage(player), true);
+                if (!rpr.isVictory() && rpr.getTargetPlayer().equals(player)) {
+                    clientConnection.closeConnection(rpr, false);
+                } else if (rpr.isVictory() || rpr.getTargetPlayer().equals("@")) {
+                    clientConnection.closeConnection(rpr, true);
                 }
             }
             clientConnection.asyncSend(request);

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP4.client.gui.sceneController;
 
-import it.polimi.ingsw.PSP4.client.gui.AlertBox;
 import it.polimi.ingsw.PSP4.client.gui.FXMLFile;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
@@ -25,12 +24,10 @@ public class LauncherNumberPlayersControl extends GUIController {
 
     public void updateUI (Request req) {
         if (req.getType() == MessageType.CHOOSE_ALLOWED_GODS) {
-
-            getClient().updateScene(FXMLFile.LOBBY_GODS_SELECTION, req,false);
+            getClient().updateScene(FXMLFile.LOBBY_GODS_SELECTION, req);
         } else if (req.getType() == MessageType.INFO) {
             if (req.getMessage().equals(Message.WAIT_PLAYERS)) {
-                AlertBox.displayError("Info", req.getMessage());
-                getClient().updateScene(FXMLFile.LOBBY_WAIT, null,false);
+                getClient().updateScene(FXMLFile.LOBBY_WAIT, null);
             }
         } else {
             System.out.println("Unexpected request");

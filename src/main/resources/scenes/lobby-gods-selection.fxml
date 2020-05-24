@@ -59,7 +59,7 @@
             </Pane>
             <VBox fx:id="godInfo" alignment="TOP_CENTER" prefHeight="430.0" prefWidth="277.0" spacing="30.0" StackPane.alignment="TOP_CENTER">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Spicy God Name" textAlignment="CENTER">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="" textAlignment="CENTER">
                      <styleClass>
                         <String fx:value="text" />
                         <String fx:value="lillybelle" />
@@ -70,7 +70,7 @@
                   </Text>
                   <StackPane alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Spicy God Description" wrappingWidth="237.0">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="" wrappingWidth="237.0">
                            <styleClass>
                               <String fx:value="text" />
                               <String fx:value="minion-pro" />
@@ -121,7 +121,7 @@
    <bottom>
       <StackPane maxWidth="-Infinity" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Text fx:id="button" strokeType="OUTSIDE" strokeWidth="0.0" text="START GAME">
+            <Text fx:id="button" strokeType="OUTSIDE" strokeWidth="0.0" text="CONFIRM">
                <styleClass>
                   <String fx:value="text" />
                   <String fx:value="lillybelle" />

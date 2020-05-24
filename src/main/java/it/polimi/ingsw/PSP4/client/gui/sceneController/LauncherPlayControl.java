@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP4.message.requests.Request;
 
 public class LauncherPlayControl extends GUIController {
     public void launchGame() {
-        getClient().updateScene(FXMLFile.LAUNCHER_FORM, null,false);
+        getClient().updateScene(FXMLFile.LAUNCHER_FORM, null);
     }
 
     public void updateUI (Request req) {

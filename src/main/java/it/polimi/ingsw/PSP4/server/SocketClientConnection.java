@@ -57,13 +57,18 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
         }
     }
 
+    public void closeConnection(RemovePlayerRequest rpr, boolean resetServer) {
+        send(rpr);
+        closeConnection(resetServer);
+    }
+
     public void closeConnection(String message, boolean resetServer) {
         send(new InfoRequest(null, message));
         closeConnection(resetServer);
     }
 
     public void closeConnection(boolean resetServer) {
-        send(new InfoRequest(null, "Connection Closed"));
+        System.out.println("Closing connection to client");
         try {
             socket.close();
         } catch (IOException e) {
@@ -158,7 +163,7 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
         exec.scheduleAtFixedRate(() -> {
             if (isActive()) {
                 long timestamp = currentTimeMillis() / 1000L;
-                System.out.println("Sent ping @" + timestamp + " to " + username);
+                //System.out.println("Sent ping @" + timestamp + " to " + username);
                 send(new PingRequest(username, null, timestamp));
                 checkPingTimeout(timestamp);
             } else {
@@ -179,7 +184,7 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
                 Response read = (Response) in.readObject();
                 if (read.getType() == MessageType.PING) {
                     PingResponse pong = (PingResponse) read;
-                    System.out.println("Received pong " + pong.getTimestamp() + " from " + name);
+                    //System.out.println("Received pong " + pong.getTimestamp() + " from " + name);
                     setLastTimestampReceived(pong.getTimestamp());
                 }
                 else {

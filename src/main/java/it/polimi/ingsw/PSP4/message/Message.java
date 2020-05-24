@@ -48,7 +48,7 @@ public abstract class Message implements Serializable {
     public static String FIRST_PLACE_WORKER = "Select the first placement on the board of one of your workers\nType two coordinates separated by a comma";
     public static String GAME_ALREADY_STARTED = "A game has already started. Try again later!";
     //public static String GAME_STARTED = "The game has started with {0} players.";
-    public static String GAME_STARTING = "\nSTARTING A NEW SANTORINI GAME\n";
+    //public static String GAME_STARTING = "\nSTARTING A NEW SANTORINI GAME\n";
     public static String HEPHAESTUS_BUILD = "Do you want to build two blocks in {0}? (Y or N)";
     public static String LAST_ASSIGNED_GOD = "As the last player to choose, you have been assigned {0}. Press Enter to continue";
     public static String LOBBY_CREATOR_LEFT = "The lobby creator has left.";

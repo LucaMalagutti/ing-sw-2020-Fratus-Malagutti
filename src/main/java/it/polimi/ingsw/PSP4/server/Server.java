@@ -112,7 +112,6 @@ public class Server {
                 setNumPlayers(c.initializeGameNumPlayer(name));
                 c.asyncSend(new InfoRequest(name, Message.WAIT_PLAYERS));
             } catch (Exception e) {
-                e.printStackTrace();
                 unregisterConnection(c);
             } finally {
                 notifyAll();

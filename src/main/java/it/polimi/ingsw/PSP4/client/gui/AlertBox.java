@@ -11,7 +11,11 @@ import javafx.stage.Stage;
 
 public class AlertBox {
 
-    //shows the error message in a new window
+    /**
+     * Shows the error message in a new window
+     * @param title title of the AlertBox
+     * @param message message displayed in the center of the AlertBox
+     */
     public static void displayError(String title, String message){
         Stage window = new Stage();
 

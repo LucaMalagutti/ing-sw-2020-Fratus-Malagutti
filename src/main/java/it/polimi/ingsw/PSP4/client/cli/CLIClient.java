@@ -35,25 +35,31 @@ public class CLIClient {
     public synchronized void setLastRequestReceived(Request lastRequest) {this.lastRequestReceived = lastRequest;}
     public synchronized Request getLastRequestReceived() {return this.lastRequestReceived;}
 
+    /**
+     * sets last Ping Timestamp. Starts serverConnectedCheck when first incoming ping
+     * @param lastTimestamp timestamp to set
+     */
     public synchronized void setLastTimestamp(long lastTimestamp) {
         if (this.lastTimestamp != -1) {
             this.lastTimestamp = lastTimestamp;
         } else {
             this.lastTimestamp = lastTimestamp;
-            serverCheck();
+            serverConnectedCheck();
         }
     }
 
     /**
      * Creates a thread that check continuously if the server keeps sending pings, otherwise closes the connection
      */
-    private void serverCheck() {
+    private void serverConnectedCheck() {
         int serverCheckTimeout = 20;
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(() -> {
             if (System.currentTimeMillis()/1000L - lastTimestamp > serverCheckTimeout) {
                 setActive(false);
                 System.out.println("Lost connection to the server. Press ENTER to exit.");
+            }
+            else if (!isActive()) {
                 exec.shutdown();
             }
         }, 0, 1, TimeUnit.SECONDS);

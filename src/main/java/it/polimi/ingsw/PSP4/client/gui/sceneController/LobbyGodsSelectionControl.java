@@ -6,8 +6,10 @@ import it.polimi.ingsw.PSP4.client.gui.GodPower;
 import it.polimi.ingsw.PSP4.message.MessageType;
 import it.polimi.ingsw.PSP4.message.requests.AssignGodRequest;
 import it.polimi.ingsw.PSP4.message.requests.ChooseAllowedGodsRequest;
+import it.polimi.ingsw.PSP4.message.requests.ChooseStartingPlayerRequest;
 import it.polimi.ingsw.PSP4.message.requests.Request;
 import javafx.event.Event;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -17,10 +19,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class LobbyGodsSelectionControl extends GUIController {
-    public GridPane implementedGodsGrid;
-    public Text callToAction;
-    public VBox godInfo;
-    public Text button;
+    @FXML
+    private GridPane implementedGodsGrid;
+    @FXML
+    private Text callToAction;
+    @FXML
+    private VBox godInfo;
+    @FXML
+    private Text button;
     private int numPlayers;
     public HBox highlightedGod;
 
@@ -67,16 +73,17 @@ public class LobbyGodsSelectionControl extends GUIController {
             for (String name: selectedGodsNames) {
                 sb.append(name).append(" ");
             }
-            System.out.println(sb.toString());
+            //System.out.println(sb.toString());
             getClient().validate(sb.toString());
         }
     }
 
     public void sendPersonalGod() {
         List<Node> selectedGods = implementedGodsGrid.getChildren().stream().filter(card->card.getStyleClass().contains("selected")).collect(Collectors.toList());
-        if(selectedGods.size() == numPlayers)
-            System.out.println(selectedGods.get(0));
-        //TODO IMPLEMENT
+        if(selectedGods.size() == numPlayers) {
+            //System.out.println(selectedGods.get(0).getId());
+            getClient().validate(selectedGods.get(0).getId());
+        }
     }
 
     private void addGodCard(String god, int index) {
@@ -115,21 +122,27 @@ public class LobbyGodsSelectionControl extends GUIController {
 
     public void updateUI (Request req) {
         if (req.getType() == MessageType.ASSIGN_GOD) {
-            getClient().updateScene(FXMLFile.LOBBY_GODS_SELECTION, req, false);
+            getClient().updateScene(FXMLFile.LOBBY_GODS_SELECTION, req);
         } else if (req.getType() == MessageType.WAIT) {
-            getClient().updateScene(FXMLFile.LOBBY_WAIT, null, false);
+            getClient().updateScene(FXMLFile.LOBBY_WAIT, null);
+        } else if (req.getType() == MessageType.CHOOSE_STARTING_PLAYER) {
+            ChooseStartingPlayerRequest r = (ChooseStartingPlayerRequest) req;
+            if (r.getPlayerNames().size() == 2) {
+                getClient().updateScene(FXMLFile.LOBBY_STARTING_PLAYER_SELECTION_TWO, req);
+            } else if (r.getPlayerNames().size() == 3){
+                getClient().updateScene(FXMLFile.LOBBY_STARTING_PLAYER_SELECTION_THREE, req);
+            }
         } else if (req.getType() == MessageType.INFO) {
             AlertBox.displayError("Info", req.getMessage());
         } else {
             System.out.println("Unexpected"+ req.getType());
         }
-        //TODO IMPLEMENT SECOND HALF (PERSONAL GOD SELECTED)
     }
 
     public void setupAttributes(Request req) {
-        if(req instanceof ChooseAllowedGodsRequest)
+        if(req.getType() == MessageType.CHOOSE_ALLOWED_GODS)
             setupAllowedGods((ChooseAllowedGodsRequest) req);
-        else if(req instanceof AssignGodRequest)
+        else if(req.getType() ==  MessageType.ASSIGN_GOD)
             setupPersonalGod((AssignGodRequest) req);
     }
 }

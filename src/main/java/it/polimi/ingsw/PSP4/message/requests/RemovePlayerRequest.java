@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP4.message.requests;
 import it.polimi.ingsw.PSP4.message.ErrorMessage;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
+import it.polimi.ingsw.PSP4.model.serializable.SerializableGameState;
 
 import java.text.MessageFormat;
 
@@ -29,8 +30,8 @@ public class RemovePlayerRequest extends Request {
      * @param message message from the sender
      * @param victory if true targetPlayer is the winner of the game, otherwise is out of the game
      */
-    public RemovePlayerRequest(String targetPlayer, String message, boolean victory) {
-        super("@", null, message, staticType);
+    public RemovePlayerRequest(String targetPlayer, SerializableGameState board, String message, boolean victory) {
+        super("@", board, message, staticType);
         this.targetPlayer = targetPlayer;
         this.victory = victory;
     }
@@ -57,5 +58,5 @@ public class RemovePlayerRequest extends Request {
     }
 
     @Override
-    public String toString() { return MessageFormat.format(Message.DEFEAT_ENEMY, targetPlayer); }
+    public String toString() { return getCustomMessage(getPlayer()); }
 }

@@ -1,5 +1,10 @@
 package it.polimi.ingsw.PSP4.client.gui.sceneController;
 
+import it.polimi.ingsw.PSP4.client.gui.AlertBox;
+import it.polimi.ingsw.PSP4.client.gui.FXMLFile;
+import it.polimi.ingsw.PSP4.client.gui.GUIClient;
+import it.polimi.ingsw.PSP4.message.Message;
+import it.polimi.ingsw.PSP4.message.MessageType;
 import it.polimi.ingsw.PSP4.message.requests.ChoosePositionRequest;
 import it.polimi.ingsw.PSP4.message.requests.RemovePlayerRequest;
 import it.polimi.ingsw.PSP4.message.requests.Request;
@@ -58,7 +63,7 @@ public class BoardController extends GUIController{
     private void setActivePlayer() {
         String activeUsername = getClient().getUsername();
         List<SerializablePlayer> matches = gameState.getPlayers().stream().filter(p -> p.getUsername().equals(activeUsername)).collect(Collectors.toList());
-        if(matches.size() == 0) {
+        if (matches.size() == 0) {
             //TODO handle error
             System.out.println("Error, this player is not in the official players list");
             return;
@@ -81,7 +86,7 @@ public class BoardController extends GUIController{
         timeline.play();
     }
     public void showPlayersList() { linearTransition(playersList.translateXProperty(), 320, 0, 250.0d); }
-    public void hidePlayersList() { linearTransition(playersList.translateXProperty(), 0, 320, 250.0d); }
+    public void hidePlayersList() { linearTransition(playersList.translateXProperty(), 0, 320, 251.0d); }
 
     /**
      * Add a player to the list on the right
@@ -243,7 +248,7 @@ public class BoardController extends GUIController{
         statusButtons.getChildren().add(button);
     }
     private void addStatusButtonWrapper() {
-        if(activePlayer.getWrapper().equals("Athena_Enemy"))
+        if(activePlayer.getWrapper() != null && activePlayer.getWrapper().equals("Athena_Enemy"))
             addStatusButton("no-way-up", null);
     }
     private void addStatusButtonChange() {
@@ -294,6 +299,7 @@ public class BoardController extends GUIController{
             return;
         requestSent = true;
         System.out.println("Change worker button pressed!");
+        getClient().validate("change");
     }
 
     /**
@@ -303,7 +309,8 @@ public class BoardController extends GUIController{
         if(requestSent)
             return;
         requestSent = true;
-        System.out.println("Skip state button pressed!");
+        //System.out.println("Skip state button pressed!");
+        getClient().validate("skip");
     }
 
     /**
@@ -313,7 +320,7 @@ public class BoardController extends GUIController{
         if(requestSent)
             return;
         requestSent = true;
-        System.out.println("Confirm action button pressed!");
+        //System.out.println("Confirm action button pressed!");
     }
 
     /**
@@ -327,7 +334,8 @@ public class BoardController extends GUIController{
         StackPane cell = (StackPane) event.getSource();
         int row = GridPane.getRowIndex(cell);
         int col = GridPane.getColumnIndex(cell);
-        System.out.println("Player wants to place his worker in: " + row + "," + col);
+        //System.out.println("Player wants to place his worker in: " + row + "," + col);
+        getClient().validate(row+","+col);
     }
 
     /**
@@ -341,7 +349,8 @@ public class BoardController extends GUIController{
         StackPane cell = (StackPane) event.getSource();
         int row = GridPane.getRowIndex(cell);
         int col = GridPane.getColumnIndex(cell);
-        System.out.println("Player wants to use the worker in: " + row + "," + col);
+        //System.out.println("Player wants to select his worker in: " + row + "," + col);
+        getClient().validate(row+","+col);
     }
 
     /**
@@ -355,7 +364,8 @@ public class BoardController extends GUIController{
         StackPane cell = (StackPane) event.getSource();
         int row = GridPane.getRowIndex(cell);
         int col = GridPane.getColumnIndex(cell);
-        System.out.println("Player wants to perform an action in: " + row + "," + col);
+        //System.out.println("Player wants to perform an action in: " + row + "," + col);
+        getClient().validate(row+","+col);
     }
 
     /**
@@ -365,7 +375,8 @@ public class BoardController extends GUIController{
         if(requestSent)
             return;
         requestSent = true;
-        System.out.println("The player wants to play again");
+        getClient().reset();
+        getClient().updateScene(FXMLFile.LAUNCHER_PLAY, null);
     }
 
     /**
@@ -375,21 +386,21 @@ public class BoardController extends GUIController{
         if(requestSent)
             return;
         requestSent = true;
-        System.out.println("The player wants to close the game");
+        GUIClient.window.close();
     }
 
     @Override
     public void updateUI(Request req) {
-
+        getClient().updateScene(FXMLFile.BOARD, req);
     }
 
     @Override
     public void setupAttributes(Request req) {
-        gameState = req.getBoard();
-//        activePlayer = gameState.getPlayers().stream().filter(p -> p != gameState.getCurrPlayer()).collect(Collectors.toList()).get(0);
-        activePlayer = gameState.getCurrPlayer();
-//        setActivePlayer();
-        standardGameState();
+        if (req.getType() != MessageType.INFO) {
+            gameState = req.getBoard();
+            setActivePlayer();
+            standardGameState();
+        }
 
         switch(req.getType()) {
             case FIRST_WORKER_PLACEMENT:
@@ -419,14 +430,16 @@ public class BoardController extends GUIController{
                 break;
             case REMOVE_PLAYER:
                 RemovePlayerRequest req2 = (RemovePlayerRequest) req;
-                if(req2.getTargetPlayer().equals(activePlayer.getUsername()))
+                if(req2.getTargetPlayer().equals(activePlayer.getUsername())) {
                     showEndPane(req2.isVictory());
-                else if(req2.isVictory())
+                } else if(req2.isVictory()) {
                     showEndPane(false);
-                //TODO implement message in case victory = false, !target.equals
+                } else if(!req2.isVictory() && !req2.getTargetPlayer().equals(activePlayer.getUsername())) {
+                    AlertBox.displayError("Enemy player lost", req2.getCustomMessage(activePlayer.getUsername()));
+                }
                 break;
             case START_TURN:
-                //TODO auto response?
+                getClient().validate("\n");
                 break;
             case WAIT:
                 fillActivePlayerPlaying("Wait for " + gameState.getCurrPlayer().getCard());

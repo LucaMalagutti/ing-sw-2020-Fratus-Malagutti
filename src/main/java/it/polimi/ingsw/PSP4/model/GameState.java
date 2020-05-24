@@ -2,18 +2,12 @@ package it.polimi.ingsw.PSP4.model;
 
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
 import it.polimi.ingsw.PSP4.controller.turnStates.StateType;
-import it.polimi.ingsw.PSP4.controller.turnStates.WaitState;
-import it.polimi.ingsw.PSP4.message.ErrorMessage;
-import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.requests.*;
 import it.polimi.ingsw.PSP4.model.serializable.SerializableGameState;
 import it.polimi.ingsw.PSP4.observer.Observable;
 import it.polimi.ingsw.PSP4.observer.Observer;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,9 +44,7 @@ public class GameState implements Observable<Request> {
     public List<GodType> getAllowedGods() { return new ArrayList<>(allowedGods);}
     public synchronized void setAllowedGods(List<GodType> allowedGods) { this.allowedGods = allowedGods; }
 
-    public void spawnDome(int row, int col) {
-        getPosition(row, col).setDome(true);
-    }
+    //public void spawnDome(int row, int col) { getPosition(row, col).setDome(true); }
 
     /**
      * Constructor of the class GameState
@@ -169,9 +161,18 @@ public class GameState implements Observable<Request> {
      */
     public void chooseStartingPlayer() {
         List<String> playerList = this.getPlayers().stream().map(Player::getUsername).collect(Collectors.toList());
-        notifyObservers(new ChooseStartingPlayerRequest(this.getCurrPlayer().getUsername(), playerList));
+        Map<String, String> map = new LinkedHashMap<>();
+        for (Player pl: players) {
+            map.put(pl.getUsername(), pl.getMechanics().getName());
+        }
+        notifyObservers(new ChooseStartingPlayerRequest(this.getCurrPlayer().getUsername(), playerList, map));
     }
 
+    /**
+     * Sends first worker placement request
+     * @param numPl number of the player to send the request to
+     * @param numWorker number of the worker to be placed on the board
+     */
     public void firstWorkerPlacement(int numPl, int numWorker) {
         if (numWorker == 0 && numPl != 0)
             skipPlayer();
@@ -288,7 +289,7 @@ public class GameState implements Observable<Request> {
         //unwrap enemies (useless if not ATHENA)
         player.getMechanics().playerDefeat(player);
         //close player's connection and inform other players
-        notifyObservers(new RemovePlayerRequest(player.getUsername(), message, false));
+        notifyObservers(new RemovePlayerRequest(player.getUsername(), new SerializableGameState(), message, false));
         notifyObservers(new StartTurnRequest(getCurrPlayer().getUsername()));
     }
 
@@ -299,7 +300,7 @@ public class GameState implements Observable<Request> {
      */
     public void playerVictory(Player player, String message) {
         //close every connection notifying the players
-        notifyObservers(new RemovePlayerRequest(player.getUsername(), message, true));
+        notifyObservers(new RemovePlayerRequest(player.getUsername(), new SerializableGameState(), message, true));
         //cleans the GameState singleton for a new game
         reset();
     }
@@ -308,7 +309,7 @@ public class GameState implements Observable<Request> {
      * Drops all client connection after a client left without surrendering
      */
     public void dropAllConnections() {
-        notifyObservers(new RemovePlayerRequest("@", "", false));
+        notifyObservers(new RemovePlayerRequest("@", new SerializableGameState(),"", false));
         GameState.getInstance().reset();
     }
 }
