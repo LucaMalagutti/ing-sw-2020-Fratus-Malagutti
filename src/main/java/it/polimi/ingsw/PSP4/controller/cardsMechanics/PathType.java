@@ -6,6 +6,7 @@ package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 public enum PathType {
     DEFAULT,
     DOUBLE_MOVE,
+    INFINITE_MOVE,
     DOUBLE_BUILD,
     EARLY_BUILD
 }

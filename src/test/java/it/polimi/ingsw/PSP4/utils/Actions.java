@@ -1,7 +1,5 @@
 package it.polimi.ingsw.PSP4.utils;
 
-import it.polimi.ingsw.PSP4.controller.cardsMechanics.AthenaEnemyGameMechanics;
-import it.polimi.ingsw.PSP4.controller.cardsMechanics.GameMechanics;
 import it.polimi.ingsw.PSP4.message.responses.*;
 import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
@@ -156,26 +154,20 @@ public class Actions {
 
 
     /**
-     * Wrap a player with a god
-     * @param username username of the player to wrap
-     * @param god name of the god to wrap around the player
+     * Wrap each player with username's evil god
+     * @param username username of the player from which the event started
      */
-    public static void wrapPlayer(String username, String god) {
+    public static void wrapPlayers(String username) {
         Player player = Getters.player(username);
-        GameMechanics mechanics = player.getMechanics();
-        if(!mechanics.getName().equals(god) && god.equals("Athena_Enemy"))
-            player.setMechanics(new AthenaEnemyGameMechanics(mechanics));
+        GameState.getInstance().wrapPlayers(player);
     }
 
     /**
-     * Unwrap a player from a god
-     * @param username username of the player to unwrap
-     * @param god name of the god around the player
+     * Unwrap each player from username's evil god
+     * @param username username of the player from which the event started
      */
-    public static void unwrapPlayer(String username, String god) {
+    public static void unwrapPlayers(String username) {
         Player player = Getters.player(username);
-        GameMechanics mechanics = player.getMechanics();
-        if(mechanics.getName().equals(god) && god.equals("Athena_Enemy"))
-            player.setMechanics(mechanics.getComponent());
+        GameState.getInstance().unwrapPlayers(player);
     }
 }

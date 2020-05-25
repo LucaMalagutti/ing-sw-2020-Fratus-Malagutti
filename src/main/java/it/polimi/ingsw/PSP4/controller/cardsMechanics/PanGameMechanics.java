@@ -8,15 +8,11 @@ import it.polimi.ingsw.PSP4.model.Player;
 public class PanGameMechanics extends GodGameMechanics {
     private static final GodType type = GodType.PAN;                //type which represents the God
 
-    //getter and setter
-    @Override
-    public GodType getType() { return type; }
-
     /**
      * Constructor of the class PanGameMechanics
      * @param component reference to the game mechanics to decorate
      */
-    public PanGameMechanics(GameMechanics component) { super(component); }
+    public PanGameMechanics(GameMechanics component) { super(type, component); }
 
     /**
      * Expands the base winning condition allowing the player to win when moving down two or more layers

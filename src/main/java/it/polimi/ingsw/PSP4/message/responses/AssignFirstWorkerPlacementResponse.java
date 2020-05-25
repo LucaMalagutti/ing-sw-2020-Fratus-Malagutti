@@ -14,9 +14,6 @@ public class AssignFirstWorkerPlacementResponse extends Response {
     private final int numPlayer;
     private final int numWorker;
 
-    public int getNumPlayer() { return numPlayer; }
-    public int getNumWorker() { return numWorker; }
-
     public SerializablePosition getSelected() { return selected; }
 
     /**

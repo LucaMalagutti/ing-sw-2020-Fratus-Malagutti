@@ -15,9 +15,6 @@ public class AssignGodResponse extends Response {
     private final List<String> allowedGods;         //List of the allowed god names to choose from
     private final String selectedGod;               //Name of the god picked by the player
 
-    public List<String> getAllowedGods() { return allowedGods; }
-    public String getSelectedGod() { return selectedGod; }
-
 
     /**
      * Constructor of the class AssignGodRequest
@@ -34,8 +31,8 @@ public class AssignGodResponse extends Response {
 
     @Override
     public void handle() {
-        List<GodType> gods = getAllowedGods().stream().map(GodType::valueOf).collect(Collectors.toList());
-        GameMechanics selectedGodMechanics = GodType.valueOf(getSelectedGod()).getGameMechanics(GameState.getInstance().getPlayers());
+        List<GodType> gods = allowedGods.stream().map(GodType::valueOf).collect(Collectors.toList());
+        GameMechanics selectedGodMechanics = GodType.valueOf(selectedGod).getGameMechanics();
         GameState.getInstance().getCurrPlayer().setMechanics(selectedGodMechanics);
         GameState.getInstance().setAllowedGods(gods);
         if (GameState.getInstance().getAllowedGods().size() > 0) {

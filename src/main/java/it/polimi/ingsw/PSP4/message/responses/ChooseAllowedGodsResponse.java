@@ -17,8 +17,6 @@ public class ChooseAllowedGodsResponse extends Response {
 
     private final List<String> selectedGods;            //List of gods selected by the player
 
-    public List<String> getSelectedGods() { return selectedGods; }
-
     /**
      * Constructor of the class ChooseAllowedGodsResponse
      * @param player username of the sender
@@ -32,7 +30,7 @@ public class ChooseAllowedGodsResponse extends Response {
 
     @Override
     public void handle() {
-        List<GodType> gods = this.getSelectedGods().stream().map(GodType::valueOf).collect(Collectors.toList());
+        List<GodType> gods = this.selectedGods.stream().map(GodType::valueOf).collect(Collectors.toList());
         GameState.getInstance().setAllowedGods(gods);
         GameState.getInstance().assignGod();
     }

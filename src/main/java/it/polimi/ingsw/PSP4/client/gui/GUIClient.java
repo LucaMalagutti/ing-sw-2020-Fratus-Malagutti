@@ -104,7 +104,7 @@ public class GUIClient extends Application{
                         //enemy client exits
                         if (req2.getTargetPlayer().equals("@") && !req2.isVictory()) {
                             Platform.runLater(() -> {
-                                closeProgram(Message.CLIENT_EXIT_DURING_GAME);
+                                closeProgram(GUIClient.CM_PLAYER_LEFT);
                                 reset();
                                 updateScene(FXMLFile.LAUNCHER_PLAY, null);
                             });
@@ -170,7 +170,7 @@ public class GUIClient extends Application{
             if (System.currentTimeMillis()/1000L - lastTimestamp > serverCheckTimeout && isActive()) {
                 Platform.runLater(() -> {
                     setActive(false);
-                    AlertBox.displayError("Server Lost", "Lost connection to the server. Exiting..");
+                    AlertBox.displayError(GUIClient.AT_SERVER_LOST, GUIClient.AM_SERVER_LOST);
                     window.close();
                 });
                 exec.shutdown();
@@ -206,15 +206,12 @@ public class GUIClient extends Application{
     public void start(Stage stage) {
         window = stage;
         window.getIcons().add(new Image(GUIClient.class.getResourceAsStream("/images/icon.png")));
-        window.setTitle("Launcher - Santorini");
         window.setResizable(false);
         window.setOnCloseRequest(e -> {
             e.consume();
-            closeProgram("Are you sure you want to leave Santorini?");
+            closeProgram(GUIClient.CM_CLOSE_MESSAGE);
         });
         updateScene(FXMLFile.LAUNCHER_PLAY, null);
-        //To debug the BOARD scene, please don't remove
-//        updateScene(FXMLFile.BOARD, new AssignFirstWorkerPlacementRequest("Lorenzo", 0, 0));
     }
 
     /**
@@ -222,7 +219,7 @@ public class GUIClient extends Application{
      * @param closingMessage message to be displayed in the ConfirmBox
      */
     public void closeProgram(String closingMessage){
-        boolean answer = ConfirmBox.displayConfirm("Closing Time", closingMessage);
+        boolean answer = ConfirmBox.displayConfirm(GUIClient.CT_CLOSE_MESSAGE, closingMessage);
         if(answer) {
             setActive(false);
             if (connected) {
@@ -254,11 +251,13 @@ public class GUIClient extends Application{
             sceneController = guiController;
         } catch (Exception e) {
             e.printStackTrace();
-            AlertBox.displayError("Unexpected error", "We are sorry, something is not working");
+            AlertBox.displayError(GUIClient.AT_UNEXPECTED_ERROR, GUIClient.AM_UNEXPECTED_ERROR);
             window.close();
             return;
         }
         Scene scene = new Scene(root);
+        if(file != FXMLFile.LOBBY_WAIT)
+            window.setTitle(file.getWindowTitle());
         window.setScene(scene);
         window.show();
     }
@@ -273,4 +272,46 @@ public class GUIClient extends Application{
         lastRequestReceived = null;
         socket = new Socket();
     }
+
+    public static String WINDOW_TITLE_LAUNCHER = "Launcher - Santorini";
+    public static String WINDOW_TITLE_LOBBY = "Lobby - Santorini";
+    public static String WINDOW_TITLE_GAME = "Santorini";
+
+    //Alerts
+    public static String AT_ENEMY_LOST = "Enemy player lost";
+    public static String AT_GAME_STARTED = "Game Already Started";
+    public static String AM_GAME_STARTED = "A game has already started. Try again later!";
+    public static String AT_SERVER_LOST = "Server Lost";
+    public static String AM_SERVER_LOST = "Lost connection to the server. Exiting..";
+    public static String AT_UNEXPECTED_ERROR = "Unexpected error";
+    public static String AM_UNEXPECTED_ERROR = "We are sorry, something is not working";
+
+    //Confirmations
+    public static String CT_CLOSE_MESSAGE = "Closing Time";
+    public static String CM_CLOSE_MESSAGE = "Are you sure you want to leave Santorini?";
+    public static String CM_PLAYER_LEFT = "A player has unexpectedly left the game. Do you want to leave Santorini?";
+
+    //Lobby Actions
+    public static String LA_GOD_SELECTION = "SELECT {0} GOD{1}";
+
+    //Board Actions
+    public static String BA_BUILD_BLOCK = "Build a block";
+    public static String BA_CHOOSE_WORKER = "Choose a worker";
+    public static String BA_CONFIRM_MOVE = "Confirm your move";
+    public static String BA_DEFEAT = "DEFEAT";
+    public static String BA_LOSER = "Loser";
+    public static String BA_MOVE_WORKER = "Move your worker";
+    public static String BA_PLACE_WORKER = "Place a worker";
+    public static String BA_VICTORY = "VICTORY";
+    public static String BA_WAIT = "Wait for {0}";
+    public static String BA_WINNER = "Winner";
+
+    //Errors
+    public static String CONNECTION_REFUSED = "There was a problem connecting to the server. Try again!";
+    public static String IP_EMPTY = "Server IP field cannot be empty";
+    public static String PLAYER_NOT_FOUND = "Error, this player is not in the official players list";
+    public static String UNEXPECTED = "Unexpected {0} {1}";
+    public static String UNEXPECTED_REQUEST = "Unexpected request";
+    public static String USERNAME_LENGTH = "Username must be between 1 and 15 characters";
+    public static String USERNAME_RESERVED = "Username must be different from '@'";
 }

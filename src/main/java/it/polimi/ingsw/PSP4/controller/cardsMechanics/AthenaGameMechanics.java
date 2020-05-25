@@ -1,10 +1,12 @@
 package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
+import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 import it.polimi.ingsw.PSP4.model.Worker;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Defines the mechanics of the God card Athena
@@ -12,45 +14,21 @@ import java.util.ArrayList;
 public class AthenaGameMechanics extends GodGameMechanics {
     private static final GodType type = GodType.ATHENA;             //type which represents the God
 
-    private final ArrayList<Player> players;
-
-    //getters and setters
-    @Override
-    public GodType getType() { return type; }
-
-    private ArrayList<Player> getPlayers() { return players; }
-
     /**
      * Constructor of the class AthenaGameMechanics
      * @param component reference to the game mechanics to decorate
      */
-    public AthenaGameMechanics(GameMechanics component, ArrayList<Player> players) {
-        super(component);
-        this.players = players;
-    }
+    public AthenaGameMechanics(GameMechanics component) { super(type, component); }
 
     /**
-     * Wraps each enemy's mechanics with an AthenaEnemyGameMechanics (if not already)
-     * @param player current player
+     * Removes the possibility to move up
      */
-    private void wrapEnemies(Player player) {
-        for(Player enemy : getPlayers()){
-            GameMechanics mechanics = enemy.getMechanics();
-            if(enemy != player && !mechanics.getName().equals("Athena_Enemy"))
-                enemy.setMechanics(new AthenaEnemyGameMechanics(mechanics));
-        }
-    }
-
-    /**
-     * Unwraps each enemy's mechanics removing the AthenaEnemyGameMechanics (if present)
-     * @param player current player
-     */
-    private void unwrapEnemies(Player player) {
-        for(Player enemy : getPlayers()){
-            GameMechanics mechanics = enemy.getMechanics();
-            if (enemy != player && mechanics.getName().equals("Athena_Enemy"))
-                enemy.setMechanics(mechanics.getComponent());
-        }
+    @Override
+    public ArrayList<Position> getMovePositions(Player player, int callNum) {
+        ArrayList<Position> componentValid = getComponent().getMovePositions(player, callNum);
+        if(!isEvil())
+            return componentValid;
+        return componentValid.stream().filter(position -> position.getHeight() <= player.getCurrWorker().getCurrPosition().getHeight()).collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -60,21 +38,12 @@ public class AthenaGameMechanics extends GodGameMechanics {
     @Override
     public void move(Player player, Position futurePosition) {
         getComponent().move(player, futurePosition);
+        if(isEvil())
+            return;
         Worker currWorker = player.getCurrWorker();
-        if(currWorker.getCurrPosition().getHeight() > currWorker.getPrevPosition().getHeight()){
-            wrapEnemies(player);
-        } else {
-            unwrapEnemies(player);
-        }
-    }
-
-    /**
-     * Called when a player using this god is removed
-     * Unwraps all enemies
-     * @param player current player
-     */
-    @Override
-    public void playerDefeat(Player player) {
-        unwrapEnemies(player);
+        if(currWorker.getCurrPosition().getHeight() > currWorker.getPrevPosition().getHeight())
+            GameState.getInstance().wrapPlayers(player);
+        else
+            GameState.getInstance().unwrapPlayers(player);
     }
 }

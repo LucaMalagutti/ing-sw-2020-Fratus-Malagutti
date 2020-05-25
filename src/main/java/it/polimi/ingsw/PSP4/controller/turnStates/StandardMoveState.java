@@ -29,7 +29,8 @@ public class StandardMoveState extends State {
     @Override
     public State getNextState() {
         Player player = getPlayer();
-        if (player.getMechanics().getPath() == PathType.DOUBLE_MOVE)
+        PathType path = player.getMechanics().getPath();
+        if (path == PathType.DOUBLE_MOVE || path == PathType.INFINITE_MOVE)
             return new SecondMoveState(player);
         return new StandardBuildState(player);
     }

@@ -4,17 +4,46 @@ import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Base class for the God card Decorator
  */
 abstract public class GameMechanics {
-    //getters and setters
-    abstract public GodType getType();
-    public String getName() { return getType().getName(); }
+    private final GodType type;
+    private boolean evil = false;
+
+    public boolean isEvil() { return evil; }
+    public void setEvil() { this.evil = true; }
+
+    public GodType getType() {
+        if(isEvil())
+            return getComponent().getType();
+        return type;
+    }
+    public GodType getRealType() { return type; }
     public PathType getPath() { return getType().getPathType(); }
 
     abstract public GameMechanics getComponent();
+    abstract public void setComponent(GameMechanics component);
+
+    /**
+     * Constructor of the class GameMechanics
+     * @param type reference to the god type
+     */
+    public GameMechanics(GodType type) {
+        this.type = type;
+    }
+
+    /**
+     * @return a list of evil GodType wrapping the innermost component
+     */
+    public List<GodType> getEvilList() {
+        List<GodType> evilList = getComponent().getEvilList();
+        if(isEvil())
+            evilList.add(type);
+        return evilList;
+    }
 
     /**
      * Modifies available movement positions based on the card effect
@@ -59,14 +88,5 @@ abstract public class GameMechanics {
      * @param futurePosition position to check
      * @return a confirmation message or null if not required
      */
-    public String needsConfirmation(Player player, Position futurePosition) {
-        return null;
-    }
-
-    /**
-     * Called when a player using this god is removed
-     * Made to be overridden
-     * @param player current player
-     */
-    public void playerDefeat(Player player) {}
+    abstract public String needsConfirmation(Player player, Position futurePosition);
 }

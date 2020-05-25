@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP4.message.ErrorMessage;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
 import it.polimi.ingsw.PSP4.message.responses.ConfirmationResponse;
+import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.serializable.SerializablePosition;
 
 import java.text.MessageFormat;
@@ -17,8 +18,6 @@ public class ConfirmationRequest extends Request {
 
     private final SerializablePosition position;
 
-    public SerializablePosition getPosition() { return position; }
-
     /**
      * Constructor of the class ConfirmationRequest
      * @param player username of the receiver
@@ -26,7 +25,7 @@ public class ConfirmationRequest extends Request {
      * @param position position in which the action will occur
      */
     public ConfirmationRequest(String player, String message, SerializablePosition position) {
-        super(player, null, message, staticType);
+        super(player, GameState.getSerializedInstance(), message, staticType);
         this.position = position;
     }
 
@@ -34,9 +33,9 @@ public class ConfirmationRequest extends Request {
     public Message validateResponse(String stringMessage) {
         stringMessage = stringMessage.toUpperCase().replaceAll("\\s","");
         if(stringMessage.equals("Y"))
-            return new ConfirmationResponse(getPlayer(), getPosition(), true);
+            return new ConfirmationResponse(getPlayer(), position, true);
         if(stringMessage.equals("N"))
-            return new ConfirmationResponse(getPlayer(), getPosition(), false);
+            return new ConfirmationResponse(getPlayer(), position, false);
         return new ErrorMessage(getPlayer(), Message.NOT_VALID_CONFIRM);
     }
 

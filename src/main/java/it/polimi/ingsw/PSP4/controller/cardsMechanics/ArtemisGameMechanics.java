@@ -11,16 +11,12 @@ import java.util.ArrayList;
 public class ArtemisGameMechanics extends GodGameMechanics {
     private static final GodType type = GodType.ARTEMIS;            //type which represents the God
 
-    //getter and setter
-    @Override
-    public GodType getType() { return type; }
-
     /**
      * Constructor of the class ArtemisGameMechanics
      * @param component reference to the game mechanics to decorate
      */
     public ArtemisGameMechanics(GameMechanics component) {
-        super(component);
+        super(type, component);
     }
 
     /**

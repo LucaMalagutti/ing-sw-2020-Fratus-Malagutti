@@ -31,7 +31,9 @@ public final class SerializableGameState implements Serializable {
         gameState.getPlayers().forEach(player -> this.players.add(new SerializablePlayer(player)));
         this.currPlayerIndex = gameState.getPlayers().indexOf(gameState.getCurrPlayer());
         this.numPlayer = gameState.getNumPlayer();
-        List<SerializablePosition> options = gameState.getCurrPlayer().getState().getOptions();
+        List<SerializablePosition> options = null;
+        if(gameState.getCurrPlayer() != null)
+            options = gameState.getCurrPlayer().getState().getOptions();
         this.options = Objects.requireNonNullElseGet(options, ArrayList::new);
     }
 

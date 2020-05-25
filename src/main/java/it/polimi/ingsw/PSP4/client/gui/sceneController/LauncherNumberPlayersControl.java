@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP4.client.gui.sceneController;
 
 import it.polimi.ingsw.PSP4.client.gui.FXMLFile;
+import it.polimi.ingsw.PSP4.client.gui.GUIClient;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
 import it.polimi.ingsw.PSP4.message.requests.Request;
@@ -30,7 +31,7 @@ public class LauncherNumberPlayersControl extends GUIController {
                 getClient().updateScene(FXMLFile.LOBBY_WAIT, null);
             }
         } else {
-            System.out.println("Unexpected request");
+            System.out.println(GUIClient.UNEXPECTED_REQUEST);
         }
     }
 

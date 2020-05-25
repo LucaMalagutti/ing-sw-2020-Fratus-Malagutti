@@ -42,6 +42,9 @@
 .layout.loser-foreground {
     -fx-background-image: url("../images/layout/loser-foreground.png");
 }
+.layout.confirm-foreground {
+    -fx-background-image: url("../images/layout/confirm-foreground.png");
+}
 .layout.player-red {
     -fx-background-color: linear-gradient(from 0% 100% to 20% 0%, #d76351 15%, transparent 40%);
 }
@@ -58,6 +61,14 @@
     -fx-background-color: linear-gradient(from 0% 100% to 20% 0%, #767676 15%, transparent 40%);
 }
 
+.players-list-background {
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-image: url("../images/layout/players-list-background.png");
+    -fx-translate-x: 320px;
+}
+
 /* FULL-SIZE GOD IMAGE */
 .god-card {
     -fx-background-position: center center;
@@ -65,36 +76,6 @@
     -fx-background-size: contain;
     -fx-background-image: url("../images/godCards/fullGodCards/full_default.png");
     -fx-pref-width: 260px;
-}
-.god-card.cropped {
-    -fx-background-size: 100%;
-}
-.god-card.apollo {
-    -fx-background-image: url("../images/godCards/fullGodCards/full_apollo.png");
-}
-.god-card.artemis {
-    -fx-background-image: url("../images/godCards/fullGodCards/full_artemis.png");
-}
-.god-card.athena {
-    -fx-background-image: url("../images/godCards/fullGodCards/full_athena.png");
-}
-.god-card.atlas {
-    -fx-background-image: url("../images/godCards/fullGodCards/full_atlas.png");
-}
-.god-card.demeter {
-    -fx-background-image: url("../images/godCards/fullGodCards/full_demeter.png");
-}
-.god-card.hephaestus {
-    -fx-background-image: url("../images/godCards/fullGodCards/full_hephaestus.png");
-}
-.god-card.minotaur {
-    -fx-background-image: url("../images/godCards/fullGodCards/full_minotaur.png");
-}
-.god-card.pan {
-    -fx-background-image: url("../images/godCards/fullGodCards/full_pan.png");
-}
-.god-card.prometheus {
-    -fx-background-image: url("../images/godCards/fullGodCards/full_prometheus.png");
 }
 
 /* SMALL GOD IMAGES WITH FRAME */
@@ -125,33 +106,6 @@
 .selectable-god.selected .selectable-frame {
     -fx-background-image: url("../images/utility/frame-yellow.png");
 }
-.selectable-god.apollo .selectable-image {
-    -fx-background-image: url("../images/godCards/god_card_apollo.png");
-}
-.selectable-god.artemis .selectable-image {
-    -fx-background-image: url("../images/godCards/god_card_artemis.png");
-}
-.selectable-god.athena .selectable-image {
-    -fx-background-image: url("../images/godCards/god_card_athena.png");
-}
-.selectable-god.atlas .selectable-image {
-    -fx-background-image: url("../images/godCards/god_card_atlas.png");
-}
-.selectable-god.demeter .selectable-image {
-    -fx-background-image: url("../images/godCards/god_card_demeter.png");
-}
-.selectable-god.hephaestus .selectable-image {
-    -fx-background-image: url("../images/godCards/god_card_hephaestus.png");
-}
-.selectable-god.minotaur .selectable-image {
-    -fx-background-image: url("../images/godCards/god_card_minotaur.png");
-}
-.selectable-god.pan .selectable-image {
-    -fx-background-image: url("../images/godCards/god_card_pan.png");
-}
-.selectable-god.prometheus .selectable-image {
-    -fx-background-image: url("../images/godCards/god_card_prometheus.png");
-}
 
 /* PODIUM GODS */
 .podium-god {
@@ -165,66 +119,12 @@
 .player-winner .podium-god.podium {
     -fx-background-image: url("../images/godCards/godPodium/podium_gold.png");
 }
-.podium-god.apollo {
-    -fx-background-image: url("../images/godCards/godPodium/podium-apollo.png");
-}
-.podium-god.artemis {
-    -fx-background-image: url("../images/godCards/godPodium/podium-artemis.png");
-}
-.podium-god.athena {
-    -fx-background-image: url("../images/godCards/godPodium/podium-athena.png");
-}
-.podium-god.atlas {
-    -fx-background-image: url("../images/godCards/godPodium/podium-atlas.png");
-}
-.podium-god.demeter {
-    -fx-background-image: url("../images/godCards/godPodium/podium-demeter.png");
-}
-.podium-god.hephaestus {
-    -fx-background-image: url("../images/godCards/godPodium/podium-hephaestus.png");
-}
-.podium-god.minotaur {
-    -fx-background-image: url("../images/godCards/godPodium/podium-minotaur.png");
-}
-.podium-god.pan {
-    -fx-background-image: url("../images/godCards/godPodium/podium-pan.png");
-}
-.podium-god.prometheus {
-    -fx-background-image: url("../images/godCards/godPodium/podium-prometheus.png");
-}
 
 .god-power {
     -fx-background-position: center center;
     -fx-background-repeat: no-repeat;
     -fx-background-size: contain;
     -fx-pref-height: 60;
-}
-.god-power.apollo {
-    -fx-background-image: url("../images/godPowers/apollo_power.png");
-}
-.god-power.artemis {
-    -fx-background-image: url("../images/godPowers/artemis_power.png");
-}
-.god-power.athena {
-    -fx-background-image: url("../images/godPowers/athena_power.png");
-}
-.god-power.atlas {
-    -fx-background-image: url("../images/godPowers/atlas_power.png");
-}
-.god-power.demeter {
-    -fx-background-image: url("../images/godPowers/demeter_power.png");
-}
-.god-power.hephaestus {
-    -fx-background-image: url("../images/godPowers/hephaestus_power.png");
-}
-.god-power.minotaur {
-    -fx-background-image: url("../images/godPowers/minotaur_power.png");
-}
-.god-power.pan {
-    -fx-background-image: url("../images/godPowers/pan_power.png");
-}
-.god-power.prometheus {
-    -fx-background-image: url("../images/godPowers/prometheus_power.png");
 }
 
 /* ANIMATIONS */
@@ -332,46 +232,23 @@
     -fx-background-image: url("../images/buttons/btn_blue_pressed.png");
 }
 
-.players-list-background {
-    -fx-background-position: center center;
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: contain;
-    -fx-background-image: url("../images/layout/players-list-background.png");
-    -fx-translate-x: 320px;
-}
-
 .status-button {
     -fx-background-position: left center;
     -fx-background-repeat: no-repeat;
     -fx-background-size: contain;
     -fx-pref-height: 104px;
-}
-.status-button.no-way-up {
-    -fx-background-image: url("../images/buttons/no-way-up.png");
+    -fx-max-height: 104px;
 }
 .status-button.change-worker {
     -fx-background-image: url("../images/buttons/change-worker.png");
 }
-.status-button.skip,
-.status-button.confirm {
-    visibility: hidden;
-}
-.status-button.skip.artemis {
-    visibility: visible;
-    -fx-background-image: url("../images/buttons/skip-move.png");
-}
-.status-button.skip.demeter,
-.status-button.skip.prometheus {
-    visibility: visible;
-    -fx-background-image: url("../images/buttons/skip-build.png");
-}
-.status-button.confirm.atlas {
-    visibility: visible;
-    -fx-background-image: url("../images/buttons/build-dome.png");
-}
-.status-button.confirm.hephaestus {
-    visibility: visible;
-    -fx-background-image: url("../images/buttons/build-twice.png");
+
+.confirm-button {
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-pref-height: 104px;
+    -fx-max-height: 104px;
 }
 
 /* ENTITIES */
@@ -416,9 +293,6 @@
 .entity.number.light-3 {
     -fx-background-image: url("../images/entities/number-3-light.png");
 }
-.entity.number.light-4 {
-    -fx-background-image: url("../images/entities/number-4-light.png");
-}
 .entity.number.dark-1 {
     -fx-background-image: url("../images/entities/number-1-dark.png");
 }
@@ -427,9 +301,6 @@
 }
 .entity.number.dark-3 {
     -fx-background-image: url("../images/entities/number-3-dark.png");
-}
-.entity.number.dark-4 {
-    -fx-background-image: url("../images/entities/number-4-dark.png");
 }
 .entity.highlight {
     -fx-background-image: url("../images/entities/highlight.png");

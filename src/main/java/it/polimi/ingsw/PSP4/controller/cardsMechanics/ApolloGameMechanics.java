@@ -13,15 +13,11 @@ import java.util.stream.Collectors;
 public class ApolloGameMechanics extends GodGameMechanics {
     private static final GodType type = GodType.APOLLO;           //type which represents the God
 
-    //getter and setter
-    @Override
-    public GodType getType() { return type; }
-
     /**
      * Constructor of the class ApolloGameMechanics
      * @param component reference to the game mechanics to decorate
      */
-    public ApolloGameMechanics(GameMechanics component){ super(component); }
+    public ApolloGameMechanics(GameMechanics component){ super(type, component); }
 
     /**
      * Allows the player to move in neighboring cells occupied by another player's worker
@@ -44,29 +40,22 @@ public class ApolloGameMechanics extends GodGameMechanics {
      */
     @Override
     public void move(Player player, Position futurePosition) {
-        if(futurePosition == null){
-            //TODO: handle exception
-        }
-        else if(futurePosition.hasDome()){
-            //TODO: handle exception
-        }
-        else {
-            player.lockWorker();
+        //TODO handle futurePosition null or with dome
+        player.lockWorker();
 
-            Worker currWorker = player.getCurrWorker();
-            Worker enemyWorker = futurePosition.getWorker();
-            Position currentPosition = currWorker.getCurrPosition();
+        Worker currWorker = player.getCurrWorker();
+        Worker enemyWorker = futurePosition.getWorker();
+        Position currentPosition = currWorker.getCurrPosition();
 
-            futurePosition.setWorker(currWorker);
-            currentPosition.setWorker(enemyWorker);
+        futurePosition.setWorker(currWorker);
+        currentPosition.setWorker(enemyWorker);
 
-            currWorker.setPrevPosition(currentPosition);
-            currWorker.setCurrPosition(futurePosition);
+        currWorker.setPrevPosition(currentPosition);
+        currWorker.setCurrPosition(futurePosition);
 
-            if (enemyWorker != null) {
-                enemyWorker.setPrevPosition(futurePosition);
-                enemyWorker.setCurrPosition(currentPosition);
-            }
+        if (enemyWorker != null) {
+            enemyWorker.setPrevPosition(futurePosition);
+            enemyWorker.setCurrPosition(currentPosition);
         }
     }
 }

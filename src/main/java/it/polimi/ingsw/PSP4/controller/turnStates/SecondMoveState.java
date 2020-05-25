@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP4.controller.turnStates;
 
+import it.polimi.ingsw.PSP4.controller.cardsMechanics.PathType;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
@@ -18,7 +19,13 @@ public class SecondMoveState extends State {
     public boolean canBeSkipped() { return true; }
 
     @Override
-    public State getNextState() { return new StandardBuildState(getPlayer()); }
+    public State getNextState() {
+        Player player = getPlayer();
+        PathType path = player.getMechanics().getPath();
+        if(path == PathType.INFINITE_MOVE)
+            return new SecondMoveState(player);
+        return new StandardBuildState(player);
+    }
 
     /**
      * Constructor of the class SecondMoveState

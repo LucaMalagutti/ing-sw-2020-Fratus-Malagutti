@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP4.utils;
 
+import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
 import it.polimi.ingsw.PSP4.controller.turnStates.State;
 import it.polimi.ingsw.PSP4.controller.turnStates.WaitState;
 import it.polimi.ingsw.PSP4.model.GameState;
@@ -201,25 +202,27 @@ public class Tests {
     }
 
     /**
-     * @param username username of the player to exclude from check
-     * @param god name of the wrapping god
-     * @return true if each player, username excluded, is wrapped with this god
+     * @param username username of the player from which the event started
+     * @return true if each player, username excluded, is wrapped with his evil god
      */
-    public static boolean enemiesWrapped(String username, String god) {
+    public static boolean enemiesWrapped(String username) {
+        GodType god = Getters.player(username).getMechanics().getType();
         for(Player player : GameState.getInstance().getPlayers())
-            if(!player.getUsername().equals(username) && !player.getMechanics().getName().equals(god))
+            if(!player.getUsername().equals(username) && !player.getMechanics().getEvilList().contains(god))
                 return false;
         return true;
     }
 
     /**
-     * @param god name of the wrapping god
-     * @return true if each player is not wrapped with this god
+     * @param username username of the player from which the event started
+     * @return true if each player is not wrapped with username's evil god
      */
-    public static boolean enemiesUnwrapped(String god) {
-        for(Player player : GameState.getInstance().getPlayers())
-            if(player.getMechanics().getName().equals(god))
+    public static boolean enemiesUnwrapped(String username) {
+        GodType god = Getters.player(username).getMechanics().getType();
+        for(Player player : GameState.getInstance().getPlayers()) {
+            if (player.getMechanics().getEvilList().contains(god))
                 return false;
+        }
         return true;
     }
 }

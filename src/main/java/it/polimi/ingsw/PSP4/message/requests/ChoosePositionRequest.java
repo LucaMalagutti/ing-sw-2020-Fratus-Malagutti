@@ -25,7 +25,6 @@ public class ChoosePositionRequest extends Request {
     private final boolean canBeSkipped;                     //Defines if the player can skip current state
     private final boolean canChangeWorker;                  //Defines if the player can change the worker
 
-    public List<SerializablePosition> getOptions() { return options; }
     public boolean canBeSkipped() { return canBeSkipped; }
     public boolean canChangeWorker() { return canChangeWorker; }
 
@@ -59,7 +58,7 @@ public class ChoosePositionRequest extends Request {
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
             return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_POSITION, stringMessage.equals("") ? "Null" : stringMessage));
         }
-        List<SerializablePosition> selected = getOptions().stream().filter(p -> p.getRow() == row && p.getCol() == col).collect(Collectors.toList());
+        List<SerializablePosition> selected = options.stream().filter(p -> p.getRow() == row && p.getCol() == col).collect(Collectors.toList());
         if(selected.size() == 1)
             return new ChoosePositionResponse(getPlayer(), selected.get(0));
         return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_POSITION, stringMessage.equals("") ? "Null" : stringMessage));

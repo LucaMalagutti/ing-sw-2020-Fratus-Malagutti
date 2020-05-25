@@ -19,9 +19,6 @@ public class AssignFirstWorkerPlacementRequest extends Request {
     private final int numPlayer;
     private final int numWorker;
 
-    public int getNumPlayer() { return numPlayer; }
-    public int getNumWorker() { return numWorker; }
-
     public AssignFirstWorkerPlacementRequest(String player, int numPlayer, int numWorker) {
         super(player, GameState.getSerializedInstance(), Message.FIRST_PLACE_WORKER, staticType);
         this.numPlayer = numPlayer;

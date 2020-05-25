@@ -14,8 +14,6 @@ public class ChoosePositionResponse extends Response {
 
     private final SerializablePosition selected;            //Position chosen by the player
 
-    public SerializablePosition getSelected() { return selected; }
-
     /**
      * Constructor of the class ChoosePositionResponse
      * @param player username of the sender

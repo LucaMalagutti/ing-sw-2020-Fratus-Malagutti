@@ -3,7 +3,6 @@ package it.polimi.ingsw.PSP4.message.requests;
 import it.polimi.ingsw.PSP4.message.ErrorMessage;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
-import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.serializable.SerializableGameState;
 
 import java.text.MessageFormat;
@@ -16,9 +15,6 @@ public class WaitRequest extends Request {
     private final static MessageType staticType = MessageType.WAIT;
 
     public final String playingPlayer;        //username of the current player
-
-    @Override
-    public boolean needsResponse() { return false; }
 
     /**
      * Constructor of the class WaitRequest

@@ -46,19 +46,16 @@ public class Position {
     }
 
     /**
-     * Increases the height by 1 (up to 4, only if dome is false)
-     * @return true if has reached the maximum level and built a dome (level 4)
+     * Increases the height by 1 (up to 3, only if dome is false)
+     * If height is 3 sets a dome
      */
-    public boolean increaseHeight() {
-        if(hasDome() || getHeight() == 4){
-            //exception
-        }
-        setHeight(getHeight() + 1);
-        if(getHeight() == 4){
+    public void increaseHeight() {
+        if(hasDome())
+            return;
+        if(getHeight() >= 3)
             setDome(true);
-            return true;
-        }
-        return false;
+        else
+            setHeight(getHeight() + 1);
     }
 
     /**
@@ -120,5 +117,12 @@ public class Position {
      */
     public ArrayList<Position> getOccupied(Player player) {
         return getNeighbour().stream().filter(position -> position.getWorker() != null && !player.getWorkers().contains(position.getWorker())).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    /**
+     * @return true if the position is on the board's perimeter
+     */
+    public boolean isPerimeter() {
+        return getCol() == 0 || getCol() == 4 || getRow() == 0 || getRow() == 4;
     }
 }

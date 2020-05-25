@@ -44,8 +44,6 @@ public class GameState implements Observable<Request> {
     public List<GodType> getAllowedGods() { return new ArrayList<>(allowedGods);}
     public synchronized void setAllowedGods(List<GodType> allowedGods) { this.allowedGods = allowedGods; }
 
-    //public void spawnDome(int row, int col) { getPosition(row, col).setDome(true); }
-
     /**
      * Constructor of the class GameState
      * Builds the board creating Position objects
@@ -132,6 +130,22 @@ public class GameState implements Observable<Request> {
     }
 
     /**
+     * Wrap each player's mechanics with origin's evil mechanics
+     * @param origin player from which the event started
+     */
+    public void wrapPlayers(Player origin) {
+        getPlayers().forEach(p -> p.wrapMechanics(origin));
+    }
+
+    /**
+     * Unwrap each player's mechanics from origin's evil mechanics
+     * @param origin player from which the event started
+     */
+    public void unwrapPlayers(Player origin) {
+        getPlayers().forEach(p -> p.unwrapMechanics(origin));
+    }
+
+    /**
      * Starts the game
      */
     public void startGame() {
@@ -163,7 +177,7 @@ public class GameState implements Observable<Request> {
         List<String> playerList = this.getPlayers().stream().map(Player::getUsername).collect(Collectors.toList());
         Map<String, String> map = new LinkedHashMap<>();
         for (Player pl: players) {
-            map.put(pl.getUsername(), pl.getMechanics().getName());
+            map.put(pl.getUsername(), pl.getMechanics().getType().getName());
         }
         notifyObservers(new ChooseStartingPlayerRequest(this.getCurrPlayer().getUsername(), playerList, map));
     }
@@ -287,9 +301,9 @@ public class GameState implements Observable<Request> {
             }
         }
         //unwrap enemies (useless if not ATHENA)
-        player.getMechanics().playerDefeat(player);
+        unwrapPlayers(player);
         //close player's connection and inform other players
-        notifyObservers(new RemovePlayerRequest(player.getUsername(), new SerializableGameState(), message, false));
+        notifyObservers(new RemovePlayerRequest(player.getUsername(), message, false));
         notifyObservers(new StartTurnRequest(getCurrPlayer().getUsername()));
     }
 
@@ -300,7 +314,7 @@ public class GameState implements Observable<Request> {
      */
     public void playerVictory(Player player, String message) {
         //close every connection notifying the players
-        notifyObservers(new RemovePlayerRequest(player.getUsername(), new SerializableGameState(), message, true));
+        notifyObservers(new RemovePlayerRequest(player.getUsername(), message, true));
         //cleans the GameState singleton for a new game
         reset();
     }
@@ -309,7 +323,7 @@ public class GameState implements Observable<Request> {
      * Drops all client connection after a client left without surrendering
      */
     public void dropAllConnections() {
-        notifyObservers(new RemovePlayerRequest("@", new SerializableGameState(),"", false));
+        notifyObservers(new RemovePlayerRequest("@","", false));
         GameState.getInstance().reset();
     }
 }

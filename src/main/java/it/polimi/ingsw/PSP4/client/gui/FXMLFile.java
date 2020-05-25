@@ -15,4 +15,19 @@ public enum FXMLFile {
     FXMLFile(String fileName) { this.fileName = fileName; }
 
     public String getFileName() { return fileName; }
+
+    public String getWindowTitle() {
+        switch(this) {
+            case LAUNCHER_PLAY:
+            case LAUNCHER_FORM:
+            case LAUNCHER_NUMBER_PLAYERS:
+                return GUIClient.WINDOW_TITLE_LAUNCHER;
+            case LOBBY_GODS_SELECTION:
+            case LOBBY_STARTING_PLAYER_SELECTION_TWO:
+            case LOBBY_STARTING_PLAYER_SELECTION_THREE:
+                return GUIClient.WINDOW_TITLE_LOBBY;
+            default:
+                return GUIClient.WINDOW_TITLE_GAME;
+        }
+    }
 }

@@ -12,10 +12,6 @@ public class DemeterGameMechanics extends GodGameMechanics {
     private static final GodType type = GodType.DEMETER;            //type which represents the God
     private Position lastPositionBuilt;                             //reference to the last position in which the player has built
 
-    //getters and setters
-    @Override
-    public GodType getType() { return type; }
-
     public Position getLastPositionBuilt() {
         return lastPositionBuilt;
     }
@@ -28,7 +24,7 @@ public class DemeterGameMechanics extends GodGameMechanics {
      * @param component reference to the game mechanics to decorate
      */
     public DemeterGameMechanics(GameMechanics component) {
-        super(component);
+        super(type, component);
         lastPositionBuilt = null;
     }
 

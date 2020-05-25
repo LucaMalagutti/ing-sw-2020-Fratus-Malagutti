@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP4.client.gui.sceneController.BoardController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP4.client.gui.sceneController.BoardController">
    <children>
       <GridPane fx:id="board" alignment="CENTER" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="435.0" vgap="10.0">
         <columnConstraints>
@@ -58,7 +52,7 @@
             </Text>
          </children>
          <padding>
-            <Insets bottom="30.0" left="130.0" right="25.0" top="50.0" />
+            <Insets bottom="30.0" left="130.0" right="25.0" top="45.0" />
          </padding>
       </VBox>
       <VBox fx:id="statusButtons" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="375.0" prefWidth="200.0" spacing="30.0" StackPane.alignment="TOP_LEFT">
@@ -167,6 +161,45 @@
                   <Insets bottom="50.0" top="30.0" />
                </VBox.margin>
             </StackPane>
+         </children>
+      </VBox>
+      <VBox fx:id="confirmPane" alignment="CENTER" layoutX="10.0" layoutY="10.0" visible="false">
+         <styleClass>
+            <String fx:value="layout" />
+            <String fx:value="confirm-foreground" />
+         </styleClass>
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR CHOICE?">
+               <styleClass>
+                  <String fx:value="text" />
+                  <String fx:value="lillybelle" />
+                  <String fx:value="white" />
+                  <String fx:value="big" />
+                  <String fx:value="shadow" />
+               </styleClass>
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </Text>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Pane onMousePressed="#confirmAction" prefHeight="200.0" prefWidth="200.0">
+                     <styleClass>
+                        <String fx:value="confirm-button" />
+                        <String fx:value="hover-effect-in" />
+                     </styleClass>
+                  </Pane>
+                  <Pane onMousePressed="#refuseAction" prefHeight="200.0" prefWidth="200.0">
+                     <styleClass>
+                        <String fx:value="confirm-button" />
+                        <String fx:value="hover-effect-in" />
+                     </styleClass>
+                  </Pane>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="35.0" />
+               </VBox.margin>
+            </HBox>
          </children>
       </VBox>
    </children>

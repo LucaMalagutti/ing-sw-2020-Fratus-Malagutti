@@ -1,8 +1,5 @@
 package it.polimi.ingsw.PSP4.controller.cardsMechanics;
 
-import it.polimi.ingsw.PSP4.model.Player;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,7 +14,9 @@ public enum GodType {
     HEPHAESTUS ("Hephaestus"),
     MINOTAUR ("Minotaur"),
     PAN ("Pan"),
-    PROMETHEUS ("Prometheus");
+    PROMETHEUS ("Prometheus"),
+    TRITON("Triton"),
+    ZEUS("Zeus");
 
     public String getName() {
         return name;
@@ -29,16 +28,14 @@ public enum GodType {
         this.name = name;
     }
 
-    public GameMechanics getGameMechanics(ArrayList<Player> players) {
+    public GameMechanics getGameMechanics() {
         switch (this) {
-            case DEFAULT:
-                return new DefaultGameMechanics();
             case APOLLO:
                 return new ApolloGameMechanics(new DefaultGameMechanics());
             case ARTEMIS:
                 return new ArtemisGameMechanics(new DefaultGameMechanics());
             case ATHENA:
-                return new AthenaGameMechanics(new DefaultGameMechanics(), players);
+                return new AthenaGameMechanics(new DefaultGameMechanics());
             case ATLAS:
                 return new AtlasGameMechanics(new DefaultGameMechanics());
             case DEMETER:
@@ -51,22 +48,17 @@ public enum GodType {
                 return new PanGameMechanics(new DefaultGameMechanics());
             case PROMETHEUS:
                 return new PrometheusGameMechanics(new DefaultGameMechanics());
+            case TRITON:
+                return new TritonGameMechanics(new DefaultGameMechanics());
+            case ZEUS:
+                return new ZeusGameMechanics(new DefaultGameMechanics());
             default:
-                System.out.println("Not a valid god");
                 return new DefaultGameMechanics();
         }
     }
 
     public PathType getPathType() {
         switch (this) {
-            case DEFAULT:
-            case APOLLO:
-            case ATHENA:
-            case ATLAS:
-            case HEPHAESTUS:
-            case MINOTAUR:
-            case PAN:
-                return PathType.DEFAULT;
             case ARTEMIS:
                 return PathType.DOUBLE_MOVE;
             case DEMETER:
@@ -74,7 +66,6 @@ public enum GodType {
             case PROMETHEUS:
                 return PathType.EARLY_BUILD;
             default:
-                System.out.println("Not a valid god");
                 return PathType.DEFAULT;
         }
     }

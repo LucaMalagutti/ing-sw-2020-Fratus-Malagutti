@@ -5,8 +5,9 @@ import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Worker;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Serializable "light" copy of Player
@@ -20,7 +21,7 @@ public final class SerializablePlayer implements Serializable {
     private final int turnNum;                                      //number of player's turn
     private final String state;                                     //String that represents the state of the player
     private final GodType card;                                     //type of the player's card
-    private final String wrapper;                                   //name of the god that is wrapping the player or null
+    private final List<String> wrappers;                            //name of the gods that are wrapping the player
     private final int currWorkerIndex;                              //current player's worker
 
     /**
@@ -38,10 +39,7 @@ public final class SerializablePlayer implements Serializable {
         this.turnNum = player.getTurnNum();
         this.state = player.getState().getType().getString();
         this.card = player.getMechanics().getType();
-        if(!this.card.getName().equals(player.getMechanics().getName()))
-            this.wrapper = player.getMechanics().getName();
-        else
-            this.wrapper = null;
+        this.wrappers = player.getMechanics().getEvilList().stream().map(GodType::getName).collect(Collectors.toList());
     }
 
     //getter and setter
@@ -57,7 +55,7 @@ public final class SerializablePlayer implements Serializable {
 
     public GodType getCard() { return card; }
 
-    public String getWrapper() { return wrapper; }
+    public List<String> getWrappers() { return wrappers; }
 
     public String getCurrWorker() {
         if(currWorkerIndex == -1)

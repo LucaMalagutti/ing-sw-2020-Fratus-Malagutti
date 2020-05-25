@@ -13,42 +13,29 @@ import java.text.MessageFormat;
 public class AtlasGameMechanics extends GodGameMechanics {
     private static final GodType type = GodType.ATLAS;              //type which represents the God
 
-    //getter and setter
-    @Override
-    public GodType getType() { return type; }
-
     /**
      * Constructor of the class AtlasGameMechanics
      * @param component reference to the game mechanics to decorate
      */
     public AtlasGameMechanics(GameMechanics component) {
-        super(component);
+        super(type, component);
     }
 
     @Override
     public void build(Player player, Position futurePosition) {
-        if(futurePosition == null){
-            //TODO: handle exception
-        }
-        else if(futurePosition.getWorker() != null){
-            //TODO: handle exception
-        }
-        else if(futurePosition.hasDome()){
-            //TODO: handle exception
-        }
-        else {
-            player.lockWorker();
+        //TODO: handle futurePosition null, occupied or with dome
+        player.lockWorker();
 
+        if(futurePosition.getHeight() < 3 && player.getState().isConfirmed())
+            futurePosition.setDome(true);
+        else
             futurePosition.increaseHeight();
-            if(player.getState().isConfirmed())
-                futurePosition.setDome(true);
-        }
     }
 
     @Override
     public String needsConfirmation(Player player, Position futurePosition) {
         if (player.getState().getType() == StateType.BUILD && futurePosition.getHeight() < 3)
             return Message.ATLAS_BUILD;
-        return null;
+        return getComponent().needsConfirmation(player, futurePosition);
     }
 }

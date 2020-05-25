@@ -12,11 +12,6 @@ public class InfoRequest extends Request {
     }
 
     @Override
-    public boolean needsResponse() {
-        return false;
-    }
-
-    @Override
     public Message validateResponse(String stringMessage) {
         return null;
     }

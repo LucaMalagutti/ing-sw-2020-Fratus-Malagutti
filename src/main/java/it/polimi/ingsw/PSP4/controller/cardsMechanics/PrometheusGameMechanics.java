@@ -12,16 +12,12 @@ import java.util.stream.Collectors;
 public class PrometheusGameMechanics extends GodGameMechanics {
     private static final GodType type = GodType.PROMETHEUS;         //type which represents the God
 
-    //getter and setter
-    @Override
-    public GodType getType() { return type; }
-
     /**
      * Constructor of the class PrometheusGameMechanics
      * @param component reference to the game mechanics to decorate
      */
     public PrometheusGameMechanics(GameMechanics component) {
-        super(component);
+        super(type, component);
     }
 
     /**

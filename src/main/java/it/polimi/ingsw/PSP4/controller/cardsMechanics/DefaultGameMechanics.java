@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP4.model.Position;
 import it.polimi.ingsw.PSP4.model.Worker;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -14,12 +15,22 @@ import java.util.stream.Collectors;
 public class DefaultGameMechanics extends GameMechanics {
     private static final GodType type = GodType.DEFAULT;            //type which represents the God
 
-    //getters and setters
     @Override
-    public GodType getType() { return type; }
+    public boolean isEvil() { return false; }
 
     @Override
     public GameMechanics getComponent() { return null; }
+
+    @Override
+    public void setComponent(GameMechanics component) { }
+
+    /**
+     * Constructor of the class DefaultGameMechanics
+     */
+    public DefaultGameMechanics() { super(type); }
+
+    @Override
+    public List<GodType> getEvilList() { return new ArrayList<>(); }
 
     /**
      * Returns ArrayList containing neighboring, reachable and free positions from the selected worker
@@ -50,43 +61,26 @@ public class DefaultGameMechanics extends GameMechanics {
 
     @Override
     public void move(Player player, Position futurePosition) {
-        if(futurePosition == null){
-            //TODO: handle exception
-        }
-        else if(futurePosition.getWorker() != null){
-            //TODO: handle exception
-        }
-        else if(futurePosition.hasDome()){
-            //TODO: handle exception
-        }
-        else {
-            player.lockWorker();
+        //TODO: handle futurePosition null, occupied or with dome
+        player.lockWorker();
 
-            Worker currWorker = player.getCurrWorker();
-            Position currentPosition = currWorker.getCurrPosition();
+        Worker currWorker = player.getCurrWorker();
+        Position currentPosition = currWorker.getCurrPosition();
 
-            futurePosition.setWorker(currWorker);
-            currentPosition.setWorker(null);
+        futurePosition.setWorker(currWorker);
+        currentPosition.setWorker(null);
 
-            currWorker.setPrevPosition(currentPosition);
-            currWorker.setCurrPosition(futurePosition);
-        }
+        currWorker.setPrevPosition(currentPosition);
+        currWorker.setCurrPosition(futurePosition);
     }
 
     @Override
     public void build(Player player, Position futurePosition) {
-        if(futurePosition == null){
-            //TODO: handle exception
-        }
-        else if(futurePosition.getWorker() != null){
-            //TODO: handle exception
-        }
-        else if(futurePosition.hasDome()){
-            //TODO: handle exception
-        }
-        else {
-            player.lockWorker();
-            futurePosition.increaseHeight();
-        }
+        //TODO: handle futurePosition null, occupied or with dome
+        player.lockWorker();
+        futurePosition.increaseHeight();
     }
+
+    @Override
+    public String needsConfirmation(Player player, Position futurePosition) { return null; }
 }

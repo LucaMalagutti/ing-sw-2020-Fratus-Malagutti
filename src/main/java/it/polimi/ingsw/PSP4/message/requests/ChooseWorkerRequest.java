@@ -22,7 +22,6 @@ public class ChooseWorkerRequest extends Request {
     private final List<int[]> workers;
 
     public SerializableGameState getBoard() { return board; }
-    public List<int[]> getWorkers() { return workers; }
 
     /**
      * Constructor of the class ChooseWorkerRequest
@@ -46,7 +45,7 @@ public class ChooseWorkerRequest extends Request {
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
             return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_WORKER, stringMessage.equals("") ? "Null" : stringMessage));
         }
-        List<int[]> selected = getWorkers().stream().filter(w -> w[0] == worker[0] && w[1] == worker[1]).collect(Collectors.toList());
+        List<int[]> selected = workers.stream().filter(w -> w[0] == worker[0] && w[1] == worker[1]).collect(Collectors.toList());
         if (selected.size() == 1)
             return new ChooseWorkerResponse(getPlayer(), selected.get(0));
         return new ErrorMessage(getPlayer(), MessageFormat.format(Message.NOT_VALID_WORKER, stringMessage.equals("") ? "Null" : stringMessage));

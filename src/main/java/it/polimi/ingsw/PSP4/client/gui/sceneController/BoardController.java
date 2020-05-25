@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP4.client.gui.sceneController;
 import it.polimi.ingsw.PSP4.client.gui.AlertBox;
 import it.polimi.ingsw.PSP4.client.gui.FXMLFile;
 import it.polimi.ingsw.PSP4.client.gui.GUIClient;
-import it.polimi.ingsw.PSP4.message.Message;
+import it.polimi.ingsw.PSP4.client.gui.GodGraphics;
 import it.polimi.ingsw.PSP4.message.MessageType;
 import it.polimi.ingsw.PSP4.message.requests.ChoosePositionRequest;
 import it.polimi.ingsw.PSP4.message.requests.RemovePlayerRequest;
@@ -24,8 +24,10 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class BoardController extends GUIController{
@@ -35,6 +37,7 @@ public class BoardController extends GUIController{
     public AnchorPane activePlayerPane;
     public Text activePlayerAction;
     public VBox endPane;
+    public VBox confirmPane;
 
     private SerializableGameState gameState;
     private SerializablePlayer activePlayer;
@@ -65,7 +68,7 @@ public class BoardController extends GUIController{
         List<SerializablePlayer> matches = gameState.getPlayers().stream().filter(p -> p.getUsername().equals(activeUsername)).collect(Collectors.toList());
         if (matches.size() == 0) {
             //TODO handle error
-            System.out.println("Error, this player is not in the official players list");
+            System.out.println(GUIClient.PLAYER_NOT_FOUND);
             return;
         }
         activePlayer = matches.get(0);
@@ -98,12 +101,13 @@ public class BoardController extends GUIController{
 
         Pane godImage = new Pane();
         godImage.getStyleClass().add("selectable-image");
+        godImage.setStyle(GodGraphics.getSelectableBG(player.getCard().getName()));
 
         Pane godFrame = new Pane();
         godFrame.getStyleClass().add("selectable-frame");
 
         StackPane godCard = new StackPane();
-        godCard.getStyleClass().addAll("selectable-god", player.getCard().getName().toLowerCase());
+        godCard.getStyleClass().add("selectable-god");
         godCard.setPrefWidth(80);
         godCard.getChildren().addAll(godImage, godFrame);
 
@@ -175,7 +179,7 @@ public class BoardController extends GUIController{
      * @param position SerializablePosition to draw
      */
     private void drawCell(SerializablePosition position) {
-        int height = Math.min(position.getHeight(), 3);
+        int height = position.getHeight();
         StackPane cell = getCellFromGrid(position.getRow(), position.getCol());
         for(int i = 1; i <= height; i++)
             addEntity(cell, "level-" + i);
@@ -215,7 +219,7 @@ public class BoardController extends GUIController{
     private void fillActivePlayerPane(String color, String message) {
         String god = activePlayer.getCard().getName();
         activePlayerPane.getStyleClass().add("player-" + color);
-        activePlayerPane.getChildren().get(1).getStyleClass().add(god.toLowerCase());
+        activePlayerPane.getChildren().get(1).setStyle(GodGraphics.getPodiumBG(god));
         ((Text) activePlayerPane.getChildren().get(2)).setText(god);
         ((Text) activePlayerPane.getChildren().get(3)).setText(message.toUpperCase());
     }
@@ -223,10 +227,10 @@ public class BoardController extends GUIController{
         fillActivePlayerPane(gameState.getPlayerColor(activePlayer).name().toLowerCase(), message);
     }
     private void fillActivePlayerWinner() {
-        fillActivePlayerPane("winner", "Winner");
+        fillActivePlayerPane("winner", GUIClient.BA_WINNER);
     }
     private void fillActivePlayerLoser() {
-        fillActivePlayerPane("loser", "Loser");
+        fillActivePlayerPane("loser", GUIClient.BA_LOSER);
     }
 
     /**
@@ -234,31 +238,29 @@ public class BoardController extends GUIController{
      * @param className class (or classes divided by a space) to be added
      * @param handler lambda function to call on mouse pressed, can be null
      */
-    private void addStatusButton(String className, EventHandler<MouseEvent> handler) {
+    private void addStatusButton(String className, String backgroundProperty, EventHandler<MouseEvent> handler) {
         if(gameState.getCurrPlayer() != activePlayer)
             return;
         String[] classNames = className.split(" ");
         Pane button = new Pane();
         button.getStyleClass().add("status-button");
         button.getStyleClass().addAll(classNames);
+        button.setStyle(backgroundProperty);
         if(handler != null) {
             button.getStyleClass().add("hover-effect-in");
             button.setOnMousePressed(handler);
         }
         statusButtons.getChildren().add(button);
     }
-    private void addStatusButtonWrapper() {
-        if(activePlayer.getWrapper() != null && activePlayer.getWrapper().equals("Athena_Enemy"))
-            addStatusButton("no-way-up", null);
+    private void addStatusButtonWrappers() {
+        for(String god : activePlayer.getWrappers())
+            addStatusButton("wrapper", GodGraphics.getWrapperButtonBG(god), null);
     }
     private void addStatusButtonChange() {
-        addStatusButton("change-worker", e -> changeWorker());
+        addStatusButton("change-worker", "", e -> changeWorker());
     }
     private void addStatusButtonSkip() {
-        addStatusButton("skip " + activePlayer.getCard().getName().toLowerCase(), e -> skipState());
-    }
-    private void addStatusButtonConfirm() {
-        addStatusButton("confirm " + activePlayer.getCard().getName().toLowerCase(), e -> confirmAction());
+        addStatusButton("skip", GodGraphics.getSkipButtonBG(activePlayer.getCard().getName()), e -> skipState());
     }
 
     /**
@@ -268,11 +270,11 @@ public class BoardController extends GUIController{
     private void showEndPane(boolean victory) {
         String message, className;
         if(victory) {
-            message = "VICTORY";
+            message = GUIClient.BA_VICTORY;
             className = "winner-foreground";
             fillActivePlayerWinner();
         } else {
-            message = "DEFEAT";
+            message = GUIClient.BA_DEFEAT;
             className = "loser-foreground";
             fillActivePlayerLoser();
         }
@@ -283,12 +285,23 @@ public class BoardController extends GUIController{
     }
 
     /**
+     * Show the options to confirm an action during the game
+     */
+    private void showConfirmPane() {
+        HBox buttons = (HBox) confirmPane.getChildren().get(1);
+        Map<Boolean, String> images = GodGraphics.getConfirmButtonsBG(activePlayer.getCard().getName());
+        buttons.getChildren().get(0).setStyle(images.get(true));
+        buttons.getChildren().get(1).setStyle(images.get(false));
+        confirmPane.setVisible(true);
+    }
+
+    /**
      * Displays parts of the gameState which don't depend on the request type
      */
     private void standardGameState() {
         gameState.getPlayers().forEach(this::addPlayerToList);
         gameState.getBoard().forEach(this::drawCell);
-        addStatusButtonWrapper();
+        addStatusButtonWrappers();
     }
 
     /**
@@ -298,7 +311,6 @@ public class BoardController extends GUIController{
         if(requestSent)
             return;
         requestSent = true;
-        System.out.println("Change worker button pressed!");
         getClient().validate("change");
     }
 
@@ -309,18 +321,27 @@ public class BoardController extends GUIController{
         if(requestSent)
             return;
         requestSent = true;
-        //System.out.println("Skip state button pressed!");
         getClient().validate("skip");
     }
 
     /**
-     * Listener for a click on the confirm status button
+     * Listener for a click on the confirm button true
      */
-    private void confirmAction() {
+    public void confirmAction() {
         if(requestSent)
             return;
         requestSent = true;
-        //System.out.println("Confirm action button pressed!");
+        getClient().validate("Y");
+    }
+
+    /**
+     * Listener for a click on the confirm button false
+     */
+    public void refuseAction() {
+        if(requestSent)
+            return;
+        requestSent = true;
+        getClient().validate("N");
     }
 
     /**
@@ -334,7 +355,6 @@ public class BoardController extends GUIController{
         StackPane cell = (StackPane) event.getSource();
         int row = GridPane.getRowIndex(cell);
         int col = GridPane.getColumnIndex(cell);
-        //System.out.println("Player wants to place his worker in: " + row + "," + col);
         getClient().validate(row+","+col);
     }
 
@@ -349,7 +369,6 @@ public class BoardController extends GUIController{
         StackPane cell = (StackPane) event.getSource();
         int row = GridPane.getRowIndex(cell);
         int col = GridPane.getColumnIndex(cell);
-        //System.out.println("Player wants to select his worker in: " + row + "," + col);
         getClient().validate(row+","+col);
     }
 
@@ -364,7 +383,6 @@ public class BoardController extends GUIController{
         StackPane cell = (StackPane) event.getSource();
         int row = GridPane.getRowIndex(cell);
         int col = GridPane.getColumnIndex(cell);
-        //System.out.println("Player wants to perform an action in: " + row + "," + col);
         getClient().validate(row+","+col);
     }
 
@@ -404,7 +422,7 @@ public class BoardController extends GUIController{
 
         switch(req.getType()) {
             case FIRST_WORKER_PLACEMENT:
-                fillActivePlayerPlaying("Place a worker");
+                fillActivePlayerPlaying(GUIClient.BA_PLACE_WORKER);
                 highlightFreeCells();
                 break;
             case CHOOSE_POSITION:
@@ -414,19 +432,18 @@ public class BoardController extends GUIController{
                 if(req1.canBeSkipped())
                     addStatusButtonSkip();
                 if(activePlayer.getState().equals("Move"))
-                    fillActivePlayerPlaying("Move your worker");
+                    fillActivePlayerPlaying(GUIClient.BA_MOVE_WORKER);
                 else
-                    fillActivePlayerPlaying("Build a block");
+                    fillActivePlayerPlaying(GUIClient.BA_BUILD_BLOCK);
                 highlightOptions();
                 break;
             case CHOOSE_WORKER:
-                fillActivePlayerPlaying("Choose a worker");
+                fillActivePlayerPlaying(GUIClient.BA_CHOOSE_WORKER);
                 highlightWorkers();
                 break;
             case CONFIRMATION:
-                fillActivePlayerPlaying("Confirm your move");
-                addStatusButtonConfirm();
-                //TODO implement timer?
+                fillActivePlayerPlaying(GUIClient.BA_CONFIRM_MOVE);
+                showConfirmPane();
                 break;
             case REMOVE_PLAYER:
                 RemovePlayerRequest req2 = (RemovePlayerRequest) req;
@@ -435,14 +452,14 @@ public class BoardController extends GUIController{
                 } else if(req2.isVictory()) {
                     showEndPane(false);
                 } else if(!req2.isVictory() && !req2.getTargetPlayer().equals(activePlayer.getUsername())) {
-                    AlertBox.displayError("Enemy player lost", req2.getCustomMessage(activePlayer.getUsername()));
+                    AlertBox.displayError(GUIClient.AT_ENEMY_LOST, req2.getCustomMessage(activePlayer.getUsername()));
                 }
                 break;
             case START_TURN:
                 getClient().validate("\n");
                 break;
             case WAIT:
-                fillActivePlayerPlaying("Wait for " + gameState.getCurrPlayer().getCard());
+                fillActivePlayerPlaying(MessageFormat.format(GUIClient.BA_WAIT, gameState.getCurrPlayer().getCard()));
                 break;
         }
     }

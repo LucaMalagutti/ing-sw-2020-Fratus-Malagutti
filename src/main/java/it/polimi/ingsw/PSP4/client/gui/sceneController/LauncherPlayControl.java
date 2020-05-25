@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP4.client.gui.sceneController;
 
 import it.polimi.ingsw.PSP4.client.gui.FXMLFile;
+import it.polimi.ingsw.PSP4.client.gui.GUIClient;
 import it.polimi.ingsw.PSP4.message.requests.Request;
 
 public class LauncherPlayControl extends GUIController {
@@ -9,7 +10,7 @@ public class LauncherPlayControl extends GUIController {
     }
 
     public void updateUI (Request req) {
-        System.out.println("Unexpected request in LAUNCHER_PLAY");
+        System.out.println(GUIClient.UNEXPECTED_REQUEST);
     }
 
     public void setupAttributes(Request req) {}

@@ -56,7 +56,7 @@ public class AthenaPowerTest {
         Actions.selectStartingPlayer(startingPlayer);
         Actions.placeWorkers(new LinkedHashMap<>(workers));
         Actions.fillBoard(new LinkedHashMap<>(buildings));
-        Actions.wrapPlayer(enemyPlayer, "Athena_Enemy");
+        Actions.wrapPlayers(startingPlayer);
 
         assertTrue(Tests.gameStateExists());
         assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
@@ -79,7 +79,7 @@ public class AthenaPowerTest {
         assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
         assertTrue(Tests.currentWorker(movePosition, true));
         assertTrue(Tests.stateOptions(new ArrayList<>(expectedBuildOptions)));
-        assertTrue(Tests.enemiesUnwrapped("Athena_Enemy"));
+        assertTrue(Tests.enemiesUnwrapped(startingPlayer));
 
         Actions.selectOption(buildPosition);
         buildings.remove(3);
@@ -137,7 +137,7 @@ public class AthenaPowerTest {
         Actions.selectStartingPlayer(startingPlayer);
         Actions.placeWorkers(new LinkedHashMap<>(workers));
         Actions.fillBoard(new LinkedHashMap<>(buildings));
-        Actions.wrapPlayer(enemyPlayer, "Athena_Enemy");
+        Actions.wrapPlayers(startingPlayer);
 
         assertTrue(Tests.gameStateExists());
         assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
@@ -156,7 +156,7 @@ public class AthenaPowerTest {
 
         Actions.selectOption(movePosition);
         workers.replace(startingPlayer, Arrays.asList(movePosition, workers.get(startingPlayer).get(1)));
-        assertTrue(Tests.enemiesUnwrapped("Athena_Enemy"));
+        assertTrue(Tests.enemiesUnwrapped(startingPlayer));
 
         assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
         assertTrue(Tests.currentWorker(movePosition, true));
@@ -220,7 +220,7 @@ public class AthenaPowerTest {
         Actions.selectStartingPlayer(startingPlayer);
         Actions.placeWorkers(new LinkedHashMap<>(workers));
         Actions.fillBoard(new LinkedHashMap<>(buildings));
-        Actions.unwrapPlayer(enemyPlayer, "Athena_Enemy");
+        Actions.unwrapPlayers(startingPlayer);
 
         assertTrue(Tests.gameStateExists());
         assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
@@ -239,7 +239,7 @@ public class AthenaPowerTest {
 
         Actions.selectOption(movePosition);
         workers.replace(startingPlayer, Arrays.asList(movePosition, workers.get(startingPlayer).get(1)));
-        assertTrue(Tests.enemiesWrapped(startingPlayer, "Athena_Enemy"));
+        assertTrue(Tests.enemiesWrapped(startingPlayer));
 
         assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
         assertTrue(Tests.currentWorker(movePosition, true));

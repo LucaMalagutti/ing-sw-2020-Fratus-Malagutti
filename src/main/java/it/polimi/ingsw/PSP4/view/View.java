@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP4.view;
 
-import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.requests.Request;
 import it.polimi.ingsw.PSP4.message.responses.Response;
 import it.polimi.ingsw.PSP4.model.Player;
@@ -16,5 +15,5 @@ public abstract class View implements Observable<Response>, Observer<Request> {
 
     void handleMove(Response response) {
         notifyObservers(response);
-    };
+    }
 }

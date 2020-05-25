@@ -12,9 +12,6 @@ public class ConfirmationResponse extends Response {
     private final SerializablePosition selected;
     private final boolean confirmed;
 
-    public SerializablePosition getSelected() { return selected; }
-    public boolean isConfirmed() { return confirmed; }
-
     /**
      * Constructor of the class ConfirmationResponse
      * @param player username of the sender

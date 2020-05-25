@@ -13,16 +13,12 @@ import java.text.MessageFormat;
 public class HephaestusGameMechanics extends GodGameMechanics {
     private static final GodType type = GodType.HEPHAESTUS;         //type which represents the God
 
-    //getters and setters
-    @Override
-    public GodType getType() { return type; }
-
     /**
      * Constructor of the class HephaestusGameMechanics
      * @param component reference to the game mechanics to decorate
      */
     public HephaestusGameMechanics(GameMechanics component) {
-        super(component);
+        super(type, component);
     }
 
     @Override
@@ -36,6 +32,6 @@ public class HephaestusGameMechanics extends GodGameMechanics {
     public String needsConfirmation(Player player, Position futurePosition) {
         if (player.getState().getType() == StateType.BUILD && futurePosition.getHeight() < 2)
             return Message.HEPHAESTUS_BUILD;
-        return null;
+        return getComponent().needsConfirmation(player, futurePosition);
     }
 }

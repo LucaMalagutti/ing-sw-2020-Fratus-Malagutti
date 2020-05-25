@@ -2,7 +2,8 @@ package it.polimi.ingsw.PSP4.client.gui.sceneController;
 
 import it.polimi.ingsw.PSP4.client.gui.AlertBox;
 import it.polimi.ingsw.PSP4.client.gui.FXMLFile;
-import it.polimi.ingsw.PSP4.client.gui.GodPower;
+import it.polimi.ingsw.PSP4.client.gui.GUIClient;
+import it.polimi.ingsw.PSP4.client.gui.GodGraphics;
 import it.polimi.ingsw.PSP4.message.MessageType;
 import it.polimi.ingsw.PSP4.message.requests.AssignGodRequest;
 import it.polimi.ingsw.PSP4.message.requests.ChooseAllowedGodsRequest;
@@ -15,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,20 +50,14 @@ public class LobbyGodsSelectionControl extends GUIController {
 
         StackPane descriptionContainer = (StackPane) godInfo.getChildren().get(1);
         Text description = (Text) descriptionContainer.getChildren().get(0);
-        String content = GodPower.getPowerFromGod(god).getDescription();
+        String content = GodGraphics.getDescriptionFromGod(god).getDescription();
         description.setText(content);
 
         Pane powerImage = (Pane) godInfo.getChildren().get(2);
-        List<String> powerClassNames = powerImage.getStyleClass();
-        powerClassNames = powerClassNames.stream().filter(c -> !c.equals("god-power")).collect(Collectors.toList());
-        powerImage.getStyleClass().removeAll(powerClassNames);
-        powerImage.getStyleClass().add(god.toLowerCase());
+        powerImage.setStyle(GodGraphics.getGodPowerBG(god));
 
         Pane godImage = (Pane) highlightedGod.getChildren().get(1);
-        List<String> imageClassNames = godImage.getStyleClass();
-        imageClassNames = imageClassNames.stream().filter(c -> !c.equals("god-card")).collect(Collectors.toList());
-        godImage.getStyleClass().removeAll(imageClassNames);
-        godImage.getStyleClass().add(god.toLowerCase());
+        godImage.setStyle(GodGraphics.getGodCardBG(god));
 
     }
 
@@ -73,7 +69,6 @@ public class LobbyGodsSelectionControl extends GUIController {
             for (String name: selectedGodsNames) {
                 sb.append(name).append(" ");
             }
-            //System.out.println(sb.toString());
             getClient().validate(sb.toString());
         }
     }
@@ -81,7 +76,6 @@ public class LobbyGodsSelectionControl extends GUIController {
     public void sendPersonalGod() {
         List<Node> selectedGods = implementedGodsGrid.getChildren().stream().filter(card->card.getStyleClass().contains("selected")).collect(Collectors.toList());
         if(selectedGods.size() == numPlayers) {
-            //System.out.println(selectedGods.get(0).getId());
             getClient().validate(selectedGods.get(0).getId());
         }
     }
@@ -89,10 +83,11 @@ public class LobbyGodsSelectionControl extends GUIController {
     private void addGodCard(String god, int index) {
         Pane image = new Pane(), frame = new Pane();
         image.getStyleClass().add("selectable-image");
+        image.setStyle(GodGraphics.getSelectableBG(god));
         frame.getStyleClass().add("selectable-frame");
 
         StackPane card = new StackPane();
-        card.getStyleClass().addAll("hover-effect-out", "selectable-god", god.toLowerCase());
+        card.getStyleClass().addAll("hover-effect-out", "selectable-god");
         card.setId(god);
         card.setOnMousePressed(this::toggleGodSelection);
         card.setOnMouseEntered(this::showGodInfo);
@@ -104,7 +99,7 @@ public class LobbyGodsSelectionControl extends GUIController {
 
     private void setupAllowedGods(ChooseAllowedGodsRequest req) {
         numPlayers = req.getNumPlayer();
-        callToAction.setText("SELECT " + numPlayers + " GODS");
+        callToAction.setText(MessageFormat.format(GUIClient.LA_GOD_SELECTION, numPlayers, "S"));
         List<String> godList = req.getSelectableGods();
         for(int i = 0; i < godList.size(); i++)
             addGodCard(godList.get(i), i);
@@ -113,7 +108,7 @@ public class LobbyGodsSelectionControl extends GUIController {
 
     private void setupPersonalGod(AssignGodRequest req) {
         numPlayers = 1;
-        callToAction.setText("SELECT YOUR GOD");
+        callToAction.setText(MessageFormat.format(GUIClient.LA_GOD_SELECTION, "YOUR", ""));
         List<String> godList = req.getAllowedGods();
         for(int i = 0; i < godList.size(); i++)
             addGodCard(godList.get(i), i);
@@ -135,7 +130,7 @@ public class LobbyGodsSelectionControl extends GUIController {
         } else if (req.getType() == MessageType.INFO) {
             AlertBox.displayError("Info", req.getMessage());
         } else {
-            System.out.println("Unexpected"+ req.getType());
+            System.out.println(MessageFormat.format(GUIClient.UNEXPECTED, req.getType(), ""));
         }
     }
 

@@ -15,11 +15,6 @@ public abstract class Request extends Message {
     public SerializableGameState getBoard() { return board; }
 
     /**
-     * @return true if the Request must receive a Response
-     */
-    public boolean needsResponse() { return true; }
-
-    /**
      * Constructor of the class Request
      * @param player username of the receiver
      * @param board serializable copy of GameState to be printed

@@ -1,10 +1,7 @@
 package it.polimi.ingsw.PSP4.controller.turnStates;
 
-import it.polimi.ingsw.PSP4.model.GameState;
 import it.polimi.ingsw.PSP4.model.Player;
 import it.polimi.ingsw.PSP4.model.Position;
-
-import java.util.ArrayList;
 
 /**
  * Defines the actions to perform when waiting

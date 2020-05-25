@@ -2,10 +2,12 @@ package it.polimi.ingsw.PSP4.model;
 
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.DefaultGameMechanics;
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.GameMechanics;
+import it.polimi.ingsw.PSP4.controller.cardsMechanics.GodType;
 import it.polimi.ingsw.PSP4.controller.cardsMechanics.PathType;
 import it.polimi.ingsw.PSP4.controller.turnStates.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Contains information about the state of one player
@@ -64,6 +66,46 @@ public class Player {
         this.turnNum = 0;
         this.state = new WaitState(this);
         this.mechanics = new DefaultGameMechanics();
+    }
+
+    /**
+     * Wrap the mechanics with origin's evil mechanics
+     * @param origin player from which the event started
+     */
+    public void wrapMechanics(Player origin) {
+        if(origin == this)
+            return;
+        List<GodType> presentWrappers = mechanics.getEvilList();
+        GodType newWrapper = origin.getMechanics().getType();
+        if(presentWrappers.contains(newWrapper))
+            return;
+        GameMechanics newMechanics = newWrapper.getGameMechanics();
+        newMechanics.setEvil();
+        newMechanics.setComponent(getMechanics());
+        setMechanics(newMechanics);
+    }
+
+    /**
+     * Unwrap the mechanics from origin's evil mechanics
+     * @param origin player from which the event started
+     */
+    public void unwrapMechanics(Player origin) {
+        if(origin == this)
+            return;
+        List<GodType> presentWrappers = mechanics.getEvilList();
+        GodType oldWrapper = origin.getMechanics().getType();
+        if(!presentWrappers.contains(oldWrapper))
+            return;
+        GameMechanics extMechanics = null;
+        GameMechanics oldMechanics = getMechanics();
+        while(oldMechanics.getRealType() != oldWrapper) {
+            extMechanics = oldMechanics;
+            oldMechanics = oldMechanics.getComponent();
+        }
+        if(extMechanics == null)
+            setMechanics(oldMechanics.getComponent());
+        else
+            extMechanics.setComponent(oldMechanics.getComponent());
     }
 
     /**
