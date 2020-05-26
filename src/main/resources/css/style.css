@@ -236,8 +236,8 @@
     -fx-background-position: left center;
     -fx-background-repeat: no-repeat;
     -fx-background-size: contain;
-    -fx-pref-height: 104px;
-    -fx-max-height: 104px;
+    -fx-pref-height: 93px;
+    -fx-max-height: 93px;
 }
 .status-button.change-worker {
     -fx-background-image: url("../images/buttons/change-worker.png");

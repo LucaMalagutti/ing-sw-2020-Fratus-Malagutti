@@ -55,12 +55,12 @@
             <Insets bottom="30.0" left="130.0" right="25.0" top="45.0" />
          </padding>
       </VBox>
-      <VBox fx:id="statusButtons" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="375.0" prefWidth="200.0" spacing="30.0" StackPane.alignment="TOP_LEFT">
+      <VBox fx:id="statusButtons" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="545.0" prefWidth="180.0" spacing="20.0" StackPane.alignment="TOP_LEFT">
          <StackPane.margin>
-            <Insets left="30.0" top="60.0" />
+            <Insets left="30.0" top="30.0" />
          </StackPane.margin>
       </VBox>
-      <AnchorPane fx:id="activePlayerPane" mouseTransparent="true" prefHeight="200.0" prefWidth="200.0" styleClass="layout">
+      <AnchorPane fx:id="activePlayerPane" mouseTransparent="true" prefHeight="200.0" prefWidth="200.0">
          <children>
             <Pane layoutX="15.0" layoutY="585.0" prefHeight="135.0" prefWidth="250.0" translateY="30.0">
                <styleClass>
@@ -90,6 +90,10 @@
                </styleClass>
             </Text>
          </children>
+         <styleClass>
+            <String fx:value="layout" />
+            <String fx:value="player-blue" />
+         </styleClass>
       </AnchorPane>
       <VBox fx:id="endPane" alignment="CENTER" visible="false" StackPane.alignment="CENTER">
          <styleClass>
