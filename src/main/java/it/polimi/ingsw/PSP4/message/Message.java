@@ -59,7 +59,7 @@ public abstract class Message implements Serializable {
     public static String YOUR_TURN = "It's your turn! Press Enter to start";
 
     //Default errors
-    public static String CLIENT_EXIT_DURING_GAME = "A player has unexpectedly left the game. Exiting..";
+    public static String CLIENT_EXIT_DURING_GAME = "A player has unexpectedly left the game. Press ENTER to exit the game..";
     public static String CONNECTION_ATTEMPT_TIMED_OUT = "The connection attempt timed out. Try again!";
     public static String NOT_VALID_CONFIRM = "Not a valid confirmation. Type \"Y\" or \"N\".";
     public static String NOT_VALID_GOD_LIST = "Not a valid god list. Try again with valid god names separated by a single space.";

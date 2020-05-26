@@ -208,11 +208,11 @@ public class GameState implements Observable<Request> {
     private void selectWorker() {
         List<int[]> workers = new ArrayList<>();
         for (Worker worker : getCurrPlayer().getWorkers()) {
-            if (!getCurrPlayer().getStuckWorkers().contains(worker)) {
+//            if (!getCurrPlayer().getStuckWorkers().contains(worker)) {
                 Position position = worker.getCurrPosition();
                 int[] coordinates = {position.getRow(), position.getCol()};
                 workers.add(coordinates);
-            }
+//            }
         }
         notifyObservers(new ChooseWorkerRequest(getCurrPlayer().getUsername(), workers));
     }
@@ -283,15 +283,16 @@ public class GameState implements Observable<Request> {
     public synchronized void playerDefeat(Player player, String message) {
         //prepares for a possible new turn
         newTurn(false);
-        //remove player from the list
-        removePlayer(player);
-        if(getPlayers().size() == 1) {
+        if(getPlayers().size() == 2) {
             //the game cannot continue
-            playerVictory(getPlayers().get(0), message);
+            for (Player p: players) {
+                if (!p.getUsername().equals(player.getUsername())) {
+                    playerVictory(p, message);
+                    break;
+                }
+            }
             return;
         }
-        //the game can continue
-        setNumPlayer(getPlayers().size());
         //remove player's workers from the board
         ArrayList<Worker> workers = player.getWorkers();
         for(Position[] line : board) {
@@ -300,10 +301,14 @@ public class GameState implements Observable<Request> {
                     position.setWorker(null);
             }
         }
-        //unwrap enemies (useless if not ATHENA)
-        unwrapPlayers(player);
         //close player's connection and inform other players
         notifyObservers(new RemovePlayerRequest(player.getUsername(), message, false));
+        //remove player from the list
+        removePlayer(player);
+        //the game can continue
+        setNumPlayer(getPlayers().size());
+        //unwrap enemies (useless if not ATHENA)
+        unwrapPlayers(player);
         notifyObservers(new StartTurnRequest(getCurrPlayer().getUsername()));
     }
 

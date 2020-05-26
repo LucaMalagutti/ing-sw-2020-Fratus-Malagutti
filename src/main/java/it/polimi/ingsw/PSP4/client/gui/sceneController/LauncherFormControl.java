@@ -9,7 +9,6 @@ import it.polimi.ingsw.PSP4.message.requests.Request;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import java.io.IOException;
 import java.text.MessageFormat;
 
 public class LauncherFormControl extends GUIController {
@@ -24,6 +23,10 @@ public class LauncherFormControl extends GUIController {
     boolean firstTime = true;
 
     public void submitLauncherForm() {
+        if (isRequestSent()) {
+            return;
+        }
+        errorLabel.setText(null);
         if(server.getText().length() == 0) {
             errorLabel.setText(GUIClient.IP_EMPTY);
             return;
@@ -36,16 +39,12 @@ public class LauncherFormControl extends GUIController {
             errorLabel.setText(GUIClient.USERNAME_RESERVED);
             return;
         }
-        if (!getClient().isConnected())
-            try {
-                getClient().setConnected(getClient().connectToServer(server.getText()));
-            } catch (IOException e) {
-                e.getMessage();
-            }
-        if (!getClient().isConnected())
+        if (!getClient().isConnected()) {
+            getClient().setConnected(getClient().connectToServer(server.getText()));
+        }
+        if (!getClient().isConnected()) {
             errorLabel.setText(GUIClient.CONNECTION_REFUSED);
-        else {
-            errorLabel.setText(null);
+        } else {
             chosenUsername = username.getText();
             if (getClient().getLastRequestReceived() != null) {
                 getClient().validate(chosenUsername);
@@ -55,6 +54,7 @@ public class LauncherFormControl extends GUIController {
 
     public void updateUI (Request req) {
         if (req.getType() == MessageType.CHOOSE_USERNAME && firstTime) {
+            setRequestSent(false);
             firstTime = false;
             getClient().validate(chosenUsername);
         }  else if (req.getType() == MessageType.CHOOSE_NUM_PLAYERS) {
@@ -63,6 +63,7 @@ public class LauncherFormControl extends GUIController {
         } else if (req.getType() == MessageType.INFO) {
             if (req.getMessage().equals(Message.WAIT_LOBBY_SETUP)) {
                 errorLabel.setText(Message.WAIT_LOBBY_SETUP);
+                setRequestSent(true);
             } else if (req.getMessage().equals(MessageFormat.format(Message.USERNAME_TAKEN, chosenUsername))) {
                 errorLabel.setText(MessageFormat.format(Message.USERNAME_TAKEN, chosenUsername));
             } else if (req.getMessage().equals(Message.GAME_ALREADY_STARTED)) {

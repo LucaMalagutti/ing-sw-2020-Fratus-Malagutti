@@ -19,14 +19,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Base class for the GUI Client
+ */
 public class GUIClient extends Application{
     public int port = 31713;
-    private Socket socket = new Socket();
+    private Socket socket;
     private ObjectOutputStream socketOut;
     private ObjectInputStream socketIn;
     private GUIController sceneController;
@@ -61,6 +63,10 @@ public class GUIClient extends Application{
         }
     }
 
+    /**
+     * Launches the GUI
+     * @param args main args
+     */
     public void run(String[] args) {
         launch(args);
     }
@@ -69,19 +75,19 @@ public class GUIClient extends Application{
      * Attempts a connection to the server
      * @param address IP address of the server to connect to
      * @return boolean indicating if the connection attempt was successful
-     * @throws IOException socket exceptions
      */
-    public boolean connectToServer(String address) throws IOException {
+    public boolean connectToServer(String address) {
         InetSocketAddress socketAddress = new InetSocketAddress(address, port);
         if (socketAddress.isUnresolved())
             return false;
         try {
-            socket.connect(socketAddress, 3000);
-        } catch (SocketTimeoutException e) {
+            socket = new Socket();
+            socket.connect(socketAddress, 2000);
+            socketOut = new ObjectOutputStream(socket.getOutputStream());
+            socketIn = new ObjectInputStream(socket.getInputStream());
+        } catch (IOException e) {
             return false;
         }
-        socketOut = new ObjectOutputStream(socket.getOutputStream());
-        socketIn = new ObjectInputStream(socket.getInputStream());
         setActive(true);
         asyncReadFromSocket();
         return true;
@@ -104,9 +110,10 @@ public class GUIClient extends Application{
                         //enemy client exits
                         if (req2.getTargetPlayer().equals("@") && !req2.isVictory()) {
                             Platform.runLater(() -> {
-                                closeProgram(GUIClient.CM_PLAYER_LEFT);
-                                reset();
-                                updateScene(FXMLFile.LAUNCHER_PLAY, null);
+                                if (!closeProgram(GUIClient.CM_PLAYER_LEFT)) {
+                                    reset();
+                                    updateScene(FXMLFile.LAUNCHER_PLAY, null);
+                                }
                             });
                         } else {
                             Platform.runLater(() -> {
@@ -152,8 +159,9 @@ public class GUIClient extends Application{
      */
     public void validate(String stringMessage) {
         Message message = getLastRequestReceived().validateResponse(stringMessage);
-        if (message.getType() == MessageType.ERROR) {
+        if (message!= null && message.getType() == MessageType.ERROR) {
             AlertBox.displayError("Error", message.getMessage());
+            sceneController.setRequestSent(false);
         }
         else {
             asyncWriteToSocket(message);
@@ -217,8 +225,9 @@ public class GUIClient extends Application{
     /**
      * Shows a ConfirmBox that asks the player if he wants to leave. Closes window on "yes"
      * @param closingMessage message to be displayed in the ConfirmBox
+     * @return answer to 'want to close the game?' question
      */
-    public void closeProgram(String closingMessage){
+    public boolean closeProgram(String closingMessage){
         boolean answer = ConfirmBox.displayConfirm(GUIClient.CT_CLOSE_MESSAGE, closingMessage);
         if(answer) {
             setActive(false);
@@ -233,6 +242,7 @@ public class GUIClient extends Application{
             }
             window.close();
         }
+        return answer;
     }
 
     /**

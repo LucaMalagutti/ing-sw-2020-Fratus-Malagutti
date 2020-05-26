@@ -12,6 +12,7 @@ public enum GodType {
     ATLAS ("Atlas"),
     DEMETER ("Demeter"),
     HEPHAESTUS ("Hephaestus"),
+    HESTIA("Hestia"),
     MINOTAUR ("Minotaur"),
     PAN ("Pan"),
     PROMETHEUS ("Prometheus"),
@@ -42,6 +43,8 @@ public enum GodType {
                 return new DemeterGameMechanics(new DefaultGameMechanics());
             case HEPHAESTUS:
                 return new HephaestusGameMechanics(new DefaultGameMechanics());
+            case HESTIA:
+                return new HestiaGameMechanics(new DefaultGameMechanics());
             case MINOTAUR:
                 return new MinotaurGameMechanics(new DefaultGameMechanics());
             case PAN:
@@ -62,6 +65,7 @@ public enum GodType {
             case ARTEMIS:
                 return PathType.DOUBLE_MOVE;
             case DEMETER:
+            case HESTIA:
                 return PathType.DOUBLE_BUILD;
             case PROMETHEUS:
                 return PathType.EARLY_BUILD;

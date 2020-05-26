@@ -14,6 +14,8 @@ import java.util.*;
 import static org.junit.Assert.assertTrue;
 
 public class AthenaPowerTest {
+    public String godName = "Athena";
+
     @Before
     public void setUp() { GameState.getInstance(true).dropAllConnections(); }
 
@@ -22,7 +24,7 @@ public class AthenaPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Athena");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         String enemyPlayer = players.get(1);
@@ -102,7 +104,7 @@ public class AthenaPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Athena");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         String enemyPlayer = players.get(1);
@@ -183,7 +185,7 @@ public class AthenaPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Athena");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         String enemyPlayer = players.get(1);

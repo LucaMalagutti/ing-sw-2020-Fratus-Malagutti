@@ -31,20 +31,16 @@ public class ClientMain {
     }
 
     public static void main(String[] args) {
-        try {
-            Scanner stdIn = new Scanner(System.in);
-            String clientUI = chooseClientUI(stdIn);
-            if (clientUI.equals("CLI")) {
-                CLIClient client = new CLIClient();
-                client.run();
-            } else if (clientUI.equals("GUI")){
-                GUIClient client = new GUIClient();
-                client.run(args);
-            } else {
-                System.out.println(Message.NOT_VALID_UI);
-            }
-        } catch (IOException e) {
-            System.err.print(e.getMessage());
+        Scanner stdIn = new Scanner(System.in);
+        String clientUI = chooseClientUI(stdIn);
+        if (clientUI.equals("CLI")) {
+            CLIClient client = new CLIClient();
+            client.run();
+        } else if (clientUI.equals("GUI")){
+            GUIClient client = new GUIClient();
+            client.run(args);
+        } else {
+            System.out.println(Message.NOT_VALID_UI);
         }
     }
 }

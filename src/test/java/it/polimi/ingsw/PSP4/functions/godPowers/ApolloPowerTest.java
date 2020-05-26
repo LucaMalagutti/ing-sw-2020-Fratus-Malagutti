@@ -7,7 +7,6 @@ import it.polimi.ingsw.PSP4.utils.Random;
 import it.polimi.ingsw.PSP4.utils.*;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
@@ -15,6 +14,8 @@ import java.util.*;
 import static org.junit.Assert.assertTrue;
 
 public class ApolloPowerTest {
+    public String godName = "Apollo";
+
     @Before
     public void setUp() { GameState.getInstance(true).dropAllConnections(); }
 
@@ -23,7 +24,7 @@ public class ApolloPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Apollo");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         Map<String, List<Coordinates>> workers = new LinkedHashMap<>();
@@ -78,7 +79,7 @@ public class ApolloPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Apollo");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         Map<String, List<Coordinates>> workers = new LinkedHashMap<>();
@@ -133,7 +134,7 @@ public class ApolloPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Apollo");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         String enemyPlayer = players.get(1);
@@ -190,7 +191,7 @@ public class ApolloPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Apollo");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         Map<String, List<Coordinates>> workers = new LinkedHashMap<>();
@@ -241,7 +242,7 @@ public class ApolloPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Apollo");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         String enemyPlayer = players.get(1);
@@ -299,7 +300,7 @@ public class ApolloPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Apollo");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         Map<String, List<Coordinates>> workers = new LinkedHashMap<>();

@@ -17,8 +17,10 @@ public class RemovePlayerRequest extends Request {
 
     private final String targetPlayer;              //username of the targetPlayer
     private final boolean victory;                  //states if the game has been won
+    private String customMessagePlayer = "";        //TODO cleanup
 
     public String getTargetPlayer() { return targetPlayer; }
+    public void setCustomMessagePlayer(String customMessagePlayer) {this.customMessagePlayer = customMessagePlayer;}
     public boolean isVictory() { return victory; }
 
     /**
@@ -38,16 +40,16 @@ public class RemovePlayerRequest extends Request {
         return new ErrorMessage(getPlayer(), Message.NOT_YOUR_TURN);
     }
 
-    public String getCustomMessage(String player) {
+    public String getCustomMessage() {
         if(isVictory()) {
-            if(player.equals(targetPlayer))
+            if(customMessagePlayer.equals(targetPlayer))
                 return MessageFormat.format(getMessage(), "A player") + MessageFormat.format(Message.VICTORY_WINNER, targetPlayer);
-            return MessageFormat.format(getMessage(), player) + MessageFormat.format(Message.VICTORY_LOSER, targetPlayer);
+            return MessageFormat.format(getMessage(), customMessagePlayer) + MessageFormat.format(Message.VICTORY_LOSER, targetPlayer);
         } else {
             if (targetPlayer.equals("@")) {
                 return Message.CLIENT_EXIT_DURING_GAME;
-            } else if(player.equals(targetPlayer)) {
-                return MessageFormat.format(getMessage(), player) + "\n" + MessageFormat.format(Message.DEFEAT_LOSER, targetPlayer);
+            } else if(customMessagePlayer.equals(targetPlayer)) {
+                return MessageFormat.format(getMessage(), customMessagePlayer) + "\n" + MessageFormat.format(Message.DEFEAT_LOSER, targetPlayer);
             } else {
                 return MessageFormat.format(getMessage(), targetPlayer) + "\n" + MessageFormat.format(Message.DEFEAT_ENEMY, targetPlayer);
             }
@@ -55,5 +57,5 @@ public class RemovePlayerRequest extends Request {
     }
 
     @Override
-    public String toString() { return getCustomMessage(getPlayer()); }
+    public String toString() { return getCustomMessage(); }
 }

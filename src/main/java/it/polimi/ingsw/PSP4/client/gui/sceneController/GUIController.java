@@ -5,14 +5,16 @@ import it.polimi.ingsw.PSP4.message.requests.Request;
 
 public abstract class GUIController {
     private GUIClient client;
+    private boolean requestSent = false;
 
+    public boolean isRequestSent() { return requestSent; }
+    public void setRequestSent(boolean requestSent) { this.requestSent = requestSent; }
+    public GUIClient getClient() {return this.client;}
     public void setClient(GUIClient client) {
         if (this.client == null) {
             this.client = client;
         }
     }
-
-    public GUIClient getClient() {return this.client;}
 
     /**
      * Updates the existing scene when a new request is received from the server

@@ -16,6 +16,7 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -41,7 +42,6 @@ public class BoardController extends GUIController{
 
     private SerializableGameState gameState;
     private SerializablePlayer activePlayer;
-    private boolean requestSent = false;
     private final List<StackPane> grid = new ArrayList<>();
 
     /**
@@ -308,9 +308,10 @@ public class BoardController extends GUIController{
      * Listener for a click on the change-worker status button
      */
     private void changeWorker() {
-        if(requestSent)
+        if(isRequestSent())
             return;
-        requestSent = true;
+        setRequestSent(true);
+        System.out.println("Change worker button pressed!");
         getClient().validate("change");
     }
 
@@ -318,29 +319,32 @@ public class BoardController extends GUIController{
      * Listener for a click on the skip status button
      */
     private void skipState() {
-        if(requestSent)
+        if(isRequestSent())
             return;
-        requestSent = true;
+        setRequestSent(true);
+        //System.out.println("Skip state button pressed!");
         getClient().validate("skip");
     }
 
     /**
      * Listener for a click on the confirm button true
      */
-    public void confirmAction() {
-        if(requestSent)
+    @FXML
+    private void confirmAction() {
+        if(isRequestSent())
             return;
-        requestSent = true;
+        setRequestSent(true);
         getClient().validate("Y");
     }
 
     /**
      * Listener for a click on the confirm button false
      */
-    public void refuseAction() {
-        if(requestSent)
+    @FXML
+    private void refuseAction() {
+        if(isRequestSent())
             return;
-        requestSent = true;
+        setRequestSent(true);
         getClient().validate("N");
     }
 
@@ -349,9 +353,9 @@ public class BoardController extends GUIController{
      * @param event click event on the StackPane
      */
     private void positionSelected(MouseEvent event) {
-        if(requestSent)
+        if(isRequestSent())
             return;
-        requestSent = true;
+        setRequestSent(true);
         StackPane cell = (StackPane) event.getSource();
         int row = GridPane.getRowIndex(cell);
         int col = GridPane.getColumnIndex(cell);
@@ -363,9 +367,9 @@ public class BoardController extends GUIController{
      * @param event click event on the StackPane
      */
     private void workerSelected(MouseEvent event) {
-        if(requestSent)
+        if(isRequestSent())
             return;
-        requestSent = true;
+        setRequestSent(true);
         StackPane cell = (StackPane) event.getSource();
         int row = GridPane.getRowIndex(cell);
         int col = GridPane.getColumnIndex(cell);
@@ -377,9 +381,9 @@ public class BoardController extends GUIController{
      * @param event click event on the StackPane
      */
     private void optionSelected(MouseEvent event) {
-        if(requestSent)
+        if(isRequestSent())
             return;
-        requestSent = true;
+        setRequestSent(true);
         StackPane cell = (StackPane) event.getSource();
         int row = GridPane.getRowIndex(cell);
         int col = GridPane.getColumnIndex(cell);
@@ -390,9 +394,9 @@ public class BoardController extends GUIController{
      * Listener for a click on the play again button in the end pane
      */
     public void playAgain() {
-        if(requestSent)
+        if(isRequestSent())
             return;
-        requestSent = true;
+        setRequestSent(true);
         getClient().reset();
         getClient().updateScene(FXMLFile.LAUNCHER_PLAY, null);
     }
@@ -401,9 +405,9 @@ public class BoardController extends GUIController{
      * Listener for a click in the close game button in the end pane
      */
     public void closeGame() {
-        if(requestSent)
+        if(isRequestSent())
             return;
-        requestSent = true;
+        setRequestSent(true);
         GUIClient.window.close();
     }
 
@@ -452,7 +456,7 @@ public class BoardController extends GUIController{
                 } else if(req2.isVictory()) {
                     showEndPane(false);
                 } else if(!req2.isVictory() && !req2.getTargetPlayer().equals(activePlayer.getUsername())) {
-                    AlertBox.displayError(GUIClient.AT_ENEMY_LOST, req2.getCustomMessage(activePlayer.getUsername()));
+                    AlertBox.displayError(GUIClient.AT_ENEMY_LOST, req2.getCustomMessage());
                 }
                 break;
             case START_TURN:

@@ -14,6 +14,8 @@ import java.util.*;
 import static org.junit.Assert.assertTrue;
 
 public class AtlasPowerTest {
+    public String godName = "Atlas";
+
     @Before
     public void setUp() { GameState.getInstance(true).dropAllConnections(); }
 
@@ -22,7 +24,7 @@ public class AtlasPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Atlas");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         String enemyPlayer = players.get(1);
@@ -87,7 +89,7 @@ public class AtlasPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Atlas");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         String enemyPlayer = players.get(1);
@@ -154,7 +156,7 @@ public class AtlasPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Atlas");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         String enemyPlayer = players.get(1);

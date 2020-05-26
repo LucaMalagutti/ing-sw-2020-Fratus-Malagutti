@@ -15,6 +15,8 @@ import java.util.*;
 import static org.junit.Assert.assertTrue;
 
 public class ArtemisPowerTest {
+    public String godName = "Artemis";
+
     @Before
     public void setUp() { GameState.getInstance(true).dropAllConnections(); }
 
@@ -23,7 +25,7 @@ public class ArtemisPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Artemis");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         Map<String, List<Coordinates>> workers = new LinkedHashMap<>();
@@ -84,7 +86,7 @@ public class ArtemisPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Artemis");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         Map<String, List<Coordinates>> workers = new LinkedHashMap<>();
@@ -141,11 +143,11 @@ public class ArtemisPowerTest {
     }
 
     @Test
-    public void powerUsed_swapWithEnemyWorker() {
+    public void powerUsed_doubleMove() {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Artemis");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         Map<String, List<Coordinates>> workers = new LinkedHashMap<>();
@@ -208,7 +210,7 @@ public class ArtemisPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Artemis");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         Map<String, List<Coordinates>> workers = new LinkedHashMap<>();
@@ -258,7 +260,7 @@ public class ArtemisPowerTest {
         int numPlayer = 2;
         List<String> players = Random.playerList(numPlayer);
         Map<String, String> gods = new LinkedHashMap<>();
-        gods.put(players.get(0), "Artemis");
+        gods.put(players.get(0), godName);
         gods.put(players.get(1), "Default");
         String startingPlayer = players.get(0);
         Map<String, List<Coordinates>> workers = new LinkedHashMap<>();

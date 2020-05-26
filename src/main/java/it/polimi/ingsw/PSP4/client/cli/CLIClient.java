@@ -10,7 +10,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
@@ -21,8 +20,7 @@ import java.util.concurrent.TimeUnit;
  * Base class for a Client using a CLI UI.
  */
 public class CLIClient {
-    private String ipAddress = "127.0.0.1";     //ipAddress of the server to connect to. HARDCODED ONLY DURING DEVELOPMENT
-    private final Socket socket = new Socket();
+    private Socket socket;
     private ObjectOutputStream socketOut;
     private ObjectInputStream socketIn;
 
@@ -142,40 +140,33 @@ public class CLIClient {
     public InetSocketAddress chooseServerIP(Scanner stdIn, int port) {
         System.out.println(Message.CHOOSE_SERVER_IP);
         String address = stdIn.nextLine();
-        InetSocketAddress socketAddress;
-        do {
-            socketAddress = new InetSocketAddress(address, port);
-            if (socketAddress.isUnresolved() || address.equals("")) {
-                System.out.println(Message.NOT_VALID_SERVER_IP);
-                address = stdIn.nextLine();
-                socketAddress = new InetSocketAddress(address, port);
-            }
-        } while (socketAddress.isUnresolved() || address.equals(""));
-        ipAddress = address;
-        return socketAddress;
+        return new InetSocketAddress(address, port);
     }
 
     /**
      * Handles the connection to the server and sets up two threads, one receiving and the other writing on the socket.
-     * @throws IOException in case something goes wrong during the connection or the users forces a client exit
      */
-    public void run() throws IOException {
+    public void run() {
         int port = 31713;
         Scanner stdIn = new Scanner(System.in);
-        if (ipAddress == null) {
+        boolean connectionAttemptSucceeded = false;
+        while (!connectionAttemptSucceeded) {
             try {
                 InetSocketAddress socketAddress = chooseServerIP(stdIn, port);
-                socket.connect(socketAddress, 3000);
-            } catch (SocketTimeoutException e) {
+                if (!socketAddress.isUnresolved()) {
+                    socket = new Socket();
+                    socket.connect(socketAddress, 3000);
+                    socketOut = new ObjectOutputStream(socket.getOutputStream());
+                    socketIn = new ObjectInputStream(socket.getInputStream());
+                    connectionAttemptSucceeded = true;
+                } else {
+                    System.out.println(Message.NOT_VALID_SERVER_IP);
+                }
+            } catch (IOException e) {
                 System.out.println(Message.CONNECTION_ATTEMPT_TIMED_OUT);
-                chooseServerIP(stdIn, port);
             }
-        } else {
-            socket.connect(new InetSocketAddress(ipAddress, port));
         }
         System.out.println("Connection established");
-        socketOut = new ObjectOutputStream(socket.getOutputStream());
-        socketIn = new ObjectInputStream(socket.getInputStream());
         try {
             Thread t0 = asyncReadFromSocket();
             Thread t1 = asyncWriteToSocket(stdIn);
@@ -184,10 +175,14 @@ public class CLIClient {
         } catch (InterruptedException | NoSuchElementException e) {
             System.out.println("Connection closed from client side");
         } finally {
-            stdIn.close();
-            socketIn.close();
-            socketOut.close();
-            socket.close();
+            try {
+                stdIn.close();
+                socketIn.close();
+                socketOut.close();
+                socket.close();
+            } catch (IOException e) {
+                e.getMessage();
+            }
         }
     }
 }

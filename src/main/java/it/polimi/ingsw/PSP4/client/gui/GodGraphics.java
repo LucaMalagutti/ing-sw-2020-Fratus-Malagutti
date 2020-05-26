@@ -12,6 +12,7 @@ public enum GodGraphics {
     ATLAS("Your Build: Your Worker may build a dome at any level.", "Confirm: build-dome.png, build-block.png"),
     DEMETER("Your Build: Your Worker may build one additional time, but not on the same space.", "Skip: skip-build.png"),
     HEPHAESTUS("Your Build: Your Worker may build one additional block (not dome) on top of your first block.", "Confirm: build-twice.png, build-once.png"),
+    HESTIA("Your Build: Your Worker may build one additional time, but this cannot be on a perimeter space.", "Skip: skip-build.png"),
     MINOTAUR("Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be forced one space to an unoccupied space at any level."),
     PAN("Win Condition: You also win if your Worker moves down two or more levels."),
     PROMETHEUS("Your Turn: If your Worker does not move up, it may build both before and after moving.", "Skip: skip-build.png"),
