@@ -27,6 +27,11 @@ public class MinotaurGameMechanics extends GodGameMechanics {
     @Override
     public ArrayList<Position> getMovePositions(Player player, int callNum) {
         ArrayList<Position> componentValid = super.getMovePositions(player, callNum);
+
+        //It should never be evil, in such case at least it won't change the behaviour
+        if(isEvil())
+            return componentValid;
+
         Position currPosition = player.getCurrWorker().getCurrPosition();
         ArrayList<Position> lower = currPosition.getReachableHeight();
         ArrayList<Position> occupied  = lower.stream().filter(currPosition.getOccupied(player)::contains).collect(Collectors.toCollection(ArrayList::new));
@@ -75,36 +80,33 @@ public class MinotaurGameMechanics extends GodGameMechanics {
      */
     @Override
     public void move(Player player, Position futurePosition) {
-        //TODO handle futurePosition null or with dome
-        if (futurePosition.getWorker() == null) {
-            super.move(player, futurePosition);
+        //It should never be evil, in such case at least it won't change the behaviour
+        if (isEvil() || futurePosition.getWorker() == null) {
+            getComponent().move(player, futurePosition);
+            return;
         }
-        else {
-            player.lockWorker();
+        player.lockWorker();
 
-            Worker currWorker = player.getCurrWorker();
-            Worker enemyWorker = futurePosition.getWorker();
-            Position currentPosition = currWorker.getCurrPosition();
-            Position behindPosition = new Position(-1, -1);
-            int[] behindCoordinates = getBehindEnemyPositionCoordinates(currentPosition, futurePosition);
-            for (Position x : futurePosition.getFree()) {
-                if (x.getRow() == behindCoordinates[0] && x.getCol() == behindCoordinates[1]) {
-                    behindPosition = x;
-                }
+        Worker currWorker = player.getCurrWorker();
+        Worker enemyWorker = futurePosition.getWorker();
+        Position currentPosition = currWorker.getCurrPosition();
+        Position behindPosition = new Position(-1, -1);
+        int[] behindCoordinates = getBehindEnemyPositionCoordinates(currentPosition, futurePosition);
+        for (Position x : futurePosition.getFree()) {
+            if (x.getRow() == behindCoordinates[0] && x.getCol() == behindCoordinates[1]) {
+                behindPosition = x;
             }
-            //This should never happen because behindPosition should always be reassigned in the loop above, since it was
-            //previously filtered by getMovePosition as behind and free. Putting (future) exception throw just in case.
-            //TODO: handle behindPosition.getCol() or getRow() == -1
-            futurePosition.setWorker(currWorker);
-            currentPosition.setWorker(null);
-
-            currWorker.setPrevPosition(currentPosition);
-            currWorker.setCurrPosition(futurePosition);
-
-            behindPosition.setWorker(enemyWorker);
-            //TODO should we add something to indicate that the worker was FORCED to move to this position to avoid checkWinCondition bugs?
-            enemyWorker.setPrevPosition(futurePosition);
-            enemyWorker.setCurrPosition(behindPosition);
         }
+
+        futurePosition.setWorker(currWorker);
+        currentPosition.setWorker(null);
+
+        currWorker.setPrevPosition(currentPosition);
+        currWorker.setCurrPosition(futurePosition);
+
+        behindPosition.setWorker(enemyWorker);
+
+        enemyWorker.setPrevPosition(futurePosition);
+        enemyWorker.setCurrPosition(behindPosition);
     }
 }

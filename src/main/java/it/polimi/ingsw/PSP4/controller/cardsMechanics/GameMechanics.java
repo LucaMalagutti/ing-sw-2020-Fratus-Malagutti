@@ -11,18 +11,22 @@ import java.util.List;
  */
 abstract public class GameMechanics {
     private final GodType type;
-    private boolean evil = false;
+    private boolean evil = false;           //If true the GameMechanics is wrapping an enemy so it can have different behaviours
 
     public boolean isEvil() { return evil; }
     public void setEvil() { this.evil = true; }
 
+    public GodType getRealType() { return type; }
     public GodType getType() {
         if(isEvil())
             return getComponent().getType();
         return type;
     }
-    public GodType getRealType() { return type; }
-    public PathType getPath() { return getType().getPathType(); }
+    public PathType getPath() {
+        if(isEvil())
+            return getComponent().getPath();
+        return type.getPathType();
+    }
 
     abstract public GameMechanics getComponent();
     abstract public void setComponent(GameMechanics component);
@@ -44,6 +48,12 @@ abstract public class GameMechanics {
             evilList.add(type);
         return evilList;
     }
+
+    /**
+     * Setup operations to be performed at the beginning of the game
+     * @param player current player
+     */
+    abstract public void setupMechanics(Player player);
 
     /**
      * Modifies available movement positions based on the card effect

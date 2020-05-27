@@ -1,16 +1,11 @@
 package it.polimi.ingsw.PSP4.model;
 
-import it.polimi.ingsw.PSP4.client.gui.GUIClient;
-import it.polimi.ingsw.PSP4.model.serializable.SerializableGameState;
-import it.polimi.ingsw.PSP4.utils.*;
+import it.polimi.ingsw.PSP4.utils.Tests;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.*;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class GameStateTest {
     @Before
@@ -26,24 +21,6 @@ public class GameStateTest {
         GameState.getInstance().dropAllConnections();
 
         assertTrue(Tests.gameStateClean());
-    }
-
-    @Ignore
-    @Test
-    public void gameState_printTest() {
-        Runner.workersPlacement(3, 0);
-        List<Coordinates> firstLevel = Arrays.asList(
-                new Coordinates(0, 0), new Coordinates(3, 3),
-                new Coordinates(1, 1), new Coordinates(2, 2),
-                new Coordinates(4, 4)
-        );
-        Map<Integer, List<Coordinates>> buildings = new LinkedHashMap<>();
-        buildings.put(1, firstLevel);
-        Actions.fillBoard(buildings);
-        Actions.setCurrentWorker(Getters.workersOnBoard().get(Getters.currentPlayer()).get(0));
-        SerializableGameState board = GameState.getSerializedInstance();
-        if(board != null)
-            System.out.println(board.toString());
     }
 
     @After

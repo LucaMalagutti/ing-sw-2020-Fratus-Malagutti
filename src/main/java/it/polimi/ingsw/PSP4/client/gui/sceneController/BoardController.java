@@ -61,17 +61,35 @@ public class BoardController extends GUIController{
     }
 
     /**
-     * Set the reference to the owner of this window
+     * @param username name of the player to find
+     * @return reference to the first player with this username in the players list
      */
-    private void setActivePlayer() {
-        String activeUsername = getClient().getUsername();
-        List<SerializablePlayer> matches = gameState.getPlayers().stream().filter(p -> p.getUsername().equals(activeUsername)).collect(Collectors.toList());
-        if (matches.size() == 0) {
-            //TODO handle error
-            System.out.println(GUIClient.PLAYER_NOT_FOUND);
+    private SerializablePlayer findFirstMatch(String username) {
+        List<SerializablePlayer> matches = gameState.getPlayers().stream().filter(p -> p.getUsername().equals(username)).collect(Collectors.toList());
+        if(matches.size() > 0)
+            return matches.get(0);
+        return null;
+    }
+
+    /**
+     * Set the reference to the owner of this window
+     * @param backup receiver of the request used to try to recover if client's username is not found
+     */
+    private void setActivePlayer(String backup) {
+        SerializablePlayer player = findFirstMatch(getClient().getUsername());
+        if(player != null) {
+            activePlayer = player;
             return;
         }
-        activePlayer = matches.get(0);
+
+        player = findFirstMatch(backup);
+        if(player != null) {
+            getClient().setUsername(backup);
+            activePlayer = player;
+            return;
+        }
+
+        //TODO close the game
     }
 
     /**
@@ -420,7 +438,7 @@ public class BoardController extends GUIController{
     public void setupAttributes(Request req) {
         if (req.getType() != MessageType.INFO) {
             gameState = req.getBoard();
-            setActivePlayer();
+            setActivePlayer(req.getPlayer());
             standardGameState();
         }
 

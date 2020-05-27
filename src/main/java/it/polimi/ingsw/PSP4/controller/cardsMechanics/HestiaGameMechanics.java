@@ -27,6 +27,10 @@ public class HestiaGameMechanics extends GodGameMechanics {
     public ArrayList<Position> getBuildPositions(Player player, int callNum) {
         ArrayList<Position> componentValid = super.getComponent().getBuildPositions(player, callNum);
 
+        //It should never be evil, in such case at least it won't change the behaviour
+        if(isEvil())
+            return componentValid;
+
         if (callNum == 2) {
             ArrayList<Position> sidePositions = componentValid.stream().filter(Position::isPerimeter).collect(Collectors.toCollection(ArrayList::new));
             componentValid.removeAll(sidePositions);

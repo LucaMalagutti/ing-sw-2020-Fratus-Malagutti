@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP4.message.requests.Request;
 
 public class LobbyWaitControl extends GUIController{
 
+    @Override
     public void updateUI(Request req) {
         if (req.getType() == MessageType.CHOOSE_USERNAME) {
             getClient().updateScene(FXMLFile.LAUNCHER_FORM, null);
@@ -16,5 +17,6 @@ public class LobbyWaitControl extends GUIController{
         }
     }
 
+    @Override
     public void setupAttributes(Request req) {}
 }

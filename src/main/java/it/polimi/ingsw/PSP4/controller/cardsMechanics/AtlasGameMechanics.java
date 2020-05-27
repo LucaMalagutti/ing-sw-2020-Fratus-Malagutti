@@ -21,9 +21,16 @@ public class AtlasGameMechanics extends GodGameMechanics {
         super(type, component);
     }
 
+    /**
+     * Builds a dome or a regular block as chosen by the player
+     */
     @Override
     public void build(Player player, Position futurePosition) {
-        //TODO: handle futurePosition null, occupied or with dome
+        //It should never be evil, in such case at least it won't change the behaviour
+        if(isEvil()) {
+            getComponent().build(player, futurePosition);
+            return;
+        }
         player.lockWorker();
 
         if(futurePosition.getHeight() < 3 && player.getState().isConfirmed())
@@ -32,9 +39,13 @@ public class AtlasGameMechanics extends GodGameMechanics {
             futurePosition.increaseHeight();
     }
 
+    /**
+     * If not already obvious needs to ask the player to choose between building a dome or a regular block
+     */
     @Override
     public String needsConfirmation(Player player, Position futurePosition) {
-        if (player.getState().getType() == StateType.BUILD && futurePosition.getHeight() < 3)
+        //It should never be evil, in such case at least it won't change the behaviour
+        if (!isEvil() && player.getState().getType() == StateType.BUILD && futurePosition.getHeight() < 3)
             return Message.ATLAS_BUILD;
         return getComponent().needsConfirmation(player, futurePosition);
     }

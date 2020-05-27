@@ -9,6 +9,9 @@ import it.polimi.ingsw.PSP4.message.requests.Request;
 public class LauncherNumberPlayersControl extends GUIController {
     private boolean selected = false;
 
+    /**
+     * Listener for a click on the 2 players button
+     */
     public void setTwoPlayers() {
         if (!selected) {
             selected = true;
@@ -16,6 +19,9 @@ public class LauncherNumberPlayersControl extends GUIController {
         }
     }
 
+    /**
+     * Listener for a click on the 3 players button
+     */
     public void setThreePlayers() {
         if (!selected) {
             selected = true;
@@ -23,6 +29,7 @@ public class LauncherNumberPlayersControl extends GUIController {
         }
     }
 
+    @Override
     public void updateUI (Request req) {
         if (req.getType() == MessageType.CHOOSE_ALLOWED_GODS) {
             getClient().updateScene(FXMLFile.LOBBY_GODS_SELECTION, req);
@@ -35,5 +42,6 @@ public class LauncherNumberPlayersControl extends GUIController {
         }
     }
 
+    @Override
     public void setupAttributes(Request req) {}
 }

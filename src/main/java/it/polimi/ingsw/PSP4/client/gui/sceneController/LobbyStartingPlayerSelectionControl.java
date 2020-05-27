@@ -32,6 +32,7 @@ public class LobbyStartingPlayerSelectionControl extends GUIController {
         getClient().validate(t.getText());
     }
 
+    @Override
     public void updateUI(Request req) {
         if (req.getType() == MessageType.FIRST_WORKER_PLACEMENT) {
             getClient().updateScene(FXMLFile.BOARD, req);
@@ -42,6 +43,7 @@ public class LobbyStartingPlayerSelectionControl extends GUIController {
         }
     }
 
+    @Override
     public void setupAttributes(Request req) {
         if (req.getType() == MessageType.CHOOSE_STARTING_PLAYER) {
             ChooseStartingPlayerRequest r = (ChooseStartingPlayerRequest) req;

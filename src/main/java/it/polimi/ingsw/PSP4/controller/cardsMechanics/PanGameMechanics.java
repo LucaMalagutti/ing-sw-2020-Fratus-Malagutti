@@ -19,6 +19,10 @@ public class PanGameMechanics extends GodGameMechanics {
      */
     @Override
     public boolean checkWinCondition(Player player) {
-        return super.checkWinCondition(player) || (player.getCurrWorker().getPrevPosition().getHeight() - player.getCurrWorker().getCurrPosition().getHeight() >= 2);
+        boolean componentCondition = getComponent().checkWinCondition(player);
+        //It should never be evil, in such case at least it won't change the behaviour
+        if(isEvil())
+            return componentCondition;
+        return componentCondition || (player.getCurrWorker().getPrevPosition().getHeight() - player.getCurrWorker().getCurrPosition().getHeight() >= 2);
     }
 }

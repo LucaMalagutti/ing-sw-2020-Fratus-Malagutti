@@ -52,6 +52,7 @@ public class LauncherFormControl extends GUIController {
         }
     }
 
+    @Override
     public void updateUI (Request req) {
         if (req.getType() == MessageType.CHOOSE_USERNAME && firstTime) {
             setRequestSent(false);
@@ -81,6 +82,6 @@ public class LauncherFormControl extends GUIController {
         }
     }
 
-
+    @Override
     public void setupAttributes(Request req) {}
 }

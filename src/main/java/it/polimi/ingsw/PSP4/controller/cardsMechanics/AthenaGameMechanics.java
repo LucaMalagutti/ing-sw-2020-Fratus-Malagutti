@@ -21,7 +21,7 @@ public class AthenaGameMechanics extends GodGameMechanics {
     public AthenaGameMechanics(GameMechanics component) { super(type, component); }
 
     /**
-     * Removes the possibility to move up
+     * Removes the possibility to move up (only if evil)
      */
     @Override
     public ArrayList<Position> getMovePositions(Player player, int callNum) {
@@ -32,8 +32,8 @@ public class AthenaGameMechanics extends GodGameMechanics {
     }
 
     /**
-     * If the current worker moves up decorates enemy's mechanics
-     * Else removes the decorator (if present)
+     * If not evil wraps the enemies with an evil version when moves up
+     * Otherwise unwraps the enemies
      */
     @Override
     public void move(Player player, Position futurePosition) {

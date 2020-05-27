@@ -21,16 +21,25 @@ public class HephaestusGameMechanics extends GodGameMechanics {
         super(type, component);
     }
 
+    /**
+     * Builds once or twice in the same place as chosen by the player
+     */
     @Override
     public void build(Player player, Position futurePosition) {
         getComponent().build(player, futurePosition);
-        if(futurePosition.getHeight() < 3 && player.getState().isConfirmed())
+
+        //It should never be evil, in such case at least it won't change the behaviour
+        if(!isEvil() && futurePosition.getHeight() < 3 && player.getState().isConfirmed())
             futurePosition.increaseHeight();
     }
 
+    /**
+     * If not already obvious needs to ask the player if wants to build once or twice
+     */
     @Override
     public String needsConfirmation(Player player, Position futurePosition) {
-        if (player.getState().getType() == StateType.BUILD && futurePosition.getHeight() < 2)
+        //It should never be evil, in such case at least it won't change the behaviour
+        if (!isEvil() && player.getState().getType() == StateType.BUILD && futurePosition.getHeight() < 2)
             return Message.HEPHAESTUS_BUILD;
         return getComponent().needsConfirmation(player, futurePosition);
     }

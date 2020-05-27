@@ -24,7 +24,11 @@ public class ApolloGameMechanics extends GodGameMechanics {
      */
     @Override
     public ArrayList<Position> getMovePositions(Player player, int callNum) {
-        ArrayList<Position> componentValid = super.getComponent().getMovePositions(player, callNum);
+        ArrayList<Position> componentValid = getComponent().getMovePositions(player, callNum);
+
+        //It should never be evil, in such case at least it won't change the behaviour
+        if(isEvil())
+            return componentValid;
 
         Position currPosition = player.getCurrWorker().getCurrPosition();
         ArrayList<Position> reachable = currPosition.getReachableHeight();
@@ -40,7 +44,12 @@ public class ApolloGameMechanics extends GodGameMechanics {
      */
     @Override
     public void move(Player player, Position futurePosition) {
-        //TODO handle futurePosition null or with dome
+        //It should never be evil, in such case at least it won't change the behaviour
+        if(isEvil()) {
+            getComponent().move(player, futurePosition);
+            return;
+        }
+
         player.lockWorker();
 
         Worker currWorker = player.getCurrWorker();

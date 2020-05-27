@@ -35,7 +35,7 @@ public class AssignFirstWorkerPlacementResponse extends Response {
         selectedWorker.setCurrPosition(selectedPosition);
         selectedPosition.setWorker(selectedWorker);
         if(numPlayer + 1 == GameState.getInstance().getNumPlayer() && numWorker == 1)
-            GameState.getInstance().newTurn();
+            GameState.getInstance().setupGameMechanics();
         else if(numWorker == 1)
             GameState.getInstance().firstWorkerPlacement(numPlayer + 1, 0);
         else

@@ -17,13 +17,19 @@ public class ZeusGameMechanics extends GodGameMechanics {
      */
     public ZeusGameMechanics(GameMechanics component) { super(type, component); }
 
+    /**
+     * If the height of its current position is less than 3 can build below the worker
+     */
     @Override
     public ArrayList<Position> getBuildPositions(Player player, int callNum) {
-        ArrayList<Position> componentValid = super.getComponent().getBuildPositions(player, callNum);
+        ArrayList<Position> componentValid = getComponent().getBuildPositions(player, callNum);
 
-        Position currPosition = player.getCurrWorker().getCurrPosition();
-        if(currPosition.getHeight() < 3)
-            componentValid.add(currPosition);
+        //It should never be evil, in such case at least it won't change the behaviour
+        if(!isEvil()) {
+            Position currPosition = player.getCurrWorker().getCurrPosition();
+            if (currPosition.getHeight() < 3)
+                componentValid.add(currPosition);
+        }
 
         return componentValid;
     }

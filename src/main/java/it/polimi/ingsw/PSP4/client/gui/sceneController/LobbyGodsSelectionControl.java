@@ -115,6 +115,7 @@ public class LobbyGodsSelectionControl extends GUIController {
         button.setOnMousePressed(e -> sendPersonalGod());
     }
 
+    @Override
     public void updateUI (Request req) {
         if (req.getType() == MessageType.ASSIGN_GOD) {
             getClient().updateScene(FXMLFile.LOBBY_GODS_SELECTION, req);
@@ -134,6 +135,7 @@ public class LobbyGodsSelectionControl extends GUIController {
         }
     }
 
+    @Override
     public void setupAttributes(Request req) {
         if(req.getType() == MessageType.CHOOSE_ALLOWED_GODS)
             setupAllowedGods((ChooseAllowedGodsRequest) req);

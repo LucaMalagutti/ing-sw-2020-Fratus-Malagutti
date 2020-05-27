@@ -24,9 +24,10 @@ public class ArtemisGameMechanics extends GodGameMechanics {
      */
     @Override
     public ArrayList<Position> getMovePositions(Player player, int callNum) {
-        ArrayList<Position> componentValid = super.getComponent().getMovePositions(player, callNum);
+        ArrayList<Position> componentValid = getComponent().getMovePositions(player, callNum);
 
-        if(callNum == 2)
+        //It should never be evil, in such case at least it won't change the behaviour
+        if(!isEvil() && callNum == 2)
             componentValid.remove(player.getCurrWorker().getPrevPosition()); // Cannot move back
         return componentValid;
     }

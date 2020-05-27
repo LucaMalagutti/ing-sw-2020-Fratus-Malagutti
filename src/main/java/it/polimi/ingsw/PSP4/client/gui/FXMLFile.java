@@ -1,5 +1,8 @@
 package it.polimi.ingsw.PSP4.client.gui;
 
+/**
+ * Collection of the FXML file names
+ */
 public enum FXMLFile {
     LAUNCHER_PLAY("launcher-play.fxml"),
     LAUNCHER_FORM("launcher-form.fxml"),

@@ -22,7 +22,9 @@ public class DefaultGameMechanics extends GameMechanics {
     public GameMechanics getComponent() { return null; }
 
     @Override
-    public void setComponent(GameMechanics component) { }
+    public void setComponent(GameMechanics component) {
+        //TODO not a legit call
+    }
 
     /**
      * Constructor of the class DefaultGameMechanics
@@ -31,6 +33,9 @@ public class DefaultGameMechanics extends GameMechanics {
 
     @Override
     public List<GodType> getEvilList() { return new ArrayList<>(); }
+
+    @Override
+    public void setupMechanics(Player player) {}
 
     /**
      * Returns ArrayList containing neighboring, reachable and free positions from the selected worker
@@ -61,7 +66,6 @@ public class DefaultGameMechanics extends GameMechanics {
 
     @Override
     public void move(Player player, Position futurePosition) {
-        //TODO: handle futurePosition null, occupied or with dome
         player.lockWorker();
 
         Worker currWorker = player.getCurrWorker();
@@ -76,7 +80,6 @@ public class DefaultGameMechanics extends GameMechanics {
 
     @Override
     public void build(Player player, Position futurePosition) {
-        //TODO: handle futurePosition null, occupied or with dome
         player.lockWorker();
         futurePosition.increaseHeight();
     }

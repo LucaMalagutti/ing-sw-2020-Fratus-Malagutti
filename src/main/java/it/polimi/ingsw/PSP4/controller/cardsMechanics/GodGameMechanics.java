@@ -28,6 +28,11 @@ abstract public class GodGameMechanics extends GameMechanics {
     }
 
     @Override
+    public void setupMechanics(Player player) {
+        component.setupMechanics(player);
+    }
+
+    @Override
     public ArrayList<Position> getMovePositions(Player player, int callNum) {
         return component.getMovePositions(player, callNum);
     }

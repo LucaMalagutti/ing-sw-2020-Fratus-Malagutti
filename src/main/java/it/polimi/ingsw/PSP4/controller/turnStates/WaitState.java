@@ -25,7 +25,5 @@ public class WaitState extends State {
     }
 
     @Override
-    public void receiveOption(Position position) {
-        //TODO: signal not possible
-    }
+    public void receiveOption(Position position) { }
 }

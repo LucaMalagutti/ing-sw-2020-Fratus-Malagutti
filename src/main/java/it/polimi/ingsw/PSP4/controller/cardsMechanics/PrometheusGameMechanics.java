@@ -25,12 +25,12 @@ public class PrometheusGameMechanics extends GodGameMechanics {
      */
     @Override
     public ArrayList<Position> getMovePositions(Player player, int callNum) {
+        ArrayList<Position> componentValid = getComponent().getMovePositions(player, callNum);
+
+        //It should never be evil, in such case at least it won't change the behaviour
         //Prometheus can move up IFF he hasn't built before, i.e. if his worker is not locked
-        if (player.isWorkerLocked()) {
-            ArrayList<Position> componentValid = super.getComponent().getMovePositions(player, callNum);
+        if (!isEvil() && player.isWorkerLocked())
             return componentValid.stream().filter(position -> position.getHeight() <= player.getCurrWorker().getCurrPosition().getHeight()).collect(Collectors.toCollection(ArrayList::new));
-        } else {
-            return super.getComponent().getMovePositions(player, callNum);
-        }
+        return componentValid;
     }
 }

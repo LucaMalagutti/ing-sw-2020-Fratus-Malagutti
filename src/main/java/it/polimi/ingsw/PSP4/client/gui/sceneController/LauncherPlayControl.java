@@ -9,9 +9,11 @@ public class LauncherPlayControl extends GUIController {
         getClient().updateScene(FXMLFile.LAUNCHER_FORM, null);
     }
 
+    @Override
     public void updateUI (Request req) {
         System.out.println(GUIClient.UNEXPECTED_REQUEST);
     }
 
+    @Override
     public void setupAttributes(Request req) {}
 }

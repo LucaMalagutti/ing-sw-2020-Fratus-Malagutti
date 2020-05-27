@@ -99,9 +99,7 @@ public class GameState implements Observable<Request> {
     /**
      * Puts the singleton in a "clean" state, used when a new game starts
      */
-    //TODO: must be private (public for testing)
     private synchronized void reset() {
-        //TODO: debug (important!)
         instance = null;
         getInstance(true);
     }
@@ -218,9 +216,18 @@ public class GameState implements Observable<Request> {
     }
 
     /**
+     * Setup each player's mechanics and start the game
+     */
+    public void setupGameMechanics() {
+        for(Player player : players)
+            player.getMechanics().setupMechanics(player);
+        newTurn();
+    }
+
+    /**
      * If no player is playing, moves currPlayer pointer forward, prepares and notifies the new player for the turn
      */
-    public void newTurn() {
+    private void newTurn() {
         newTurn(true);
     }
 
@@ -228,7 +235,7 @@ public class GameState implements Observable<Request> {
      * If no player is playing, moves currPlayer pointer forward and prepares the new player for the turn
      * @param notify if true notifies the new player
      */
-    public void newTurn(boolean notify) {
+    private void newTurn(boolean notify) {
         for(Player player : getPlayers())
             if(player.getState().getType() != StateType.WAIT)
                 return;

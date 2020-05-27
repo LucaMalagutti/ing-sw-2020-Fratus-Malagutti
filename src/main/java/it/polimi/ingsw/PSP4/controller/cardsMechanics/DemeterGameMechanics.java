@@ -35,6 +35,10 @@ public class DemeterGameMechanics extends GodGameMechanics {
     public ArrayList<Position> getBuildPositions(Player player, int callNum) {
         ArrayList<Position> componentValid = super.getComponent().getBuildPositions(player, callNum);
 
+        //It should never be evil, in such case at least it won't change the behaviour
+        if(isEvil())
+            return componentValid;
+
         //resets lastPositionBuilt to null at the beginning of StandardBuiltState
         if (callNum == 1) {
             setLastPositionBuilt(null);
@@ -45,12 +49,16 @@ public class DemeterGameMechanics extends GodGameMechanics {
         return componentValid;
     }
 
+    /**
+     * Sets futurePosition as lastPositionBuilt
+     */
     @Override
     public void build(Player player, Position futurePosition) {
-        super.build(player, futurePosition);
+        getComponent().build(player, futurePosition);
 
         //lastPositionBuilt is null at the beginning StandardBuildState
-        if (getLastPositionBuilt() == null) {
+        //It should never be evil, in such case at least it won't change the behaviour
+        if (!isEvil() && getLastPositionBuilt() == null) {
             setLastPositionBuilt(futurePosition);
         }
     }
