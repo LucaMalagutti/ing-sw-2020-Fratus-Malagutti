@@ -22,9 +22,7 @@ public class DefaultGameMechanics extends GameMechanics {
     public GameMechanics getComponent() { return null; }
 
     @Override
-    public void setComponent(GameMechanics component) {
-        //TODO not a legit call
-    }
+    public void setComponent(GameMechanics component) { }
 
     /**
      * Constructor of the class DefaultGameMechanics

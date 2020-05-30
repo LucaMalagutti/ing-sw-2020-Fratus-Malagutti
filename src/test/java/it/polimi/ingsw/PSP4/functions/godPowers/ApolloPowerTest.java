@@ -14,7 +14,7 @@ import java.util.*;
 import static org.junit.Assert.assertTrue;
 
 public class ApolloPowerTest {
-    public String godName = "Apollo";
+    public final String godName = "Apollo";
 
     @Before
     public void setUp() { GameState.getInstance(true).dropAllConnections(); }

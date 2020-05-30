@@ -15,7 +15,7 @@ import java.util.*;
 import static org.junit.Assert.assertTrue;
 
 public class HestiaPowerTest {
-    public String godName = "Hestia";
+    public final String godName = "Hestia";
 
     @Before
     public void setUp() { GameState.getInstance(true).dropAllConnections(); }

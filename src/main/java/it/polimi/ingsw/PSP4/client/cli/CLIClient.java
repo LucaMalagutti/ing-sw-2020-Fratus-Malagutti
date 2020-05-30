@@ -68,13 +68,14 @@ public class CLIClient {
      * @param pingRequest request to be answered
      */
     private void answerPing(Request pingRequest) {
+        String pingResponseString = "PONG";
         PingRequest ping;
         ping = (PingRequest) pingRequest;
         setLastTimestamp(ping.getTimestamp());
         new Thread (() -> {
             try {
                 socketOut.reset();
-                socketOut.writeObject(ping.validateResponse("PONG"));
+                socketOut.writeObject(ping.validateResponse(pingResponseString));
                 socketOut.flush();
             } catch (IOException e) {
                 e.getMessage();
@@ -148,6 +149,8 @@ public class CLIClient {
      */
     public void run() {
         int port = 31713;
+        int socketTimeout = 3000;
+        String connectionClosed = "Connection closed from client side";
         Scanner stdIn = new Scanner(System.in);
         boolean connectionAttemptSucceeded = false;
         while (!connectionAttemptSucceeded) {
@@ -155,7 +158,7 @@ public class CLIClient {
                 InetSocketAddress socketAddress = chooseServerIP(stdIn, port);
                 if (!socketAddress.isUnresolved()) {
                     socket = new Socket();
-                    socket.connect(socketAddress, 3000);
+                    socket.connect(socketAddress, socketTimeout);
                     socketOut = new ObjectOutputStream(socket.getOutputStream());
                     socketIn = new ObjectInputStream(socket.getInputStream());
                     connectionAttemptSucceeded = true;
@@ -166,14 +169,13 @@ public class CLIClient {
                 System.out.println(Message.CONNECTION_ATTEMPT_TIMED_OUT);
             }
         }
-        System.out.println("Connection established");
         try {
             Thread t0 = asyncReadFromSocket();
             Thread t1 = asyncWriteToSocket(stdIn);
             t0.join();
             t1.join();
         } catch (InterruptedException | NoSuchElementException e) {
-            System.out.println("Connection closed from client side");
+            System.out.println(connectionClosed);
         } finally {
             try {
                 stdIn.close();

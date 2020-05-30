@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP4.client.gui.sceneController;
 
 import it.polimi.ingsw.PSP4.client.gui.AlertBox;
 import it.polimi.ingsw.PSP4.client.gui.FXMLFile;
-import it.polimi.ingsw.PSP4.client.gui.GUIClient;
+import it.polimi.ingsw.PSP4.client.gui.GUIMessages;
 import it.polimi.ingsw.PSP4.message.Message;
 import it.polimi.ingsw.PSP4.message.MessageType;
 import it.polimi.ingsw.PSP4.message.requests.Request;
@@ -28,22 +28,22 @@ public class LauncherFormControl extends GUIController {
         }
         errorLabel.setText(null);
         if(server.getText().length() == 0) {
-            errorLabel.setText(GUIClient.IP_EMPTY);
+            errorLabel.setText(GUIMessages.IP_EMPTY);
             return;
         }
         if(username.getText().replaceAll("\\s", "").length() < 1 || username.getText().replaceAll("\\s", "").length() > 15) {
-            errorLabel.setText(GUIClient.USERNAME_LENGTH);
+            errorLabel.setText(GUIMessages.USERNAME_LENGTH);
             return;
         }
         if(username.getText().replaceAll("\\s", "").equals("@")) {
-            errorLabel.setText(GUIClient.USERNAME_RESERVED);
+            errorLabel.setText(GUIMessages.USERNAME_RESERVED);
             return;
         }
         if (!getClient().isConnected()) {
             getClient().setConnected(getClient().connectToServer(server.getText()));
         }
         if (!getClient().isConnected()) {
-            errorLabel.setText(GUIClient.CONNECTION_REFUSED);
+            errorLabel.setText(GUIMessages.CONNECTION_REFUSED);
         } else {
             chosenUsername = username.getText();
             if (getClient().getLastRequestReceived() != null) {
@@ -68,7 +68,7 @@ public class LauncherFormControl extends GUIController {
             } else if (req.getMessage().equals(MessageFormat.format(Message.USERNAME_TAKEN, chosenUsername))) {
                 errorLabel.setText(MessageFormat.format(Message.USERNAME_TAKEN, chosenUsername));
             } else if (req.getMessage().equals(Message.GAME_ALREADY_STARTED)) {
-                AlertBox.displayError(GUIClient.AT_GAME_STARTED, GUIClient.AM_GAME_STARTED);
+                AlertBox.displayError(GUIMessages.AT_GAME_STARTED, GUIMessages.AM_GAME_STARTED);
             } else if (req.getMessage().equals(MessageFormat.format(Message.ENTERING_LOBBY, chosenUsername))) {
                 getClient().setUsername(chosenUsername);
                 getClient().updateScene(FXMLFile.LOBBY_WAIT, null);
@@ -76,9 +76,6 @@ public class LauncherFormControl extends GUIController {
         } else if (req.getType() == MessageType.WAIT) {
             getClient().setUsername(chosenUsername);
             getClient().updateScene(FXMLFile.LOBBY_WAIT, null);
-        }
-        else {
-            System.out.println(MessageFormat.format(GUIClient.UNEXPECTED, req.getType(), req.getMessage()));
         }
     }
 

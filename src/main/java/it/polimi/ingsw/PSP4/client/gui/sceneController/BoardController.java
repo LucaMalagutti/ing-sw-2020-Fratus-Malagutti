@@ -1,9 +1,6 @@
 package it.polimi.ingsw.PSP4.client.gui.sceneController;
 
-import it.polimi.ingsw.PSP4.client.gui.AlertBox;
-import it.polimi.ingsw.PSP4.client.gui.FXMLFile;
-import it.polimi.ingsw.PSP4.client.gui.GUIClient;
-import it.polimi.ingsw.PSP4.client.gui.GodGraphics;
+import it.polimi.ingsw.PSP4.client.gui.*;
 import it.polimi.ingsw.PSP4.message.MessageType;
 import it.polimi.ingsw.PSP4.message.requests.ChoosePositionRequest;
 import it.polimi.ingsw.PSP4.message.requests.RemovePlayerRequest;
@@ -89,7 +86,8 @@ public class BoardController extends GUIController{
             return;
         }
 
-        //TODO close the game
+        AlertBox.displayError(GUIMessages.AT_UNEXPECTED_ERROR, GUIMessages.PLAYER_NOT_FOUND);
+        GUIClient.window.close();
     }
 
     /**
@@ -245,10 +243,10 @@ public class BoardController extends GUIController{
         fillActivePlayerPane(gameState.getPlayerColor(activePlayer).name().toLowerCase(), message);
     }
     private void fillActivePlayerWinner() {
-        fillActivePlayerPane("winner", GUIClient.BA_WINNER);
+        fillActivePlayerPane("winner", GUIMessages.BA_WINNER);
     }
     private void fillActivePlayerLoser() {
-        fillActivePlayerPane("loser", GUIClient.BA_LOSER);
+        fillActivePlayerPane("loser", GUIMessages.BA_LOSER);
     }
 
     /**
@@ -288,14 +286,15 @@ public class BoardController extends GUIController{
     private void showEndPane(boolean victory) {
         String message, className;
         if(victory) {
-            message = GUIClient.BA_VICTORY;
+            message = GUIMessages.BA_VICTORY;
             className = "winner-foreground";
             fillActivePlayerWinner();
         } else {
-            message = GUIClient.BA_DEFEAT;
+            message = GUIMessages.BA_DEFEAT;
             className = "loser-foreground";
             fillActivePlayerLoser();
         }
+        getClient().getServerConnectionCheckExecutor().shutdown();
         ((Text) endPane.getChildren().get(0)).setText(activePlayer.getUsername());
         ((Text) endPane.getChildren().get(1)).setText(message);
         endPane.getStyleClass().add(className);
@@ -444,7 +443,7 @@ public class BoardController extends GUIController{
 
         switch(req.getType()) {
             case FIRST_WORKER_PLACEMENT:
-                fillActivePlayerPlaying(GUIClient.BA_PLACE_WORKER);
+                fillActivePlayerPlaying(GUIMessages.BA_PLACE_WORKER);
                 highlightFreeCells();
                 break;
             case CHOOSE_POSITION:
@@ -454,17 +453,17 @@ public class BoardController extends GUIController{
                 if(req1.canBeSkipped())
                     addStatusButtonSkip();
                 if(activePlayer.getState().equals("Move"))
-                    fillActivePlayerPlaying(GUIClient.BA_MOVE_WORKER);
+                    fillActivePlayerPlaying(GUIMessages.BA_MOVE_WORKER);
                 else
-                    fillActivePlayerPlaying(GUIClient.BA_BUILD_BLOCK);
+                    fillActivePlayerPlaying(GUIMessages.BA_BUILD_BLOCK);
                 highlightOptions();
                 break;
             case CHOOSE_WORKER:
-                fillActivePlayerPlaying(GUIClient.BA_CHOOSE_WORKER);
+                fillActivePlayerPlaying(GUIMessages.BA_CHOOSE_WORKER);
                 highlightWorkers();
                 break;
             case CONFIRMATION:
-                fillActivePlayerPlaying(GUIClient.BA_CONFIRM_MOVE);
+                fillActivePlayerPlaying(GUIMessages.BA_CONFIRM_MOVE);
                 showConfirmPane();
                 break;
             case REMOVE_PLAYER:
@@ -474,14 +473,14 @@ public class BoardController extends GUIController{
                 } else if(req2.isVictory()) {
                     showEndPane(false);
                 } else if(!req2.isVictory() && !req2.getTargetPlayer().equals(activePlayer.getUsername())) {
-                    AlertBox.displayError(GUIClient.AT_ENEMY_LOST, req2.getCustomMessage());
+                    AlertBox.displayError(GUIMessages.AT_ENEMY_LOST, req2.getCustomMessage());
                 }
                 break;
             case START_TURN:
                 getClient().validate("\n");
                 break;
             case WAIT:
-                fillActivePlayerPlaying(MessageFormat.format(GUIClient.BA_WAIT, gameState.getCurrPlayer().getCard()));
+                fillActivePlayerPlaying(MessageFormat.format(GUIMessages.BA_WAIT, gameState.getCurrPlayer().getCard()));
                 break;
         }
     }

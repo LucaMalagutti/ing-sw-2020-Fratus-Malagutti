@@ -14,7 +14,7 @@ import java.util.*;
 import static org.junit.Assert.assertTrue;
 
 public class PanPowerTest {
-    public String godName = "Pan";
+    public final String godName = "Pan";
 
     @Before
     public void setUp() { GameState.getInstance(true).dropAllConnections(); }

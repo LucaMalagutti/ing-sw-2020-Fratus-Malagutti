@@ -20,7 +20,7 @@ public class Player {
     private int turnNum;                                            //number of player's turn
     private State state;                                            //state of player's turn
     private GameMechanics mechanics;                                //card of the player
-    private final ArrayList<Worker>stuckWorkers = new ArrayList<>();//list of worker have no move options in this turn
+    private final ArrayList<Worker> stuckWorkers = new ArrayList<>();//list of worker have no move options in this turn
 
     //getter and setter
     public String getUsername() { return username; }

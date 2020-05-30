@@ -14,7 +14,7 @@ import java.util.*;
 import static org.junit.Assert.assertTrue;
 
 public class MinotaurPowerTest {
-    public String godName = "Minotaur";
+    public final String godName = "Minotaur";
     @Before
     public void setUp() { GameState.getInstance(true).dropAllConnections(); }
 

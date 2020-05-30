@@ -14,7 +14,7 @@ import java.util.*;
 import static org.junit.Assert.assertTrue;
 
 public class AtlasPowerTest {
-    public String godName = "Atlas";
+    public final String godName = "Atlas";
 
     @Before
     public void setUp() { GameState.getInstance(true).dropAllConnections(); }

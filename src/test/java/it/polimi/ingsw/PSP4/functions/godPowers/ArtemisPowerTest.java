@@ -15,7 +15,7 @@ import java.util.*;
 import static org.junit.Assert.assertTrue;
 
 public class ArtemisPowerTest {
-    public String godName = "Artemis";
+    public final String godName = "Artemis";
 
     @Before
     public void setUp() { GameState.getInstance(true).dropAllConnections(); }

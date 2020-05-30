@@ -14,6 +14,7 @@ public enum GodType {
     HEPHAESTUS ("Hephaestus"),
     HERA("Hera"),
     HESTIA("Hestia"),
+    LIMUS("Limus"),
     MINOTAUR ("Minotaur"),
     PAN ("Pan"),
     PROMETHEUS ("Prometheus"),
@@ -48,6 +49,8 @@ public enum GodType {
                 return new HeraGameMechanics(new DefaultGameMechanics());
             case HESTIA:
                 return new HestiaGameMechanics(new DefaultGameMechanics());
+            case LIMUS:
+                return new LimusGameMechanics(new DefaultGameMechanics());
             case MINOTAUR:
                 return new MinotaurGameMechanics(new DefaultGameMechanics());
             case PAN:

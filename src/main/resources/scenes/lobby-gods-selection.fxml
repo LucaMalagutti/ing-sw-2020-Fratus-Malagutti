@@ -38,7 +38,7 @@
                         <Insets left="10.0" right="10.0" />
                      </padding>
                   </GridPane>
-                  <Pane fx:id="s" maxWidth="-Infinity" prefWidth="260.0" styleClass="god-card">
+                  <Pane maxWidth="-Infinity" prefWidth="260.0" styleClass="god-card">
                      <HBox.margin>
                         <Insets bottom="35.0" left="30.0" right="30.0" />
                      </HBox.margin>

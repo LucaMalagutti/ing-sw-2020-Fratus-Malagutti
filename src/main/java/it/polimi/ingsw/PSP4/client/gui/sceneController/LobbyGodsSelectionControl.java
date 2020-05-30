@@ -1,9 +1,6 @@
 package it.polimi.ingsw.PSP4.client.gui.sceneController;
 
-import it.polimi.ingsw.PSP4.client.gui.AlertBox;
-import it.polimi.ingsw.PSP4.client.gui.FXMLFile;
-import it.polimi.ingsw.PSP4.client.gui.GUIClient;
-import it.polimi.ingsw.PSP4.client.gui.GodGraphics;
+import it.polimi.ingsw.PSP4.client.gui.*;
 import it.polimi.ingsw.PSP4.message.MessageType;
 import it.polimi.ingsw.PSP4.message.requests.AssignGodRequest;
 import it.polimi.ingsw.PSP4.message.requests.ChooseAllowedGodsRequest;
@@ -99,7 +96,7 @@ public class LobbyGodsSelectionControl extends GUIController {
 
     private void setupAllowedGods(ChooseAllowedGodsRequest req) {
         numPlayers = req.getNumPlayer();
-        callToAction.setText(MessageFormat.format(GUIClient.LA_GOD_SELECTION, numPlayers, "S"));
+        callToAction.setText(MessageFormat.format(GUIMessages.LA_GOD_SELECTION, numPlayers, "S"));
         List<String> godList = req.getSelectableGods();
         for(int i = 0; i < godList.size(); i++)
             addGodCard(godList.get(i), i);
@@ -108,7 +105,7 @@ public class LobbyGodsSelectionControl extends GUIController {
 
     private void setupPersonalGod(AssignGodRequest req) {
         numPlayers = 1;
-        callToAction.setText(MessageFormat.format(GUIClient.LA_GOD_SELECTION, "YOUR", ""));
+        callToAction.setText(MessageFormat.format(GUIMessages.LA_GOD_SELECTION, "YOUR", ""));
         List<String> godList = req.getAllowedGods();
         for(int i = 0; i < godList.size(); i++)
             addGodCard(godList.get(i), i);
@@ -129,9 +126,9 @@ public class LobbyGodsSelectionControl extends GUIController {
                 getClient().updateScene(FXMLFile.LOBBY_STARTING_PLAYER_SELECTION_THREE, req);
             }
         } else if (req.getType() == MessageType.INFO) {
-            AlertBox.displayError("Info", req.getMessage());
+            AlertBox.displayError(GUIMessages.WINDOW_TITLE_INFO, req.getMessage());
         } else {
-            System.out.println(MessageFormat.format(GUIClient.UNEXPECTED, req.getType(), ""));
+            System.out.println(MessageFormat.format(GUIMessages.UNEXPECTED, req.getType(), ""));
         }
     }
 

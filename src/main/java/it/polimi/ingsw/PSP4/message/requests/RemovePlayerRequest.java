@@ -17,7 +17,7 @@ public class RemovePlayerRequest extends Request {
 
     private final String targetPlayer;              //username of the targetPlayer
     private final boolean victory;                  //states if the game has been won
-    private String customMessagePlayer = "";        //TODO cleanup
+    private String customMessagePlayer = "";        //username of the player receiving the message
 
     public String getTargetPlayer() { return targetPlayer; }
     public void setCustomMessagePlayer(String customMessagePlayer) {this.customMessagePlayer = customMessagePlayer;}

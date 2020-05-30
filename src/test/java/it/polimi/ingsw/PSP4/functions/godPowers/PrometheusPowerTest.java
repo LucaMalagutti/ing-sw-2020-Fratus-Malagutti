@@ -15,7 +15,7 @@ import java.util.*;
 import static org.junit.Assert.assertTrue;
 
 public class PrometheusPowerTest {
-    public String godName = "Prometheus";
+    public final String godName = "Prometheus";
 
     @Before
     public void setUp() { GameState.getInstance(true).dropAllConnections(); }

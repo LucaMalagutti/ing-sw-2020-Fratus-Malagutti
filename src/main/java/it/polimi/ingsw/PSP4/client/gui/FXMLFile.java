@@ -24,13 +24,13 @@ public enum FXMLFile {
             case LAUNCHER_PLAY:
             case LAUNCHER_FORM:
             case LAUNCHER_NUMBER_PLAYERS:
-                return GUIClient.WINDOW_TITLE_LAUNCHER;
+                return GUIMessages.WINDOW_TITLE_LAUNCHER;
             case LOBBY_GODS_SELECTION:
             case LOBBY_STARTING_PLAYER_SELECTION_TWO:
             case LOBBY_STARTING_PLAYER_SELECTION_THREE:
-                return GUIClient.WINDOW_TITLE_LOBBY;
+                return GUIMessages.WINDOW_TITLE_LOBBY;
             default:
-                return GUIClient.WINDOW_TITLE_GAME;
+                return GUIMessages.WINDOW_TITLE_GAME;
         }
     }
 }

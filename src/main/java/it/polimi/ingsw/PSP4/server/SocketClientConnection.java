@@ -27,6 +27,10 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
     private final Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
+    private static final String connectionClosed = "Closing connection to client";
+    private static final String connectionUnregistered = "Connection unregistered from server";
+    private static final String usernameError = "USERNAME_ERROR";
+    private static final String connectionTimeout = "Closing connection to client for ping timeout";
 
     private final Server server;
     private boolean active = true;
@@ -47,6 +51,10 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
         this.server = server;
     }
 
+    /**
+     * Sends a Request to the client, cleaning the stream
+      * @param message Request to be sent
+     */
     private synchronized void send(Request message) {
         try {
             out.reset();
@@ -67,8 +75,12 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
         closeConnection(resetServer);
     }
 
+    /**
+     * Closes the socket
+     * @param resetServer indicates if the server has to be reset after the client disconnects
+     */
     public void closeConnection(boolean resetServer) {
-        System.out.println("Closing connection to client");
+        System.out.println(connectionClosed);
         try {
             socket.close();
         } catch (IOException e) {
@@ -79,13 +91,19 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
             server.reset();
     }
 
+    /**
+     * Calls closeConnection(false) and Server.unregisterConnection
+     */
     private void close() {
         closeConnection(false);
-        System.out.println("Unregistering client from server");
         server.unregisterConnection(this);
-        System.out.println("Connection unregistered from server");
+        System.out.println(connectionUnregistered);
     }
 
+    /**
+     * Sends a Request to the client asynchronously
+     * @param message Request to be sent
+     */
     public void asyncSend(Request message) {
         new Thread(() -> send(message)).start();
     }
@@ -128,7 +146,7 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
                 return usernameResponse.getSelectedUsername();
             }
             else {
-                return "USERNAME_ERROR";
+                return usernameError;
             }
         } catch (IOException | ClassNotFoundException e) {
             return e.getMessage();
@@ -144,7 +162,7 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
             try {
                 Thread.sleep(pongTimeout*1000);
                 if (getLastTimestampReceived() != timestamp && isActive()) {
-                    System.out.println("CLOSING CLIENT CONNECTION TIMEOUT");
+                    System.out.println(connectionTimeout);
                     close();
                 }
             } catch (InterruptedException e) {
@@ -172,6 +190,9 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
         }, 0, pingInterval, TimeUnit.SECONDS);
     }
 
+    /**
+     * Initializes the socket streams and listens to Responses from the server
+     */
     @Override
     public void run() {
         try {

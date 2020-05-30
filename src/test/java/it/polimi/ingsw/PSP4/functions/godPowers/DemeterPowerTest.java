@@ -15,7 +15,7 @@ import java.util.*;
 import static org.junit.Assert.assertTrue;
 
 public class DemeterPowerTest {
-    public String godName = "Demeter";
+    public final String godName = "Demeter";
 
     @Before
     public void setUp() { GameState.getInstance(true).dropAllConnections(); }

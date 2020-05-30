@@ -61,7 +61,7 @@
                   <Insets right="286.0" />
                </StackPane.margin>
                <children>
-                  <Text fx:id="firstPlayerButton" strokeType="OUTSIDE" strokeWidth="0.0" text="ARTEMIS" textAlignment="CENTER" StackPane.alignment="CENTER">
+                  <Text fx:id="firstPlayerButton" strokeType="OUTSIDE" strokeWidth="0.0" text="-" textAlignment="CENTER" StackPane.alignment="CENTER">
                      <styleClass>
                         <String fx:value="text" />
                         <String fx:value="lillybelle" />
@@ -84,7 +84,7 @@
                   <Insets left="286.0" />
                </StackPane.margin>
                <children>
-                  <Text fx:id="secondPlayerButton" strokeType="OUTSIDE" strokeWidth="0.0" text="PROMETHEUS" textAlignment="CENTER" StackPane.alignment="CENTER">
+                  <Text fx:id="secondPlayerButton" strokeType="OUTSIDE" strokeWidth="0.0" text="-" textAlignment="CENTER" StackPane.alignment="CENTER">
                      <styleClass>
                         <String fx:value="text" />
                         <String fx:value="lillybelle" />

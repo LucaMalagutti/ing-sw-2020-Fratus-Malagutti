@@ -4,7 +4,6 @@ import it.polimi.ingsw.PSP4.client.cli.CLIClient;
 import it.polimi.ingsw.PSP4.client.gui.GUIClient;
 import it.polimi.ingsw.PSP4.message.Message;
 
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Scanner;
 

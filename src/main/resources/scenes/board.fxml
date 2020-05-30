@@ -92,7 +92,6 @@
          </children>
          <styleClass>
             <String fx:value="layout" />
-            <String fx:value="player-blue" />
          </styleClass>
       </AnchorPane>
       <VBox fx:id="endPane" alignment="CENTER" visible="false" StackPane.alignment="CENTER">

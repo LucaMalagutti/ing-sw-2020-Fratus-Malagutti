@@ -206,11 +206,9 @@ public class GameState implements Observable<Request> {
     private void selectWorker() {
         List<int[]> workers = new ArrayList<>();
         for (Worker worker : getCurrPlayer().getWorkers()) {
-//            if (!getCurrPlayer().getStuckWorkers().contains(worker)) {
-                Position position = worker.getCurrPosition();
-                int[] coordinates = {position.getRow(), position.getCol()};
-                workers.add(coordinates);
-//            }
+            Position position = worker.getCurrPosition();
+            int[] coordinates = {position.getRow(), position.getCol()};
+            workers.add(coordinates);
         }
         notifyObservers(new ChooseWorkerRequest(getCurrPlayer().getUsername(), workers));
     }
