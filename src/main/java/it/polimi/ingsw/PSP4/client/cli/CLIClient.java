@@ -74,9 +74,11 @@ public class CLIClient {
         setLastTimestamp(ping.getTimestamp());
         new Thread (() -> {
             try {
-                socketOut.reset();
-                socketOut.writeObject(ping.validateResponse(pingResponseString));
-                socketOut.flush();
+                synchronized (socketOut) {
+                    socketOut.reset();
+                    socketOut.writeObject(ping.validateResponse(pingResponseString));
+                    socketOut.flush();
+                }
             } catch (IOException e) {
                 e.getMessage();
             }
@@ -119,11 +121,15 @@ public class CLIClient {
                 while (isActive()) {
                     String inputLine = stdIn.nextLine();
                     Message validated = getLastRequestReceived().validateResponse(inputLine);
-                    if (validated.getType() == MessageType.ERROR && isActive())
-                        System.out.println(validated.getMessage());
-                    else
-                        socketOut.writeObject(validated);
-                    socketOut.flush();
+                    synchronized (socketOut) {
+                        if (validated.getType() == MessageType.ERROR && isActive())
+                            System.out.println(validated.getMessage());
+                        else {
+                            socketOut.reset();
+                            socketOut.writeObject(validated);
+                        }
+                        socketOut.flush();
+                    }
                 }
             } catch (Exception e) {
                 setActive(false);

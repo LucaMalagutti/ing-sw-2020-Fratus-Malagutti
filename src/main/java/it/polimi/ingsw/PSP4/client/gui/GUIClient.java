@@ -197,15 +197,7 @@ public class GUIClient extends Application{
         PingRequest ping = (PingRequest) pingRequest;
         String pingRequestResponseString = "PONG";
         setLastTimestamp(ping.getTimestamp());
-        new Thread (() -> {
-            try {
-                socketOut.reset();
-                socketOut.writeObject(ping.validateResponse(pingRequestResponseString));
-                socketOut.flush();
-            } catch (IOException e) {
-                e.getMessage();
-            }
-        }).start();
+        asyncWriteToSocket(ping.validateResponse(pingRequestResponseString));
     }
 
     /**

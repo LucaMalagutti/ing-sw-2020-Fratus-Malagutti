@@ -6,15 +6,32 @@
 
   <groupId>it.polimi.ingsw.PSP4</groupId>
   <artifactId>Santorini</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
 
   <name>Santorini</name>
   <url>http://www.example.com</url>
+
+  <profiles>
+    <profile>
+      <id>server</id>
+      <properties>
+        <mainClass>it.polimi.ingsw.PSP4.ServerMain</mainClass>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>client</id>
+      <properties>
+        <mainClass>it.polimi.ingsw.PSP4.ClientMain</mainClass>
+      </properties>
+    </profile>
+  </profiles>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>9</maven.compiler.source>
     <maven.compiler.target>9</maven.compiler.target>
+    <mainClass>it.polimi.ingsw.PSP4.ServerMain</mainClass>
   </properties>
 
   <dependencies>
@@ -34,6 +51,13 @@
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
       <version>11.0.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-shade-plugin</artifactId>
+      <version>3.2.3</version>
+      <type>maven-plugin</type>
     </dependency>
 
   </dependencies>
@@ -83,6 +107,29 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>
+                false
+              </createDependencyReducedPom>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                    <mainClass>${mainClass}</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>

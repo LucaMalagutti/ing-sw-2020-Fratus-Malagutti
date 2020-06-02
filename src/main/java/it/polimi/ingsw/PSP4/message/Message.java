@@ -68,7 +68,7 @@ public abstract class Message implements Serializable {
     public static final String NOT_VALID_PLAYER_NUMBER = "Not a valid number of players. Type 2 or 3";
     public static final String NOT_VALID_POSITION = "{0} is not a valid position. Try again.";
     public static final String NOT_VALID_SERVER_IP = "This IP address is invalid. Try again";
-    public static final String NOT_VALID_UI = "Couldn't select a valid UI. Exiting..";
+    //public static final String NOT_VALID_UI = "Couldn't select a valid UI. Exiting..";
     public static final String NOT_VALID_USERNAME = "{0} is not a valid player name. Try again.";
     public static final String NOT_VALID_WORKER = "{0} is not a valid worker position. Try again.";
     public static final String NOT_YOUR_TURN = "There is a time and place for everything, but not now.";
