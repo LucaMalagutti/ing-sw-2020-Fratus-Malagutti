@@ -262,6 +262,56 @@ public class AthenaPowerTest {
         assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
     }
 
+    @Test
+    public void threePlayers_losesWhileWrapping_enemiesUnwrapped() {
+        int numPlayer = 3;
+        List<String> players = Random.playerList(numPlayer);
+        Map<String, String> gods = new LinkedHashMap<>();
+        gods.put(players.get(0), godName);
+        gods.put(players.get(1), "Default");
+        gods.put(players.get(2), "Default");
+        String startingPlayer = players.get(0);
+        String enemyPlayer1 = players.get(1);
+        Map<String, List<Coordinates>> workers = new LinkedHashMap<>();
+        workers.put(players.get(0), Arrays.asList(new Coordinates(0, 0), new Coordinates(4, 4)));
+        workers.put(players.get(1), Arrays.asList(new Coordinates(1, 1), new Coordinates(3, 3)));
+        workers.put(players.get(2), Arrays.asList(new Coordinates(1, 0), new Coordinates(3, 4)));
+        Map<Integer, List<Coordinates>> buildings = new LinkedHashMap<>();
+        buildings.put(2, Arrays.asList(
+                new Coordinates(0, 1), new Coordinates(4, 3)
+        ));
+        Coordinates firstWorker = workers.get(startingPlayer).get(0);
+        Coordinates secondWorker = workers.get(startingPlayer).get(1);
+        List<Coordinates> expectedMoveOptions = new ArrayList<>();
+
+        Actions.addPlayers(new ArrayList<>(players));
+        Actions.assignGods(new LinkedHashMap<>(gods));
+        Actions.selectStartingPlayer(startingPlayer);
+        Actions.placeWorkers(new LinkedHashMap<>(workers));
+        Actions.fillBoard(new LinkedHashMap<>(buildings));
+        Actions.wrapPlayers(startingPlayer);
+
+        Actions.setCurrentWorker(firstWorker);
+
+        assertTrue(Tests.enemiesWrapped(startingPlayer));
+        assertTrue(Tests.currentWorker(firstWorker, false));
+        assertTrue(Tests.stateOptions(expectedMoveOptions));
+
+        Actions.changeCurrentWorker(secondWorker);
+
+        gods.remove(startingPlayer);
+        workers.remove(startingPlayer);
+        numPlayer--;
+
+        assertTrue(Tests.gameStateExists());
+        assertTrue(Tests.numberOfPlayers(numPlayer));
+        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
+        assertTrue(Tests.currentPlayer(enemyPlayer1));
+        assertTrue(Tests.playersUnwrappedAll());
+        assertTrue(Tests.newTurn());
+    }
+
     @After
     public void tearDown() { GameState.getInstance().dropAllConnections(); }
 }

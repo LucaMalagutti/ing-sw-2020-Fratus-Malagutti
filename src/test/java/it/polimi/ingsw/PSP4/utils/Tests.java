@@ -225,4 +225,15 @@ public class Tests {
         }
         return true;
     }
+
+    /**
+     * @return false if any player is wrapped with any evil god
+     */
+    public static boolean playersUnwrappedAll() {
+        for(Player player : GameState.getInstance().getPlayers()) {
+            if (player.getMechanics().getEvilList().size() != 0)
+                return false;
+        }
+        return true;
+    }
 }
