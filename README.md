@@ -3,13 +3,13 @@ This repo contains the code created by Group 4 to be submitted for the exam "Pro
  
 The project consists of a playable Java implementation of the board game "Santorini" released in 2004 by Gordon Hamilton. 
 
-###Components of the group
+## Group Components
 
 - Lorenzo Fratus
 - Luca Malagutti
 - (Roberto Ferri)
 
-###Implemented Features
+## Implemented Features
 
 - Complete Game Rules
 - Socket
@@ -18,7 +18,7 @@ The project consists of a playable Java implementation of the board game "Santor
 - Advanced Feature: additional gods 
     - (Hera, Hestia, Limus, Triton, Zeus)
     
-###How to run the game
+## How to run the game
 
 - Both the server and the client JAR can be found in the deliveries/final/jar/ folder
 
