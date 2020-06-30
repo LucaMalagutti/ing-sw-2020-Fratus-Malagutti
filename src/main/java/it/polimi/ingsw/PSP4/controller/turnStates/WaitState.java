@@ -11,6 +11,7 @@ public class WaitState extends State {
 
     /**
      * Constructor of the class WaitState
+     * @param player reference to current player
      */
     public WaitState(Player player) { super(player, staticType); }
 

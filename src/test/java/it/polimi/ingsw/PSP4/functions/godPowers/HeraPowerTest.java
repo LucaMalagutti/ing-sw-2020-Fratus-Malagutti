@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Assert;
 
 public class HeraPowerTest {
     public final String godName = "Hera";
@@ -49,30 +49,30 @@ public class HeraPowerTest {
         Actions.placeWorkers(new LinkedHashMap<>(workers));
         Actions.fillBoard(new LinkedHashMap<>(buildings));
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
-        assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
-        assertTrue(Tests.currentPlayer(startingPlayer));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.enemiesWrapped(enemyPlayer));
-        assertTrue(Tests.allowedGodsEmpty());
-        assertTrue(Tests.newTurn());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
+        Assert.assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
+        Assert.assertTrue(Tests.currentPlayer(startingPlayer));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.enemiesWrapped(enemyPlayer));
+        Assert.assertTrue(Tests.allowedGodsEmpty());
+        Assert.assertTrue(Tests.newTurn());
 
         Actions.setCurrentWorker(startingPosition);
 
-        assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(startingPosition, false));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
+        Assert.assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(startingPosition, false));
+        Assert.assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
 
         Actions.selectOption(movePosition);
         workers.replace(startingPlayer, Arrays.asList(movePosition, workers.get(startingPlayer).get(1)));
 
-        assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentPlayer(startingPlayer));
-        assertTrue(Tests.currentWorker(movePosition, true));
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
+        Assert.assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentPlayer(startingPlayer));
+        Assert.assertTrue(Tests.currentWorker(movePosition, true));
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
     }
 
     @Test
@@ -105,30 +105,30 @@ public class HeraPowerTest {
         Actions.placeWorkers(new LinkedHashMap<>(workers));
         Actions.fillBoard(new LinkedHashMap<>(buildings));
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
-        assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
-        assertTrue(Tests.currentPlayer(startingPlayer));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.enemiesWrapped(enemyPlayer));
-        assertTrue(Tests.allowedGodsEmpty());
-        assertTrue(Tests.newTurn());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
+        Assert.assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
+        Assert.assertTrue(Tests.currentPlayer(startingPlayer));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.enemiesWrapped(enemyPlayer));
+        Assert.assertTrue(Tests.allowedGodsEmpty());
+        Assert.assertTrue(Tests.newTurn());
 
         Actions.setCurrentWorker(startingPosition);
 
-        assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(startingPosition, false));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
+        Assert.assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(startingPosition, false));
+        Assert.assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
 
         Actions.selectOption(movePosition);
         workers.replace(startingPlayer, Arrays.asList(movePosition, workers.get(startingPlayer).get(1)));
 
-        assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentPlayer(startingPlayer));
-        assertTrue(Tests.currentWorker(movePosition, true));
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
+        Assert.assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentPlayer(startingPlayer));
+        Assert.assertTrue(Tests.currentWorker(movePosition, true));
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
     }
 
     @Test
@@ -161,25 +161,25 @@ public class HeraPowerTest {
         Actions.placeWorkers(new LinkedHashMap<>(workers));
         Actions.fillBoard(new LinkedHashMap<>(buildings));
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
-        assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
-        assertTrue(Tests.currentPlayer(startingPlayer));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.enemiesWrapped(enemyPlayer));
-        assertTrue(Tests.allowedGodsEmpty());
-        assertTrue(Tests.newTurn());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
+        Assert.assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
+        Assert.assertTrue(Tests.currentPlayer(startingPlayer));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.enemiesWrapped(enemyPlayer));
+        Assert.assertTrue(Tests.allowedGodsEmpty());
+        Assert.assertTrue(Tests.newTurn());
 
         Actions.setCurrentWorker(startingPosition);
 
-        assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(startingPosition, false));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
+        Assert.assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(startingPosition, false));
+        Assert.assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
 
         Actions.selectOption(movePosition);
 
-        assertTrue(Tests.gameStateClean());
+        Assert.assertTrue(Tests.gameStateClean());
     }
 
     @Test
@@ -212,30 +212,30 @@ public class HeraPowerTest {
         Actions.placeWorkers(new LinkedHashMap<>(workers));
         Actions.fillBoard(new LinkedHashMap<>(buildings));
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
-        assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
-        assertTrue(Tests.currentPlayer(startingPlayer));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.enemiesWrapped(enemyPlayer));
-        assertTrue(Tests.allowedGodsEmpty());
-        assertTrue(Tests.newTurn());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
+        Assert.assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
+        Assert.assertTrue(Tests.currentPlayer(startingPlayer));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.enemiesWrapped(enemyPlayer));
+        Assert.assertTrue(Tests.allowedGodsEmpty());
+        Assert.assertTrue(Tests.newTurn());
 
         Actions.setCurrentWorker(startingPosition);
 
-        assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(startingPosition, false));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
+        Assert.assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(startingPosition, false));
+        Assert.assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
 
         Actions.selectOption(movePosition);
         workers.replace(startingPlayer, Arrays.asList(movePosition, workers.get(startingPlayer).get(1)));
 
-        assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentPlayer(startingPlayer));
-        assertTrue(Tests.currentWorker(movePosition, true));
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
+        Assert.assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentPlayer(startingPlayer));
+        Assert.assertTrue(Tests.currentWorker(movePosition, true));
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
     }
 
     @Test
@@ -268,9 +268,9 @@ public class HeraPowerTest {
 
         Actions.setCurrentWorker(firstWorker);
 
-        assertTrue(Tests.enemiesWrapped(startingPlayer));
-        assertTrue(Tests.currentWorker(firstWorker, false));
-        assertTrue(Tests.stateOptions(expectedMoveOptions));
+        Assert.assertTrue(Tests.enemiesWrapped(startingPlayer));
+        Assert.assertTrue(Tests.currentWorker(firstWorker, false));
+        Assert.assertTrue(Tests.stateOptions(expectedMoveOptions));
 
         Actions.changeCurrentWorker(secondWorker);
 
@@ -278,13 +278,13 @@ public class HeraPowerTest {
         workers.remove(startingPlayer);
         numPlayer--;
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
-        assertTrue(Tests.currentPlayer(enemyPlayer1));
-        assertTrue(Tests.playersUnwrappedAll());
-        assertTrue(Tests.newTurn());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
+        Assert.assertTrue(Tests.currentPlayer(enemyPlayer1));
+        Assert.assertTrue(Tests.playersUnwrappedAll());
+        Assert.assertTrue(Tests.newTurn());
     }
 
     @After

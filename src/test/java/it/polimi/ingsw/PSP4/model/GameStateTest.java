@@ -5,7 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Assert;
 
 public class GameStateTest {
     @Before
@@ -13,14 +13,14 @@ public class GameStateTest {
 
     @Test
     public void getInstance_postImplementation() {
-        assertTrue(Tests.gameStateClean());
+        Assert.assertTrue(Tests.gameStateClean());
     }
 
     @Test
     public void getInstance_postReset() {
         GameState.getInstance().dropAllConnections();
 
-        assertTrue(Tests.gameStateClean());
+        Assert.assertTrue(Tests.gameStateClean());
     }
 
     @After

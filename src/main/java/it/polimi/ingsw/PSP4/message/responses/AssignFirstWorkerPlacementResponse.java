@@ -20,6 +20,8 @@ public class AssignFirstWorkerPlacementResponse extends Response {
      * Constructor of the class ChoosePositionResponse
      * @param player username of the sender
      * @param selected Position chosen by the player
+     * @param numPlayer number of the player that sent the response
+     * @param numWorker number of the worker to be placed on the board
      */
     public AssignFirstWorkerPlacementResponse(String player, SerializablePosition selected, int numPlayer, int numWorker) {
         super(player, "", staticType);

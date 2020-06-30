@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Assert;
 
 public class PrometheusPowerTest {
     public final String godName = "Prometheus";
@@ -57,33 +57,33 @@ public class PrometheusPowerTest {
         Actions.fillBoard(new LinkedHashMap<>(buildings));
         Actions.setCurrentWorker(startingPosition);
 
-        assertTrue(Tests.currentState(new EarlyBuildState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(startingPosition, false));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedEarlyBuildOptions)));
+        Assert.assertTrue(Tests.currentState(new EarlyBuildState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(startingPosition, false));
+        Assert.assertTrue(Tests.stateOptions(new ArrayList<>(expectedEarlyBuildOptions)));
 
         Actions.skipCurrentState();
         Actions.setCurrentWorker(startingPosition);
 
-        assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(startingPosition, false));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
+        Assert.assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(startingPosition, false));
+        Assert.assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
 
         Actions.selectOption(movePosition);
         workers.replace(startingPlayer, Arrays.asList(movePosition, workers.get(startingPlayer).get(1)));
 
-        assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(movePosition, true));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedStandardBuildOptions)));
+        Assert.assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(movePosition, true));
+        Assert.assertTrue(Tests.stateOptions(new ArrayList<>(expectedStandardBuildOptions)));
 
         Actions.selectOption(buildPosition);
         buildings.remove(1);
         buildings.put(2, Arrays.asList(buildPosition, new Coordinates(1, 1)));
 
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
-        assertTrue(Tests.currentPlayer(enemyPlayer));
-        assertTrue(Tests.currentState(new StandardMoveState(Getters.player(enemyPlayer))));
-        assertTrue(Tests.newTurn());
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
+        Assert.assertTrue(Tests.currentPlayer(enemyPlayer));
+        Assert.assertTrue(Tests.currentState(new StandardMoveState(Getters.player(enemyPlayer))));
+        Assert.assertTrue(Tests.newTurn());
     }
 
     @Test
@@ -131,9 +131,9 @@ public class PrometheusPowerTest {
         Actions.fillBoard(new LinkedHashMap<>(buildings));
         Actions.setCurrentWorker(startingPosition);
 
-        assertTrue(Tests.currentState(new EarlyBuildState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(startingPosition, false));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedEarlyBuildOptions)));
+        Assert.assertTrue(Tests.currentState(new EarlyBuildState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(startingPosition, false));
+        Assert.assertTrue(Tests.stateOptions(new ArrayList<>(expectedEarlyBuildOptions)));
 
         Actions.selectOption(earlyBuildPosition);
         buildings.remove(1);
@@ -141,16 +141,16 @@ public class PrometheusPowerTest {
         buildings.put(1, Arrays.asList(new Coordinates(0, 1), new Coordinates(1,1)));
         buildings.put(2, Arrays.asList(new Coordinates(0, 0), new Coordinates(1,0)));
 
-        assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(startingPosition, true));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
+        Assert.assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(startingPosition, true));
+        Assert.assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
 
         Actions.selectOption(movePosition);
         workers.replace(startingPlayer, Arrays.asList(movePosition, workers.get(startingPlayer).get(1)));
 
-        assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(movePosition, true));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedStandardBuildOptions)));
+        Assert.assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(movePosition, true));
+        Assert.assertTrue(Tests.stateOptions(new ArrayList<>(expectedStandardBuildOptions)));
 
         Actions.selectOption(buildPosition);
         buildings.remove(1);
@@ -158,11 +158,11 @@ public class PrometheusPowerTest {
         buildings.put(1, Arrays.asList(new Coordinates(0, 1), new Coordinates(0,0)));
         buildings.put(2, Arrays.asList(new Coordinates(1,0), new Coordinates(1,1)));
 
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
-        assertTrue(Tests.currentPlayer(enemyPlayer));
-        assertTrue(Tests.currentState(new StandardMoveState(Getters.player(enemyPlayer))));
-        assertTrue(Tests.newTurn());
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
+        Assert.assertTrue(Tests.currentPlayer(enemyPlayer));
+        Assert.assertTrue(Tests.currentState(new StandardMoveState(Getters.player(enemyPlayer))));
+        Assert.assertTrue(Tests.newTurn());
     }
 
     @After

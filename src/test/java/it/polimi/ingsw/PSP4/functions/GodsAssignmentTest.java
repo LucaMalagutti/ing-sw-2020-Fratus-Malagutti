@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Assert;
 
 public class GodsAssignmentTest {
     @Before
@@ -30,12 +30,12 @@ public class GodsAssignmentTest {
         Actions.assignGods(new LinkedHashMap<>(gods));
         Actions.selectStartingPlayer(startingPlayer);
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardEmpty());
-        assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
-        assertTrue(Tests.currentPlayer(startingPlayer));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.allowedGodsEmpty());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardEmpty());
+        Assert.assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
+        Assert.assertTrue(Tests.currentPlayer(startingPlayer));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.allowedGodsEmpty());
     }
 
     @Test
@@ -49,12 +49,12 @@ public class GodsAssignmentTest {
         Actions.assignGods(new LinkedHashMap<>(gods));
         Actions.selectStartingPlayer(startingPlayer);
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardEmpty());
-        assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
-        assertTrue(Tests.currentPlayer(startingPlayer));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.allowedGodsEmpty());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardEmpty());
+        Assert.assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
+        Assert.assertTrue(Tests.currentPlayer(startingPlayer));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.allowedGodsEmpty());
     }
 
     @Test
@@ -68,12 +68,12 @@ public class GodsAssignmentTest {
         Actions.assignGods(new LinkedHashMap<>(gods));
         Actions.selectStartingPlayer(startingPlayer);
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardEmpty());
-        assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
-        assertTrue(Tests.currentPlayer(startingPlayer));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.allowedGodsEmpty());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardEmpty());
+        Assert.assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
+        Assert.assertTrue(Tests.currentPlayer(startingPlayer));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.allowedGodsEmpty());
     }
 
     @Test
@@ -87,12 +87,12 @@ public class GodsAssignmentTest {
         Actions.assignGods(new LinkedHashMap<>(gods));
         Actions.selectStartingPlayer(startingPlayer);
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardEmpty());
-        assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
-        assertTrue(Tests.currentPlayer(startingPlayer));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.allowedGodsEmpty());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardEmpty());
+        Assert.assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
+        Assert.assertTrue(Tests.currentPlayer(startingPlayer));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.allowedGodsEmpty());
     }
 
     @Test
@@ -106,12 +106,12 @@ public class GodsAssignmentTest {
         Actions.assignGods(new LinkedHashMap<>(gods));
         Actions.selectStartingPlayer(startingPlayer);
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardEmpty());
-        assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
-        assertTrue(Tests.currentPlayer(startingPlayer));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.allowedGodsEmpty());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardEmpty());
+        Assert.assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
+        Assert.assertTrue(Tests.currentPlayer(startingPlayer));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.allowedGodsEmpty());
     }
 
     @Test
@@ -125,12 +125,12 @@ public class GodsAssignmentTest {
         Actions.assignGods(new LinkedHashMap<>(gods));
         Actions.selectStartingPlayer(startingPlayer);
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardEmpty());
-        assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
-        assertTrue(Tests.currentPlayer(startingPlayer));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.allowedGodsEmpty());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardEmpty());
+        Assert.assertTrue(Tests.godsAssignments(new LinkedHashMap<>(gods)));
+        Assert.assertTrue(Tests.currentPlayer(startingPlayer));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.allowedGodsEmpty());
     }
 
     @After

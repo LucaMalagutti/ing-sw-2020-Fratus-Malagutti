@@ -25,6 +25,7 @@ public class ChooseStartingPlayerRequest extends Request {
     /**
      * Constructor of the class ChooseStartingPlayerRequest
      * @param player username of the receiver
+     * @param playerNames list of usernames of the players
      * @param playerGods Map playerName to playerGodName
      */
     public ChooseStartingPlayerRequest(String player, List<String> playerNames, Map<String, String> playerGods) {

@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Assert;
 
 public class WorkersPlacementTest {
 
@@ -25,10 +25,10 @@ public class WorkersPlacementTest {
 
         Actions.placeWorkers(new LinkedHashMap<>(workers));
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardNoBuildings());
-        assertTrue(Tests.newTurn());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardNoBuildings());
+        Assert.assertTrue(Tests.newTurn());
     }
 
     @Test
@@ -42,12 +42,12 @@ public class WorkersPlacementTest {
 
         Actions.placeWorkers(new LinkedHashMap<>(workers));
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardNoBuildings());
-        assertTrue(Tests.currentPlayer(players.get(startingPlayer)));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.newTurn());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardNoBuildings());
+        Assert.assertTrue(Tests.currentPlayer(players.get(startingPlayer)));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.newTurn());
     }
 
     @Test
@@ -61,12 +61,12 @@ public class WorkersPlacementTest {
 
         Actions.placeWorkers(new LinkedHashMap<>(workers));
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardNoBuildings());
-        assertTrue(Tests.currentPlayer(players.get(startingPlayer)));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.newTurn());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardNoBuildings());
+        Assert.assertTrue(Tests.currentPlayer(players.get(startingPlayer)));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.newTurn());
     }
 
     @Test
@@ -80,12 +80,12 @@ public class WorkersPlacementTest {
 
         Actions.placeWorkers(new LinkedHashMap<>(workers));
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardNoBuildings());
-        assertTrue(Tests.currentPlayer(players.get(startingPlayer)));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.newTurn());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardNoBuildings());
+        Assert.assertTrue(Tests.currentPlayer(players.get(startingPlayer)));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.newTurn());
     }
 
     @Test
@@ -99,12 +99,12 @@ public class WorkersPlacementTest {
 
         Actions.placeWorkers(new LinkedHashMap<>(workers));
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardNoBuildings());
-        assertTrue(Tests.currentPlayer(players.get(startingPlayer)));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.newTurn());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardNoBuildings());
+        Assert.assertTrue(Tests.currentPlayer(players.get(startingPlayer)));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.newTurn());
     }
 
 
@@ -119,12 +119,12 @@ public class WorkersPlacementTest {
 
         Actions.placeWorkers(new LinkedHashMap<>(workers));
 
-        assertTrue(Tests.gameStateExists());
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardNoBuildings());
-        assertTrue(Tests.currentPlayer(players.get(startingPlayer)));
-        assertTrue(Tests.numberOfPlayers(numPlayer));
-        assertTrue(Tests.newTurn());
+        Assert.assertTrue(Tests.gameStateExists());
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardNoBuildings());
+        Assert.assertTrue(Tests.currentPlayer(players.get(startingPlayer)));
+        Assert.assertTrue(Tests.numberOfPlayers(numPlayer));
+        Assert.assertTrue(Tests.newTurn());
     }
 
     @After

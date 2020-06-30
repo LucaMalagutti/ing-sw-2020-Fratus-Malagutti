@@ -112,6 +112,8 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
      * Asks the first player in the lobby to select how many players will play this game
      * @param username username of the first player, i.e. the one who sets the number of players
      * @return number of players for this game
+     * @throws IOException Any of the usual Input/Output related exceptions.
+     * @throws ClassNotFoundException Class of a serialized object cannot be found.
      */
     public int initializeGameNumPlayer(String username) throws IOException, ClassNotFoundException {
         send(new InfoRequest(username, MessageFormat.format(Message.CREATING_LOBBY, username)));
@@ -127,6 +129,8 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
 
     /**
      * Overloading method
+     * @param alreadyTaken last username chosen by the player that is already taken
+     * @return whitespace-stripped username
      */
     public String selectClientUsername(String alreadyTaken) {
         send(new InfoRequest(null, MessageFormat.format(Message.USERNAME_TAKEN, alreadyTaken)));
@@ -156,6 +160,7 @@ public class SocketClientConnection implements Observable<Response>, Runnable {
     /**
      * Creates a thread that checks that a corresponding pong arrives before a timeout, otherwise it closes the connection
      * Called every time that ping is sent to the connected client.
+     * @param timestamp time of the last ping
      */
     public void checkPingTimeout(long timestamp){
         new Thread(() -> {

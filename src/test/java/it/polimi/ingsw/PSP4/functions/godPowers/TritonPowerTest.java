@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Assert;
 
 public class TritonPowerTest {
     public final String godName = "Triton";
@@ -52,15 +52,15 @@ public class TritonPowerTest {
         Actions.fillBoard(new LinkedHashMap<>(buildings));
         Actions.setCurrentWorker(startingPosition);
 
-        assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(startingPosition, false));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
+        Assert.assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(startingPosition, false));
+        Assert.assertTrue(Tests.stateOptions(new ArrayList<>(expectedMoveOptions)));
 
         Actions.selectOption(movePosition);
         workers.replace(startingPlayer, Arrays.asList(movePosition, workers.get(startingPlayer).get(1)));
 
-        assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(movePosition, true));
+        Assert.assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(movePosition, true));
     }
 
     @Test
@@ -104,34 +104,34 @@ public class TritonPowerTest {
         Actions.fillBoard(new LinkedHashMap<>(buildings));
         Actions.setCurrentWorker(startingPosition);
 
-        assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(startingPosition, false));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedFirstMoveOptions)));
+        Assert.assertTrue(Tests.currentState(new StandardMoveState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(startingPosition, false));
+        Assert.assertTrue(Tests.stateOptions(new ArrayList<>(expectedFirstMoveOptions)));
 
         Actions.selectOption(firstMovePosition);
         workers.replace(startingPlayer, Arrays.asList(firstMovePosition, workers.get(startingPlayer).get(1)));
 
-        assertTrue(Tests.currentState(new SecondMoveState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(firstMovePosition, true));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedSecondMoveOptions)));
+        Assert.assertTrue(Tests.currentState(new SecondMoveState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(firstMovePosition, true));
+        Assert.assertTrue(Tests.stateOptions(new ArrayList<>(expectedSecondMoveOptions)));
 
         Actions.selectOption(secondMovePosition);
         workers.replace(startingPlayer, Arrays.asList(secondMovePosition, workers.get(startingPlayer).get(1)));
 
-        assertTrue(Tests.currentState(new SecondMoveState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(secondMovePosition, true));
-        assertTrue(Tests.stateOptions(new ArrayList<>(expectedThirdMoveOptions)));
+        Assert.assertTrue(Tests.currentState(new SecondMoveState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(secondMovePosition, true));
+        Assert.assertTrue(Tests.stateOptions(new ArrayList<>(expectedThirdMoveOptions)));
 
         Actions.selectOption(thirdMovePosition);
         workers.replace(startingPlayer, Arrays.asList(thirdMovePosition, workers.get(startingPlayer).get(1)));
 
         Actions.skipCurrentState();
 
-        assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
-        assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
-        assertTrue(Tests.currentPlayer(startingPlayer));
-        assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
-        assertTrue(Tests.currentWorker(thirdMovePosition, true));
+        Assert.assertTrue(Tests.boardWorkers(new LinkedHashMap<>(workers)));
+        Assert.assertTrue(Tests.boardBuildings(new LinkedHashMap<>(buildings)));
+        Assert.assertTrue(Tests.currentPlayer(startingPlayer));
+        Assert.assertTrue(Tests.currentState(new StandardBuildState(Getters.player(startingPlayer))));
+        Assert.assertTrue(Tests.currentWorker(thirdMovePosition, true));
     }
 
     @After

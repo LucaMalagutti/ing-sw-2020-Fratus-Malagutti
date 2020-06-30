@@ -87,6 +87,7 @@ public class CLIClient {
 
     /**
      * Creates a thread that handles the objects arriving from the socket the client is connected to
+     * @return reference to the thread
      */
     public Thread asyncReadFromSocket() {
         Thread t = new Thread(() -> {
@@ -114,6 +115,7 @@ public class CLIClient {
     /**
      * Creates a thread that handles the sending of objects to the socket
      * @param stdIn scanner the user writes on
+     * @return reference to the thread
      */
     public Thread asyncWriteToSocket(final Scanner stdIn) {
         Thread t = new Thread(() -> {
@@ -144,6 +146,7 @@ public class CLIClient {
     /**
      * Asks the player to choose an IP address to connect to and validates it
      * @param stdIn stdInput to read from
+     * @param port port to read from
      * @return InetSocketAddress with the chosen IPAddress and the hardcoded server port
      */
     public InetSocketAddress chooseServerIP(Scanner stdIn, int port) {

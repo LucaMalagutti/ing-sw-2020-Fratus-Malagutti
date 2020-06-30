@@ -63,6 +63,7 @@ public class Position {
      * Should only be called in the GameState constructor
      * @param row row of the Position
      * @param col column of the Position
+     * @param gameState reference to the GameState singleton (passed as a parameter because this method is called in GameState's constructor)
      */
     protected void setUpNeighbors(int row, int col, GameState gameState) {
         if (neighbour==null){
