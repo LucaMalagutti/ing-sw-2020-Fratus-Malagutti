@@ -1,0 +1,130 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: LauncherNumberPlayersControl</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP4.client.gui.sceneController</a> ]
+</div>
+
+<h1>Coverage Summary for Class: LauncherNumberPlayersControl (it.polimi.ingsw.PSP4.client.gui.sceneController)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LauncherNumberPlayersControl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP4.client.gui.sceneController;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP4.client.gui.FXMLFile;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP4.client.gui.GUIMessages;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP4.message.Message;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP4.message.MessageType;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP4.message.requests.Request;
+<i>8</i>&nbsp;
+<b class="nc"><i>9</i>&nbsp;public class LauncherNumberPlayersControl extends GUIController {</b>
+<b class="nc"><i>10</i>&nbsp;    private boolean selected = false;</b>
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    /**
+<i>13</i>&nbsp;     * Listener for a click on the 2 players button
+<i>14</i>&nbsp;     */
+<i>15</i>&nbsp;    public void setTwoPlayers() {
+<b class="nc"><i>16</i>&nbsp;        if (!selected) {</b>
+<b class="nc"><i>17</i>&nbsp;            selected = true;</b>
+<b class="nc"><i>18</i>&nbsp;            getClient().validate(&quot;2&quot;);</b>
+<i>19</i>&nbsp;        }
+<i>20</i>&nbsp;    }
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    /**
+<i>23</i>&nbsp;     * Listener for a click on the 3 players button
+<i>24</i>&nbsp;     */
+<i>25</i>&nbsp;    public void setThreePlayers() {
+<b class="nc"><i>26</i>&nbsp;        if (!selected) {</b>
+<b class="nc"><i>27</i>&nbsp;            selected = true;</b>
+<b class="nc"><i>28</i>&nbsp;            getClient().validate(&quot;3&quot;);</b>
+<i>29</i>&nbsp;        }
+<i>30</i>&nbsp;    }
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    @Override
+<i>33</i>&nbsp;    public void updateUI (Request req) {
+<b class="nc"><i>34</i>&nbsp;        if (req.getType() == MessageType.CHOOSE_ALLOWED_GODS) {</b>
+<b class="nc"><i>35</i>&nbsp;            getClient().updateScene(FXMLFile.LOBBY_GODS_SELECTION, req);</b>
+<b class="nc"><i>36</i>&nbsp;        } else if (req.getType() == MessageType.INFO) {</b>
+<b class="nc"><i>37</i>&nbsp;            if (req.getMessage().equals(Message.WAIT_PLAYERS)) {</b>
+<b class="nc"><i>38</i>&nbsp;                getClient().updateScene(FXMLFile.LOBBY_WAIT, null);</b>
+<i>39</i>&nbsp;            }
+<i>40</i>&nbsp;        } else {
+<b class="nc"><i>41</i>&nbsp;            System.out.println(GUIMessages.UNEXPECTED_REQUEST);</b>
+<i>42</i>&nbsp;        }
+<i>43</i>&nbsp;    }
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    @Override
+<i>46</i>&nbsp;    public void setupAttributes(Request req) {}
+<i>47</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-30 16:52</div>
+</div>
+</body>
+</html>

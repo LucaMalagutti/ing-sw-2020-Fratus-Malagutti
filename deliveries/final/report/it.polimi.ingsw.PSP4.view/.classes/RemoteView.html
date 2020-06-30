@@ -1,0 +1,184 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: RemoteView</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP4.view</a> ]
+</div>
+
+<h1>Coverage Summary for Class: RemoteView (it.polimi.ingsw.PSP4.view)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RemoteView</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 27)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">RemoteView$MessageReceiver</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 29)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP4.view;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP4.message.MessageType;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP4.message.requests.RemovePlayerRequest;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP4.message.requests.Request;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP4.message.requests.WaitRequest;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP4.message.responses.Response;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP4.model.Player;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP4.observer.Observer;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP4.server.SocketClientConnection;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import java.util.ArrayList;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;public class RemoteView extends View {
+<b class="nc"><i>15</i>&nbsp;    private final ArrayList&lt;Observer&lt;Response&gt;&gt; observers = new ArrayList&lt;&gt;();</b>
+<i>16</i>&nbsp;    private final SocketClientConnection clientConnection;
+<i>17</i>&nbsp;
+<b class="nc"><i>18</i>&nbsp;    private class MessageReceiver implements Observer&lt;Response&gt; {</b>
+<i>19</i>&nbsp;        @Override
+<i>20</i>&nbsp;        //response : client response
+<i>21</i>&nbsp;        public void update(Response response) {
+<b class="nc"><i>22</i>&nbsp;            handleMove(response);</b>
+<i>23</i>&nbsp;        }
+<i>24</i>&nbsp;    }
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    public RemoteView(Player player, SocketClientConnection c) {
+<b class="nc"><i>27</i>&nbsp;        super(player);</b>
+<b class="nc"><i>28</i>&nbsp;        this.clientConnection = c;</b>
+<b class="nc"><i>29</i>&nbsp;        c.addObserver(new MessageReceiver());</b>
+<i>30</i>&nbsp;    }
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    @Override
+<i>33</i>&nbsp;    public void update(Request request) {
+<b class="nc"><i>34</i>&nbsp;        if (request.getPlayer().equals(&quot;@&quot;) || request.getPlayer().equals(getPlayer().getUsername())) {</b>
+<b class="nc"><i>35</i>&nbsp;            if(request.getType() == MessageType.REMOVE_PLAYER) {</b>
+<i>36</i>&nbsp;                //Special case, could close the connection
+<b class="nc"><i>37</i>&nbsp;                RemovePlayerRequest rpr = (RemovePlayerRequest) request;</b>
+<b class="nc"><i>38</i>&nbsp;                String player = getPlayer().getUsername();</b>
+<b class="nc"><i>39</i>&nbsp;                rpr.setCustomMessagePlayer(player);</b>
+<b class="nc"><i>40</i>&nbsp;                if (!rpr.isVictory() &amp;&amp; rpr.getTargetPlayer().equals(player)) {</b>
+<b class="nc"><i>41</i>&nbsp;                    clientConnection.closeConnection(rpr, false);</b>
+<b class="nc"><i>42</i>&nbsp;                } else if (rpr.isVictory() || rpr.getTargetPlayer().equals(&quot;@&quot;)) {</b>
+<b class="nc"><i>43</i>&nbsp;                    clientConnection.closeConnection(rpr, true);</b>
+<i>44</i>&nbsp;                }
+<b class="nc"><i>45</i>&nbsp;            } else {</b>
+<b class="nc"><i>46</i>&nbsp;                clientConnection.asyncSend(request);</b>
+<i>47</i>&nbsp;            }
+<i>48</i>&nbsp;        } else {
+<b class="nc"><i>49</i>&nbsp;            clientConnection.asyncSend(new WaitRequest(getPlayer().getUsername(), request.getBoard(), request.getPlayer()));</b>
+<i>50</i>&nbsp;        }
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    @Override
+<i>54</i>&nbsp;    public void notifyObservers(Response response) {
+<b class="nc"><i>55</i>&nbsp;        synchronized (observers) {</b>
+<b class="nc"><i>56</i>&nbsp;            for (Observer&lt;Response&gt; obs: observers) {</b>
+<b class="nc"><i>57</i>&nbsp;                obs.update(response);</b>
+<b class="nc"><i>58</i>&nbsp;            }</b>
+<b class="nc"><i>59</i>&nbsp;        }</b>
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    @Override
+<i>63</i>&nbsp;    public void addObserver(Observer&lt;Response&gt; o) {
+<b class="nc"><i>64</i>&nbsp;        synchronized (observers) {</b>
+<b class="nc"><i>65</i>&nbsp;            observers.add(o);</b>
+<b class="nc"><i>66</i>&nbsp;        }</b>
+<i>67</i>&nbsp;    }
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    @Override
+<i>70</i>&nbsp;    public void removeObserver(Observer&lt;Response&gt; o) {
+<b class="nc"><i>71</i>&nbsp;        synchronized (observers) {</b>
+<b class="nc"><i>72</i>&nbsp;            observers.remove(o);</b>
+<b class="nc"><i>73</i>&nbsp;        }</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-30 16:52</div>
+</div>
+</body>
+</html>

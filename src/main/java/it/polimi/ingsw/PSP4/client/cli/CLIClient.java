@@ -50,14 +50,14 @@ public class CLIClient {
      * Creates a thread that check continuously if the server keeps sending pings, otherwise closes the connection
      */
     private void serverConnectedCheck() {
-        int serverCheckTimeout = 20;
+        int serverCheckTimeout = 17;
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(() -> {
             if (System.currentTimeMillis()/1000L - lastTimestamp > serverCheckTimeout) {
+                if (isActive()) {
+                    System.out.println("Lost connection to the server. Press ENTER to exit.");
+                }
                 setActive(false);
-                System.out.println("Lost connection to the server. Press ENTER to exit.");
-            }
-            else if (!isActive()) {
                 exec.shutdown();
             }
         }, 0, 1, TimeUnit.SECONDS);
@@ -120,15 +120,17 @@ public class CLIClient {
             try {
                 while (isActive()) {
                     String inputLine = stdIn.nextLine();
-                    Message validated = getLastRequestReceived().validateResponse(inputLine);
-                    synchronized (socketOut) {
-                        if (validated.getType() == MessageType.ERROR && isActive())
-                            System.out.println(validated.getMessage());
-                        else {
-                            socketOut.reset();
-                            socketOut.writeObject(validated);
+                    if (isActive()) {
+                        Message validated = getLastRequestReceived().validateResponse(inputLine);
+                        synchronized (socketOut) {
+                            if (validated.getType() == MessageType.ERROR)
+                                System.out.println(validated.getMessage());
+                            else {
+                                socketOut.reset();
+                                socketOut.writeObject(validated);
+                            }
+                            socketOut.flush();
                         }
-                        socketOut.flush();
                     }
                 }
             } catch (Exception e) {

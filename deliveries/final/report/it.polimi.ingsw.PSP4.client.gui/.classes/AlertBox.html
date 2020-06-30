@@ -1,0 +1,127 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AlertBox</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP4.client.gui</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AlertBox (it.polimi.ingsw.PSP4.client.gui)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AlertBox</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP4.client.gui;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import javafx.geometry.Insets;
+<i>4</i>&nbsp;import javafx.geometry.Pos;
+<i>5</i>&nbsp;import javafx.scene.Scene;
+<i>6</i>&nbsp;import javafx.scene.control.Button;
+<i>7</i>&nbsp;import javafx.scene.control.Label;
+<i>8</i>&nbsp;import javafx.scene.layout.VBox;
+<i>9</i>&nbsp;import javafx.stage.Modality;
+<i>10</i>&nbsp;import javafx.stage.Stage;
+<i>11</i>&nbsp;
+<b class="nc"><i>12</i>&nbsp;public class AlertBox {</b>
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    /**
+<i>15</i>&nbsp;     * Shows the error message in a new window
+<i>16</i>&nbsp;     * @param title title of the AlertBox
+<i>17</i>&nbsp;     * @param message message displayed in the center of the AlertBox
+<i>18</i>&nbsp;     */
+<i>19</i>&nbsp;    public static void displayError(String title, String message){
+<b class="nc"><i>20</i>&nbsp;        Stage window = new Stage();</b>
+<i>21</i>&nbsp;
+<b class="nc"><i>22</i>&nbsp;        window.initModality(Modality.APPLICATION_MODAL);</b>
+<b class="nc"><i>23</i>&nbsp;        window.getIcons().addAll(GUIClient.window.getIcons());</b>
+<b class="nc"><i>24</i>&nbsp;        window.setTitle(title);</b>
+<i>25</i>&nbsp;
+<b class="nc"><i>26</i>&nbsp;        Label label = new Label();</b>
+<b class="nc"><i>27</i>&nbsp;        label.setText(message);</b>
+<i>28</i>&nbsp;
+<b class="nc"><i>29</i>&nbsp;        Button closeButton = new Button(&quot;OK&quot;);</b>
+<b class="nc"><i>30</i>&nbsp;        closeButton.setMinWidth(75);</b>
+<b class="nc"><i>31</i>&nbsp;        closeButton.setOnAction(e -&gt; window.close());</b>
+<i>32</i>&nbsp;
+<b class="nc"><i>33</i>&nbsp;        VBox layout = new VBox(10);</b>
+<i>34</i>&nbsp;
+<b class="nc"><i>35</i>&nbsp;        layout.getChildren().addAll(label, closeButton);</b>
+<b class="nc"><i>36</i>&nbsp;        layout.setAlignment(Pos.CENTER);</b>
+<b class="nc"><i>37</i>&nbsp;        layout.setPadding(new Insets(20, 20, 20 ,20));</b>
+<i>38</i>&nbsp;
+<b class="nc"><i>39</i>&nbsp;        Scene scene = new Scene(layout);</b>
+<b class="nc"><i>40</i>&nbsp;        window.setScene(scene);</b>
+<b class="nc"><i>41</i>&nbsp;        window.showAndWait();</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    }
+<i>44</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-30 16:52</div>
+</div>
+</body>
+</html>

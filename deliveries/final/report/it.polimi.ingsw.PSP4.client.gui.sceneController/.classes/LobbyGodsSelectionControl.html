@@ -1,0 +1,225 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: LobbyGodsSelectionControl</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP4.client.gui.sceneController</a> ]
+</div>
+
+<h1>Coverage Summary for Class: LobbyGodsSelectionControl (it.polimi.ingsw.PSP4.client.gui.sceneController)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LobbyGodsSelectionControl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 69)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP4.client.gui.sceneController;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP4.client.gui.*;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP4.message.MessageType;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP4.message.requests.AssignGodRequest;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP4.message.requests.ChooseAllowedGodsRequest;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP4.message.requests.ChooseStartingPlayerRequest;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP4.message.requests.Request;
+<i>9</i>&nbsp;import javafx.event.Event;
+<i>10</i>&nbsp;import javafx.fxml.FXML;
+<i>11</i>&nbsp;import javafx.scene.Node;
+<i>12</i>&nbsp;import javafx.scene.input.MouseEvent;
+<i>13</i>&nbsp;import javafx.scene.layout.*;
+<i>14</i>&nbsp;import javafx.scene.text.Text;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;import java.text.MessageFormat;
+<i>17</i>&nbsp;import java.util.List;
+<i>18</i>&nbsp;import java.util.stream.Collectors;
+<i>19</i>&nbsp;
+<b class="nc"><i>20</i>&nbsp;public class LobbyGodsSelectionControl extends GUIController {</b>
+<i>21</i>&nbsp;    @FXML
+<i>22</i>&nbsp;    private GridPane implementedGodsGrid;
+<i>23</i>&nbsp;    @FXML
+<i>24</i>&nbsp;    private Text callToAction;
+<i>25</i>&nbsp;    @FXML
+<i>26</i>&nbsp;    private VBox godInfo;
+<i>27</i>&nbsp;    @FXML
+<i>28</i>&nbsp;    private Text button;
+<i>29</i>&nbsp;    private int numPlayers;
+<i>30</i>&nbsp;    public HBox highlightedGod;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    public void toggleGodSelection(Event event){
+<b class="nc"><i>33</i>&nbsp;        Node god = (Node)event.getSource();</b>
+<b class="nc"><i>34</i>&nbsp;        List&lt;Node&gt; selectedGods = implementedGodsGrid.getChildren().stream().filter(card-&gt;card.getStyleClass().contains(&quot;selected&quot;)).collect(Collectors.toList());</b>
+<b class="nc"><i>35</i>&nbsp;        if (!selectedGods.contains(god) &amp;&amp; selectedGods.size() &lt; numPlayers) {</b>
+<b class="nc"><i>36</i>&nbsp;            god.getStyleClass().add(&quot;selected&quot;);</b>
+<i>37</i>&nbsp;        } else {
+<b class="nc"><i>38</i>&nbsp;            god.getStyleClass().remove(&quot;selected&quot;);</b>
+<i>39</i>&nbsp;        }
+<i>40</i>&nbsp;    }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    public void showGodInfo(MouseEvent event) {
+<b class="nc"><i>43</i>&nbsp;        String god = ((Node) event.getSource()).getId();</b>
+<i>44</i>&nbsp;
+<b class="nc"><i>45</i>&nbsp;        Text godName = (Text) godInfo.getChildren().get(0);</b>
+<b class="nc"><i>46</i>&nbsp;        godName.setText(god);</b>
+<i>47</i>&nbsp;
+<b class="nc"><i>48</i>&nbsp;        StackPane descriptionContainer = (StackPane) godInfo.getChildren().get(1);</b>
+<b class="nc"><i>49</i>&nbsp;        Text description = (Text) descriptionContainer.getChildren().get(0);</b>
+<b class="nc"><i>50</i>&nbsp;        String content = GodGraphics.getDescriptionFromGod(god).getDescription();</b>
+<b class="nc"><i>51</i>&nbsp;        description.setText(content);</b>
+<i>52</i>&nbsp;
+<b class="nc"><i>53</i>&nbsp;        Pane powerImage = (Pane) godInfo.getChildren().get(2);</b>
+<b class="nc"><i>54</i>&nbsp;        powerImage.setStyle(GodGraphics.getGodPowerBG(god));</b>
+<i>55</i>&nbsp;
+<b class="nc"><i>56</i>&nbsp;        Pane godImage = (Pane) highlightedGod.getChildren().get(1);</b>
+<b class="nc"><i>57</i>&nbsp;        godImage.setStyle(GodGraphics.getGodCardBG(god));</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    public void sendAllowedGods() {
+<b class="nc"><i>62</i>&nbsp;        List&lt;Node&gt; selectedGods = implementedGodsGrid.getChildren().stream().filter(card-&gt;card.getStyleClass().contains(&quot;selected&quot;)).collect(Collectors.toList());</b>
+<b class="nc"><i>63</i>&nbsp;        if (selectedGods.size() == numPlayers) {</b>
+<b class="nc"><i>64</i>&nbsp;            List&lt;String&gt; selectedGodsNames = implementedGodsGrid.getChildren().stream().filter(card-&gt;card.getStyleClass().contains(&quot;selected&quot;)).map(Node::getId).collect(Collectors.toList());</b>
+<b class="nc"><i>65</i>&nbsp;            StringBuilder sb = new StringBuilder();</b>
+<b class="nc"><i>66</i>&nbsp;            for (String name: selectedGodsNames) {</b>
+<b class="nc"><i>67</i>&nbsp;                sb.append(name).append(&quot; &quot;);</b>
+<b class="nc"><i>68</i>&nbsp;            }</b>
+<b class="nc"><i>69</i>&nbsp;            getClient().validate(sb.toString());</b>
+<i>70</i>&nbsp;        }
+<i>71</i>&nbsp;    }
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    public void sendPersonalGod() {
+<b class="nc"><i>74</i>&nbsp;        List&lt;Node&gt; selectedGods = implementedGodsGrid.getChildren().stream().filter(card-&gt;card.getStyleClass().contains(&quot;selected&quot;)).collect(Collectors.toList());</b>
+<b class="nc"><i>75</i>&nbsp;        if(selectedGods.size() == numPlayers) {</b>
+<b class="nc"><i>76</i>&nbsp;            getClient().validate(selectedGods.get(0).getId());</b>
+<i>77</i>&nbsp;        }
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    private void addGodCard(String god, int index) {
+<b class="nc"><i>81</i>&nbsp;        Pane image = new Pane(), frame = new Pane();</b>
+<b class="nc"><i>82</i>&nbsp;        image.getStyleClass().add(&quot;selectable-image&quot;);</b>
+<b class="nc"><i>83</i>&nbsp;        image.setStyle(GodGraphics.getSelectableBG(god));</b>
+<b class="nc"><i>84</i>&nbsp;        frame.getStyleClass().add(&quot;selectable-frame&quot;);</b>
+<i>85</i>&nbsp;
+<b class="nc"><i>86</i>&nbsp;        StackPane card = new StackPane();</b>
+<b class="nc"><i>87</i>&nbsp;        card.getStyleClass().addAll(&quot;hover-effect-out&quot;, &quot;selectable-god&quot;);</b>
+<b class="nc"><i>88</i>&nbsp;        card.setId(god);</b>
+<b class="nc"><i>89</i>&nbsp;        card.setOnMousePressed(this::toggleGodSelection);</b>
+<b class="nc"><i>90</i>&nbsp;        card.setOnMouseEntered(this::showGodInfo);</b>
+<b class="nc"><i>91</i>&nbsp;        card.getChildren().addAll(image, frame);</b>
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;        int colNum = implementedGodsGrid.getColumnCount();</b>
+<b class="nc"><i>94</i>&nbsp;        implementedGodsGrid.add(card, index % colNum, index / colNum);</b>
+<i>95</i>&nbsp;    }
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    private void setupAllowedGods(ChooseAllowedGodsRequest req) {
+<b class="nc"><i>98</i>&nbsp;        numPlayers = req.getNumPlayer();</b>
+<b class="nc"><i>99</i>&nbsp;        callToAction.setText(MessageFormat.format(GUIMessages.LA_GOD_SELECTION, numPlayers, &quot;S&quot;));</b>
+<b class="nc"><i>100</i>&nbsp;        List&lt;String&gt; godList = req.getSelectableGods();</b>
+<b class="nc"><i>101</i>&nbsp;        for(int i = 0; i &lt; godList.size(); i++)</b>
+<b class="nc"><i>102</i>&nbsp;            addGodCard(godList.get(i), i);</b>
+<b class="nc"><i>103</i>&nbsp;        button.setOnMousePressed(e -&gt; sendAllowedGods());</b>
+<i>104</i>&nbsp;    }
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    private void setupPersonalGod(AssignGodRequest req) {
+<b class="nc"><i>107</i>&nbsp;        numPlayers = 1;</b>
+<b class="nc"><i>108</i>&nbsp;        callToAction.setText(MessageFormat.format(GUIMessages.LA_GOD_SELECTION, &quot;YOUR&quot;, &quot;&quot;));</b>
+<b class="nc"><i>109</i>&nbsp;        List&lt;String&gt; godList = req.getAllowedGods();</b>
+<b class="nc"><i>110</i>&nbsp;        for(int i = 0; i &lt; godList.size(); i++)</b>
+<b class="nc"><i>111</i>&nbsp;            addGodCard(godList.get(i), i);</b>
+<b class="nc"><i>112</i>&nbsp;        button.setOnMousePressed(e -&gt; sendPersonalGod());</b>
+<i>113</i>&nbsp;    }
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    @Override
+<i>116</i>&nbsp;    public void updateUI (Request req) {
+<b class="nc"><i>117</i>&nbsp;        if (req.getType() == MessageType.ASSIGN_GOD) {</b>
+<b class="nc"><i>118</i>&nbsp;            getClient().updateScene(FXMLFile.LOBBY_GODS_SELECTION, req);</b>
+<b class="nc"><i>119</i>&nbsp;        } else if (req.getType() == MessageType.WAIT) {</b>
+<b class="nc"><i>120</i>&nbsp;            getClient().updateScene(FXMLFile.LOBBY_WAIT, null);</b>
+<b class="nc"><i>121</i>&nbsp;        } else if (req.getType() == MessageType.CHOOSE_STARTING_PLAYER) {</b>
+<b class="nc"><i>122</i>&nbsp;            ChooseStartingPlayerRequest r = (ChooseStartingPlayerRequest) req;</b>
+<b class="nc"><i>123</i>&nbsp;            if (r.getPlayerNames().size() == 2) {</b>
+<b class="nc"><i>124</i>&nbsp;                getClient().updateScene(FXMLFile.LOBBY_STARTING_PLAYER_SELECTION_TWO, req);</b>
+<b class="nc"><i>125</i>&nbsp;            } else if (r.getPlayerNames().size() == 3){</b>
+<b class="nc"><i>126</i>&nbsp;                getClient().updateScene(FXMLFile.LOBBY_STARTING_PLAYER_SELECTION_THREE, req);</b>
+<i>127</i>&nbsp;            }
+<b class="nc"><i>128</i>&nbsp;        } else if (req.getType() == MessageType.INFO) {</b>
+<b class="nc"><i>129</i>&nbsp;            AlertBox.displayError(GUIMessages.WINDOW_TITLE_INFO, req.getMessage());</b>
+<i>130</i>&nbsp;        } else {
+<b class="nc"><i>131</i>&nbsp;            System.out.println(MessageFormat.format(GUIMessages.UNEXPECTED, req.getType(), &quot;&quot;));</b>
+<i>132</i>&nbsp;        }
+<i>133</i>&nbsp;    }
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    @Override
+<i>136</i>&nbsp;    public void setupAttributes(Request req) {
+<b class="nc"><i>137</i>&nbsp;        if(req.getType() == MessageType.CHOOSE_ALLOWED_GODS)</b>
+<b class="nc"><i>138</i>&nbsp;            setupAllowedGods((ChooseAllowedGodsRequest) req);</b>
+<b class="nc"><i>139</i>&nbsp;        else if(req.getType() ==  MessageType.ASSIGN_GOD)</b>
+<b class="nc"><i>140</i>&nbsp;            setupPersonalGod((AssignGodRequest) req);</b>
+<i>141</i>&nbsp;    }
+<i>142</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-30 16:52</div>
+</div>
+</body>
+</html>

@@ -21,6 +21,26 @@
 
     <profile>
       <id>client</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-graphics</artifactId>
+          <version>13</version>
+          <classifier>win</classifier>
+        </dependency>
+        <dependency>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-graphics</artifactId>
+          <version>13</version>
+          <classifier>mac</classifier>
+        </dependency>
+        <dependency>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-graphics</artifactId>
+          <version>13</version>
+          <classifier>linux</classifier>
+        </dependency>
+      </dependencies>
       <properties>
         <mainClass>it.polimi.ingsw.PSP4.ClientMain</mainClass>
       </properties>
@@ -47,6 +67,7 @@
       <artifactId>javafx-controls</artifactId>
       <version>11.0.2</version>
     </dependency>
+
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>

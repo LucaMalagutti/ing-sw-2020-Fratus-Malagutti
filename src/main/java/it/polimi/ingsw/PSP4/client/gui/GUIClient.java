@@ -176,7 +176,7 @@ public class GUIClient extends Application{
      * Checks if the server sending pings, if not it closes the connection to the server
      */
     private void checkServerConnected() {
-        int serverCheckTimeout = 11;
+        int serverCheckTimeout = 17;
         serverConnectionCheckExecutor.scheduleAtFixedRate(() -> {
             if (System.currentTimeMillis()/1000L - lastTimestamp > serverCheckTimeout) {
                 Platform.runLater(() -> {
