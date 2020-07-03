@@ -54,9 +54,7 @@ public class CLIClient {
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(() -> {
             if (System.currentTimeMillis()/1000L - lastTimestamp > serverCheckTimeout) {
-                if (isActive()) {
-                    System.out.println("Lost connection to the server. Press ENTER to exit.");
-                }
+                System.out.println("Lost connection to the server. Press ENTER to exit.");
                 setActive(false);
                 exec.shutdown();
             }

@@ -106,7 +106,6 @@ public class GUIClient extends Application{
                 while(isActive()) {
                     Object inputObject = socketIn.readObject();
                     Request request = (Request) inputObject;
-//                    System.out.println("READ "+request.getType());
                     if (request.getType() == MessageType.PING) {
                         Platform.runLater(() -> answerPing(request));
                     } else if (request.getType() == MessageType.REMOVE_PLAYER) {

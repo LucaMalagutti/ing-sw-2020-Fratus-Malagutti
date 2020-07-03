@@ -19,7 +19,7 @@ public enum GodGraphics {
     HERA("Opponent’s Turn: An opponent cannot win by moving into a perimeter space."),
     HESTIA("Your Build: Your Worker may build one additional time, but this cannot be on a perimeter space.", "build"),
     LIMUS("Opponent’s Turn: Opponent Workers cannot build on spaces neighboring your Workers, unless building a dome to create a Complete Tower."),
-    MINOTAUR("Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be forced one space to an unoccupied space at any level."),
+    MINOTAUR("Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be forced one space straight backwards to an unoc- cupied space at any level."),
     PAN("Win Condition: You also win if your Worker moves down two or more levels."),
     PROMETHEUS("Your Turn: If your Worker does not move up, it may build both before and after moving.", "build"),
     TRITON("Your Move: Each time your Worker moves into a perimeter space, it may immediately move again.", "move"),

@@ -328,7 +328,6 @@ public class BoardController extends GUIController{
         if(isRequestSent())
             return;
         setRequestSent(true);
-        System.out.println("Change worker button pressed!");
         getClient().validate("change");
     }
 
@@ -339,7 +338,6 @@ public class BoardController extends GUIController{
         if(isRequestSent())
             return;
         setRequestSent(true);
-        //System.out.println("Skip state button pressed!");
         getClient().validate("skip");
     }
 
