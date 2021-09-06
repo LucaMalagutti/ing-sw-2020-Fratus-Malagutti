@@ -1,7 +1,8 @@
-# Prova Finale, Ingegneria del Software
-This repo contains the code created by Group 4 to be submitted for the exam "Prova Finale (Ingegneria del Software)" held by Politecnico di Milano by prof. San Pietro during spring 2020.  
+# Software Engineering Project 
+
+This repository contains the code for the exam "Prova Finale (Ingegneria del Software)" held at Politecnico di Milano during spring 2020.  
  
-The project consists of a playable Java implementation of the board game "Santorini" released in 2004 by Gordon Hamilton. 
+The project consists of a playable Java implementation of the board game ["Santorini"](https://www.youtube.com/watch?v=EZi-MZEylRQ) released in 2004 by Gordon Hamilton. 
 
 ## Group Components
 
@@ -16,11 +17,11 @@ The project consists of a playable Java implementation of the board game "Santor
 - GUI
 - CLI
 - Advanced Feature: additional gods 
-    - (Hera, Hestia, Limus, Triton, Zeus)
+    - Hera, Hestia, Limus, Triton, Zeus
     
 ## How to run the game
 
-- Both the server and the client JAR can be found in the deliveries/final/jar/ folder
+- Both the server and the client JAR can be found in the `deliveries/final/jar/` folder
 
 - To run the server download the server JAR and run
 
@@ -30,11 +31,26 @@ The project consists of a playable Java implementation of the board game "Santor
 
 `java -jar santorini_client_4.jar`
 
-- To run the CLI run
+- To run the Command Line version of the game run
 
 `java -jar santorini_client_4.jar cli`
 
-- To recreate the JARs, run the 'maven package' command after selecting the corresponding profile in the pom.xml file
+- To recompile the JARs, run the 'maven package' command after selecting the corresponding profile in the pom.xml file
 
-    
+- When playing locally with multiple clients, select "0.0.0.0" as the server IP address
 
+## Screenshots from the game 
+
+God selection screen:
+![godSelection](readme_images/god_selection.png)
+
+Game board:
+![gameBoard](readme_images/game_board.png)
+
+God ability screen:
+
+![godAbility](readme_images/god_ability.png)
+
+Victory screen:
+
+![victory](readme_images/victory_screen.png)
